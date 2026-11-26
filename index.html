@@ -133,6 +133,23 @@ section{padding-block:4.2rem 0}
 .btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 18px;font:700 .95rem var(--f-body);text-decoration:none;cursor:pointer;color:#fff}
 .btn svg{flex:none}
 .btn-call{background:var(--call)}.btn-zalo{background:var(--zalo)}.btn-fb{background:var(--fb)}.btn-tt{background:#000;color:#fff;box-shadow:inset 0 0 0 1px #333}.btn-map{background:var(--ink);color:var(--bg)}
+.btn-call,.btn-zalo,.btn-fb,.btn-tt,.btn-map{box-shadow:0 8px 20px -8px rgba(0,0,0,.45),inset 0 -2px 0 rgba(0,0,0,.18);min-height:46px;font-size:1rem}
+.btn svg.bi{width:20px!important;height:20px!important;flex:none}
+.btn .go{opacity:.85;font-weight:800;margin-left:2px}
+.big a{color:inherit;text-decoration:underline;text-decoration-color:var(--call);text-underline-offset:6px;text-decoration-thickness:3px}
+.tap-hint{display:block;margin-top:8px;font-size:.8rem;font-weight:600;opacity:.75}
+@media (prefers-reduced-motion:no-preference){
+  .btn-call,.btn-zalo,.btn-fb,.btn-tt,.btn-map{isolation:isolate}
+  .btn-call::after,.btn-zalo::after,.btn-fb::after,.btn-tt::after,.btn-map::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:shine 3.2s ease-in-out infinite;pointer-events:none}
+  .btn-zalo::after{animation-delay:.6s}.btn-fb::after{animation-delay:1.1s}.btn-tt::after{animation-delay:1.6s}.btn-map::after{animation-delay:2s}
+  .btn-call{animation:callglow 1.8s ease-out infinite}
+  .btn-call .bi{animation:callring 1.8s ease-in-out infinite;transform-origin:50% 50%}
+  .btn .go{display:inline-block;animation:nudge 1.4s ease-in-out infinite}
+}
+@keyframes shine{0%,55%{left:-60%}100%{left:130%}}
+@keyframes callglow{0%{box-shadow:0 0 0 0 rgba(34,197,94,.65),0 8px 20px -8px rgba(0,0,0,.45)}70%{box-shadow:0 0 0 14px rgba(34,197,94,0),0 8px 20px -8px rgba(0,0,0,.45)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0),0 8px 20px -8px rgba(0,0,0,.45)}}
+@keyframes callring{0%,50%,100%{transform:rotate(0)}10%,30%{transform:rotate(-16deg)}20%,40%{transform:rotate(16deg)}}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
 .btn-ghost{background:transparent;color:inherit;border:1px solid currentColor;font-weight:600}
 .btn[aria-disabled="true"]{opacity:.55;cursor:default}
 .note{max-width:720px;margin:1.6rem auto 0;text-align:center;background:var(--warn-bg);color:var(--warn-ink);border-radius:12px;padding:10px 14px;font-size:.86rem}
@@ -426,7 +443,7 @@ footer{padding-block:2.4rem 1rem;color:var(--muted);font-size:.85rem;text-align:
     <div class="contact">
       <div class="card" data-r="left">
         <div class="ic" style="background:var(--call)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"/></svg></div>
-        <h3>Điện thoại</h3><div class="big" id="phone">0372 659 937</div>
+        <h3>Điện thoại</h3><div class="big" id="phone"><a href="tel:0372659937">0372 659 937</a></div><span class="tap-hint">Chạm vào số hoặc nút xanh để gọi ngay</span>
         <div class="row"><a class="btn btn-call" href="tel:0372659937">Gọi ngay</a><button class="btn btn-ghost" type="button" id="copy">Sao chép số</button></div>
       </div>
       <div class="card" data-r>
@@ -639,13 +656,13 @@ function types0(b,m,s){
     if(k==="pad")return [T("Ép kính cảm ứng",Z&&Math.max(350,r50(Z*.25)),2,"6 tháng","2–3 giờ","Kính hoặc cảm ứng bị vỡ, liệt. Màn hiển thị vẫn tốt."),T("Thay màn nguyên bộ",Z,3,"6 tháng","1–2 giờ","Màn sọc, chảy mực, không lên hình. Thay cả bộ màn và cảm ứng.")];
     return [T("Màn chính hãng",Z,3,"6 tháng","45–60 phút","Màn chính hãng theo máy. Màu, độ sáng và cảm ứng như nguyên bản."),T("Màn thay thế loại tốt",Z&&r50(Z*.45),2,"3 tháng","45–60 phút","Giá tốt, hiển thị ổn định, phù hợp máy đời cũ.")];
   }
-  if(s==="pin"){
+  if(s==="pin"){const CH=T("Pin chính hãng",null,3,"12 tháng","20–30 phút","Pin chính hãng, hiện đúng dung lượng, không báo lỗi.",false,"Tạm hết hàng");
     if(k==="ip"){const pp=P?PIN[P[5]]:[B&&r50(B*.8),B&&r50(B*1.1),B&&r50(B*1.35)];
-      return [T("Pin không xác định",pp[0],1,"12 tháng","20–30 phút","Pin dung lượng chuẩn, dùng tốt. Cài đặt báo pin không xác định, không xem được % sức khỏe."),
-      T("Pin đã sử dụng",pp[1],2,"12 tháng","20–30 phút","Pin Apple zin tháo máy. Cài đặt hiện mục linh kiện đã sử dụng."),
-      T("Pin ép phôi, chạy lại 100%",pp[2],3,"12 tháng","1–2 giờ","Ép cell pin mới vào phôi pin zin, chạy lại phần mềm để hiện 100%, không báo lỗi."),
-      T("Pin chính hãng",null,3,"12 tháng","20–30 phút","Bao chính hãng, hiện đúng dung lượng, không báo lỗi.",false,"Tạm hết hàng")];}
-    return [T("Thay pin",B,3,"12 tháng","30–45 phút","Pin dung lượng chuẩn theo máy, kiểm tra dòng sạc trước khi giao.")];
+      const gen=+(m.n.match(/iPhone (\d+)/)||[0,0])[1];
+      if(gen<12)return [T("Pin nguyên quả",pp[0],2,"12 tháng","20–30 phút","Pin nguyên quả dung lượng chuẩn, thay nhanh, dùng ổn định."),CH];
+      return [T("Pin dung lượng chuẩn",pp[0],2,"12 tháng","20–30 phút","Pin dung lượng chuẩn theo máy, thay nhanh, dùng ổn định."),
+      T("Pin chẩn đoán",pp[1],3,"12 tháng","20–30 phút","Pin có chẩn đoán, xem được tình trạng pin trong cài đặt."),CH];}
+    return [T("Thay pin",B,3,"12 tháng","30–45 phút","Pin dung lượng chuẩn theo máy, kiểm tra dòng sạc trước khi giao."),CH];
   }
   if(s==="cam"){const base=B||800,big=/1[4-9] Pro|17|18/.test(m.n)&&/Pro|Air|17$|17e/.test(m.n),pro3=/1[4-9] Pro/.test(m.n);
     return [T("Thay kính camera (giá mỗi kính)",k==="ip"?(pro3?200:150):r50(150+base*.1),2,"3 tháng","20–30 phút","Kính camera nứt, vỡ. Chỉ thay mặt kính bị vỡ, giữ nguyên cụm camera."),
@@ -914,6 +931,15 @@ addEventListener("scroll",req,{passive:true});addEventListener("resize",req);
 hero.addEventListener("pointermove",e=>{if(e.pointerType!=="mouse")return;const r=hero.getBoundingClientRect();mx=(e.clientX-r.left)/r.width-.5;my=(e.clientY-r.top)/r.height-.5;req();});
 hero.addEventListener("pointerleave",()=>{mx=my=0;req();});
 req();
+
+/* Icon cho các nút liên hệ để khách biết bấm được */
+(()=>{const I={call:'<svg class="bi" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"/></svg>',
+zalo:'<svg class="bi" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.6 1.4 4.9 3.6 6.5L5 21l3.4-1.8c1.1.3 2.3.5 3.6.5 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/></svg>',
+fb:'<svg class="bi" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8V6.5c0-.8.2-1.5 1.5-1.5H17V2h-2.6C11.6 2 11 3.8 11 6v2H9v3h2v11h3V11h2.6l.4-3z"/></svg>',
+tt:'<svg class="bi" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 2h-3.3v13.3a2.9 2.9 0 11-2.9-2.9c.3 0 .6 0 .9.1V9.1a6.3 6.3 0 105.3 6.2V8.6a7.9 7.9 0 004.4 1.3V6.6a4.5 4.5 0 01-4.4-4.6z"/></svg>',
+map:'<svg class="bi" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>'};
+const deco=root=>root.querySelectorAll('a.btn-call,a.btn-zalo,a.btn-fb,a.btn-tt,a.btn-map').forEach(a=>{if(a.dataset.deco)return;a.dataset.deco=1;const k=["call","zalo","fb","tt","map"].find(x=>a.classList.contains("btn-"+x));a.insertAdjacentHTML("afterbegin",I[k]);if(!a.closest(".bar"))a.insertAdjacentHTML("beforeend",'<span class="go" aria-hidden="true">›</span>');});
+deco(document);new MutationObserver(()=>deco(document)).observe(document.body,{childList:true,subtree:true});})();
 </script>
 
 </body>
