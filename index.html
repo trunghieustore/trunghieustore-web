@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="TrungHieuStore - Bảng giá sửa chữa iPhone, iPad, Samsung và các hãng. 32/9D Phan Văn Đối, Bà Điểm, Hóc Môn. 0372 659 937">
+<link rel="icon" href="logo-mark.png">
+</head>
+<body>
+<title>TrungHieuStore Bảng giá sửa chữa</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap">
+<style>
+/* Layout: mọi khối căn giữa. Hero: iPhone mặt trước (Dynamic Island) trôi lên, tên TrungHieuStore ở chân màn hình.
+   -> Kiểm tra miễn phí -> 1 Hãng -> 2 Dòng & đời máy -> 3 Dịch vụ (hình linh kiện) -> 4 Loại linh kiện + giá ngay dưới -> Quy trình -> Liên hệ & chỉ đường */
+@property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
+:root{
+  --bg:#f5f4f2; --surface:#ffffff; --ink:#141210; --muted:#625b54; --line:#e6e1dc; --soft:#fff1e6;
+  --accent:#e05a00; --accent-ink:#ffffff; --hero:#000000; --hero-ink:#eef3fa; --zalo:#0068ff; --call:#12a150; --fb:#1877f2; --gold:#ffb020; --hot:#ff5a5f;
+  --warn-bg:#fff6dc; --warn-ink:#7a5a00;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0a0908; --surface:#161311; --ink:#f3eee9; --muted:#a69d94; --line:#2c2621; --soft:#2a1a0e;
+  --accent:#ff7a1a; --accent-ink:#1a0b00; --warn-bg:#2b2410; --warn-ink:#f1d27a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a0908; --surface:#161311; --ink:#f3eee9; --muted:#a69d94; --line:#2c2621; --soft:#2a1a0e;
+  --accent:#ff7a1a; --accent-ink:#1a0b00; --warn-bg:#2b2410; --warn-ink:#f1d27a; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;padding-bottom:140px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.15}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.center{text-align:center}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;background:var(--hero);color:var(--hero-ink);margin-top:calc(-1 * env(safe-area-inset-top,0px));height:260svh}
+.hero.static{height:auto}
+.stage{position:sticky;top:0;height:100svh;overflow:hidden;background:radial-gradient(120% 70% at 50% 35%,#2a1300 0%,var(--hero) 62%);text-align:center;perspective:1200px}
+.hero.static .stage{position:relative;height:auto;min-height:100svh}
+.hero .stars{position:absolute;inset:0;background-image:radial-gradient(#3a2a1e 1px,transparent 1.5px);background-size:24px 24px;opacity:.5;
+  -webkit-mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent);mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent)}
+.hero .halo{position:absolute;left:50%;top:38%;width:min(90vw,620px);aspect-ratio:1;translate:-50% -50%;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,106,0,.38),rgba(255,106,0,.1) 45%,transparent 70%);filter:blur(10px)}
+.phone-wrap{position:absolute;left:0;right:0;top:0;z-index:1;display:flex;justify-content:center;padding-top:6svh;will-change:transform;transform:translateY(var(--py,0px))}
+.phone{width:min(clamp(230px,62vw,380px),calc(88svh / 2.03));max-width:92%;filter:drop-shadow(0 40px 70px rgba(0,0,0,.75))}
+.brandline{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);z-index:3;width:100%;will-change:transform;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brandtag{text-shadow:0 2px 12px #000;margin:.6rem auto 0;max-width:44ch;color:#b8c4d4;font-size:clamp(.95rem,2.6vw,1.15rem)}
+.brandtag b{color:#fff}
+.scrollhint{margin-top:1rem;display:inline-flex;flex-direction:column;align-items:center;gap:6px;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#8fa3bd}
+.scrollhint i{width:22px;height:34px;border:2px solid #8fa3bd;border-radius:12px;position:relative}
+.scrollhint i::after{content:"";position:absolute;left:50%;top:6px;width:4px;height:7px;margin-left:-2px;border-radius:2px;background:#8fa3bd}
+
+.logo{margin:0;display:grid;justify-items:center;gap:clamp(10px,2vw,18px)}
+.lg-mark-w{display:block;will-change:transform}
+.lg-mark{display:block;width:clamp(120px,min(34vw,22svh),230px);height:auto;filter:drop-shadow(0 10px 30px rgba(0,0,0,.85))}
+.lg-text-w{position:relative;display:block;width:min(100%,660px);will-change:transform}
+.lg-text{display:block;width:100%;height:auto;filter:drop-shadow(0 6px 18px rgba(0,0,0,.9))}
+.lg-shine{position:absolute;inset:0;background:linear-gradient(100deg,transparent 35%,rgba(255,255,255,.95) 50%,transparent 65%);background-size:250% 100%;background-position:150% 0;
+  -webkit-mask:url(logo-text.png) center/100% 100% no-repeat;mask:url(logo-text.png) center/100% 100% no-repeat;mix-blend-mode:overlay;pointer-events:none}
+.minihead{position:fixed;left:0;right:0;top:0;z-index:25;background:rgba(0,0,0,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid #2c2621;
+  padding-top:calc(env(safe-area-inset-top,0px) + 8px);padding-bottom:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;justify-content:center;align-items:center;gap:10px;transform:translateY(-110%);transition:transform .9s var(--ease)}
+.minihead.show{transform:none}
+.minihead img{height:26px;width:auto;display:block}.minihead .mt{height:14px}
+.footlogo{display:block;margin:0 auto 1rem;width:min(80vw,360px);height:auto}
+footer{background:#000;color:#a69d94}
+footer strong{color:#fff}
+.preview{display:grid;justify-items:center;gap:8px;margin-bottom:6px}
+.pv-stage{position:relative;width:100%;height:clamp(200px,34vw,280px)}
+.pv-stage img,.pv-stage svg{position:absolute;left:50%;top:50%;height:100%;width:auto;max-width:100%;object-fit:contain;translate:-50% -50%;transition:opacity 1.1s var(--ease),transform 1.4s var(--ease)}
+.pv-stage img.off{opacity:0;transform:scale(.96) translateY(8px)}
+.pv-name{font-weight:800;font-size:1.15rem}
+.pv-color{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;font-weight:700;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:4px 12px 4px 6px}
+.pv-color i{width:18px;height:18px;border-radius:50%;border:1px solid rgba(0,0,0,.2);transition:background-color 1s}
+.dots{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0;position:relative}
+.dot[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:2px}
+.pv-hint{font-size:.78rem;color:var(--muted)}
+.brand img.bimg{height:112px;width:auto;transition:opacity .6s var(--ease),transform .7s var(--ease)}
+.brand:hover img.bimg{transform:translateY(-4px) scale(1.06)}
+.lead{max-width:560px;margin:1.6rem auto 0;background:var(--surface);border:2px solid var(--accent);border-radius:22px;padding:20px;display:grid;gap:10px;text-align:left}
+.lead-m{text-align:center;color:var(--muted)}.lead-m b{color:var(--ink)}
+.lead label{font-weight:700;font-size:.88rem}
+.lead textarea,.lead input{width:100%;font:500 1rem var(--f-body);padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.lead-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.lead-row>div{display:grid;gap:6px;min-width:0}
+@media (max-width:520px){.lead-row{grid-template-columns:1fr}}
+.lead-err{margin:0;color:#d33;font-weight:700;font-size:.88rem}
+.lead-done{background:var(--soft);border-radius:14px;padding:14px;text-align:center;display:grid;gap:10px;justify-items:center}
+.lead-done .row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.other-hint{text-align:center;margin:1.2rem auto 0;color:var(--muted)}
+.other-hint button{background:none;border:0;color:var(--accent);font:700 1rem var(--f-body);text-decoration:underline;cursor:pointer}
+.updating{position:fixed;left:50%;bottom:calc(72px + env(safe-area-inset-bottom,0px));translate:-50% 0;z-index:21;display:flex;align-items:center;gap:10px;
+  max-width:calc(100% - 24px);width:max-content;background:#1a0b00;color:#fff;border:1px solid #ff5a3c;border-radius:999px;padding:8px 16px 8px 12px;
+  font-size:.85rem;line-height:1.3;box-shadow:0 10px 30px -10px rgba(255,60,40,.7);text-align:left}
+.updating b{color:#ffb38a}
+.rdot{position:relative;flex:none;width:12px;height:12px;border-radius:50%;background:#ff2d2d}
+.rdot::after{content:"";position:absolute;inset:0;border-radius:50%;background:#ff2d2d;animation:rping 1.4s cubic-bezier(0,0,.2,1) infinite}
+@keyframes rping{75%,100%{transform:scale(2.6);opacity:0}}
+@media (prefers-reduced-motion:reduce){.rdot::after{animation:none}}
+.tp-tag{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:800;color:#d32020}
+.tp-tag i{width:7px;height:7px;border-radius:50%;background:#ff2d2d;animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.callsheet{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:grid;place-items:end center;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.callsheet .box{width:min(100%,420px);background:var(--surface);color:var(--ink);border-radius:22px;padding:20px;text-align:center;display:grid;gap:10px}
+.callsheet .num{font:800 1.8rem var(--f-num);letter-spacing:.03em;user-select:all;color:var(--accent)}
+.callsheet .row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.callsheet p{margin:0;color:var(--muted);font-size:.9rem}
+.scr{position:relative;width:62px;height:112px;border-radius:14px;border:3px solid #0b0f14;overflow:hidden;box-shadow:0 10px 24px -10px rgba(0,0,0,.6);transform-style:preserve-3d}
+.scr::before{content:"";position:absolute;top:5px;left:50%;width:20px;height:6px;margin-left:-10px;border-radius:4px;background:#000;z-index:2}
+.scr i{position:absolute;inset:-40%;background:conic-gradient(from 0deg,#ff6a00,#ffb070,#7a3cff,#1e4fd8,#ff6aa0,#ff6a00)}
+.scr.lcd{border-width:6px}
+.scr.lcd i{filter:saturate(.45) brightness(1.15) contrast(.8)}
+.scr.lcd::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(255,255,255,.05))}
+.scr.oled i{filter:saturate(1.3) contrast(1.15)}
+.scr.zin i{filter:saturate(1.15)}
+.scr.zin::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,240,220,.55) 50%,transparent 65%);background-size:250% 100%}
+.type{perspective:800px}
+/* ---------- COMMON ---------- */
+section{padding-block:4.2rem 0}
+.sec-head{text-align:center;max-width:640px;margin:0 auto}
+.sec-head .n{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--accent);color:var(--accent-ink);font:800 1.15rem var(--f-num);margin-bottom:.7rem}
+.sec-head .eyebrow{font-size:.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.sec-head h2{font-size:clamp(1.5rem,4.4vw,2.2rem);font-weight:800;margin-top:.2rem}
+.sec-head p{color:var(--muted);margin:.5rem auto 0}
+.crumb{margin:1rem auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;font-size:.85rem}
+.crumb span{background:var(--soft);color:var(--accent);border-radius:999px;padding:4px 12px;font-weight:700}
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 18px;font:700 .95rem var(--f-body);text-decoration:none;cursor:pointer;color:#fff}
+.btn svg{flex:none}
+.btn-call{background:var(--call)}.btn-zalo{background:var(--zalo)}.btn-fb{background:var(--fb)}.btn-tt{background:#000;color:#fff;box-shadow:inset 0 0 0 1px #333}.btn-map{background:var(--ink);color:var(--bg)}
+.btn-ghost{background:transparent;color:inherit;border:1px solid currentColor;font-weight:600}
+.btn[aria-disabled="true"]{opacity:.55;cursor:default}
+.note{max-width:720px;margin:1.6rem auto 0;text-align:center;background:var(--warn-bg);color:var(--warn-ink);border-radius:12px;padding:10px 14px;font-size:.86rem}
+
+/* ---------- FREE CHECK ---------- */
+.free{max-width:760px;margin:3rem auto 0;border-radius:24px;padding:2px;background:conic-gradient(from var(--ang),var(--accent),var(--call),var(--gold),var(--hot),var(--accent));animation:spin 6s linear infinite}
+@keyframes spin{to{--ang:360deg}}
+.free-in{position:relative;overflow:hidden;border-radius:22px;background:var(--surface);padding:26px 20px;text-align:center}
+.free-in::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,color-mix(in srgb,var(--accent) 14%,transparent) 50%,transparent 70%);translate:-100% 0;animation:shine 5s ease-in-out infinite;pointer-events:none}
+@keyframes shine{0%,45%{translate:-100% 0}90%,100%{translate:100% 0}}
+.free h2{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:900}
+.free h2 span{color:var(--call)}
+.free ul{margin:.9rem 0 1.2rem;padding:0;list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;color:var(--muted)}
+.free li::before{content:"✓ ";color:var(--call);font-weight:800}
+
+/* ---------- PICKERS ---------- */
+.grid-c{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:1.6rem}
+.brand{position:relative;overflow:hidden;cursor:pointer;width:142px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:14px 8px 12px;display:grid;gap:4px;justify-items:center}
+.brand svg{height:112px;width:auto;transition:transform .7s var(--ease)}
+.brand .bn{font-weight:800;font-size:1.02rem}
+.brand .bs{font-size:.74rem;color:var(--muted);line-height:1.3}
+.brand .glow{position:absolute;inset:auto 15% 34% 15%;height:40%;border-radius:50%;filter:blur(24px);opacity:0;transition:opacity .6s}
+.brand>*{position:relative}
+[aria-pressed="true"].brand,[aria-pressed="true"].svc,[aria-pressed="true"].type{border-color:var(--accent);background:var(--soft)}
+[aria-pressed="true"].brand .glow{opacity:.55}
+.tick{position:absolute;top:8px;right:10px;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:none;place-items:center;font-weight:800;font-size:.8rem}
+[aria-pressed="true"]>.tick{display:grid}
+.panel{max-width:860px;margin:1.6rem auto 0;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px}
+.lbl{font-size:.74rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center}
+.series{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:.6rem}
+.ser{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:9px 16px;font:800 .92rem var(--f-body);cursor:pointer;position:relative;overflow:hidden}
+.ser[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.divider{height:1px;background:var(--line);margin:16px 0}
+.search{display:block;width:100%;max-width:420px;margin:.6rem auto 0;font:500 1rem var(--f-body);padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);text-align:center}
+.models{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
+.model{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px 15px;font:600 .88rem var(--f-body);cursor:pointer;position:relative;overflow:hidden}
+.model[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.empty{color:var(--muted);text-align:center;padding:10px}
+
+.svc{position:relative;overflow:hidden;cursor:pointer;width:160px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:14px 10px;display:grid;gap:6px;justify-items:center;text-align:center}
+.svc .ill{width:84px;height:84px}
+.svc .sn{font-weight:800;font-size:.98rem;line-height:1.25}
+.svc .sp{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-weight:700;font-size:.84rem;color:var(--muted)}
+.svc .hot{position:absolute;top:10px;left:10px;font-size:.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--hot);color:#fff;border-radius:999px;padding:3px 7px}
+
+.types{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:1.6rem}
+.type{position:relative;overflow:hidden;cursor:pointer;width:min(100%,250px);border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:16px;text-align:center;display:grid;gap:8px;justify-items:center}
+.type .tn{font-weight:800;font-size:1.02rem;line-height:1.25;padding:0 24px}
+.q{display:flex;gap:4px;align-items:center;font-size:.72rem;color:var(--muted)}
+.q i{width:22px;height:6px;border-radius:3px;background:var(--line)}
+.q i.on{background:var(--call)}
+.type .tp{font:800 1.35rem/1.1 var(--f-num);font-variant-numeric:tabular-nums;color:var(--accent)}
+.type .tp.na{font-family:var(--f-body);font-size:1.05rem;color:var(--muted)}
+.type .td{font-size:.84rem;color:var(--muted)}
+.type .tb{font-size:.78rem;font-weight:700;background:var(--soft);color:var(--accent);border-radius:999px;padding:3px 10px}
+.typenote{margin:1rem auto 0;max-width:560px;text-align:center;color:var(--muted);font-size:.88rem}
+
+.fid{max-width:860px;margin:1.6rem auto 0;overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px}
+.fid table{border-collapse:collapse;width:100%;min-width:560px;font-size:.9rem}
+.fid th,.fid td{padding:11px 12px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+.fid th:first-child,.fid td:first-child{text-align:left;font-weight:700}
+.fid thead th{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;white-space:normal;min-width:110px}
+.fid td.p{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.fid tr.me td{background:var(--soft);color:var(--accent)}
+.fid tbody tr:last-child td{border-bottom:0}
+
+.result{max-width:620px;margin:1.6rem auto 0;border-radius:26px;background:var(--hero);color:var(--hero-ink);padding:24px 20px;text-align:center;position:relative;overflow:hidden}
+.result::before{content:"";position:absolute;left:50%;top:-30%;width:120%;height:80%;translate:-50% 0;background:radial-gradient(circle,rgba(255,106,0,.28),transparent 65%);pointer-events:none}
+.result>*{position:relative}
+.result .big{width:130px;height:130px;margin:0 auto}
+.result .rl{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#8fa3bd;font-weight:800;margin-top:.6rem}
+.result h3{font-size:1.35rem;font-weight:800;margin-top:.3rem}
+.result .rm{color:#b8c4d4}
+.price{margin-top:.9rem;font:800 clamp(2.2rem,8vw,3rem)/1 var(--f-num);font-variant-numeric:tabular-nums;color:#fff}
+.price small{font-size:.9rem;color:#8fa3bd;font-weight:600;font-family:var(--f-body)}
+.price.na{font-family:var(--f-body);font-size:1.7rem}
+.tmp{display:inline-block;margin-top:.6rem;font-size:.72rem;font-weight:800;background:#3a2f0c;color:#f1d27a;border-radius:6px;padding:2px 8px}
+.facts{margin:1.1rem auto 0;max-width:420px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fact{background:#1c1612;border-radius:14px;padding:10px}
+.fact .k{font-size:.7rem;color:#8fa3bd;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.fact .v{font-weight:800;margin-top:2px}
+.rdesc{margin:1rem auto 0;max-width:46ch;color:#cfd9e6;font-size:.92rem}
+.r-cta{margin:1.2rem auto 0;max-width:420px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.r-cta .btn-ghost{grid-column:1/-1;color:#cfd9e6;font-size:.86rem}
+
+/* ---------- PROCESS ---------- */
+.proc{list-style:none;margin:1.8rem auto 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;max-width:1000px}
+.proc li{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px 14px;text-align:center}
+.proc .pn{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--soft);color:var(--accent);font:800 1.1rem var(--f-num)}
+.proc h3{font-size:1rem;margin-top:.7rem}
+.proc p{margin:.4rem 0 0;color:var(--muted);font-size:.86rem}
+@media (max-width:820px){.proc{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ---------- CONTACT ---------- */
+.contact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:1.8rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;text-align:center;display:grid;gap:10px;justify-items:center;align-content:start}
+.card .ic{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;color:#fff}
+.card h3{font-size:1.05rem}
+.card .big{font:800 1.3rem var(--f-num);letter-spacing:.02em;user-select:all}
+.card .row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.card p{margin:0;color:var(--muted);font-size:.88rem}
+.mapcard{grid-column:1/-1}
+.map{width:100%;max-width:760px;border-radius:18px;overflow:hidden;border:1px solid var(--line);display:block}
+.map svg{display:block;width:100%;height:auto}
+.addr{font-weight:800;font-size:1.1rem}
+@media (max-width:820px){.contact{grid-template-columns:1fr}}
+
+/* ---------- BANDS, FOOTER, BAR ---------- */
+.band{margin-top:4rem;overflow:hidden;background:var(--ink);color:var(--bg);padding-block:15px;rotate:-1.5deg;margin-inline:-20px}
+.band .track{display:flex;gap:2.2rem;white-space:nowrap;font:800 clamp(1.25rem,4vw,1.9rem) var(--f-body);will-change:translate}
+.band .track span{display:inline-flex;align-items:center;gap:2.2rem}
+.band .track span::after{content:"";width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.band.b2{rotate:1.2deg;margin-top:-6px;background:var(--accent);color:var(--accent-ink)}
+.band.b2 .track span::after{background:var(--accent-ink)}
+.band.top{margin-top:0;position:relative;z-index:4}
+.band.b3{background:transparent;color:transparent;-webkit-text-stroke:1.5px var(--accent);rotate:1deg}
+.band.b3 .track{font-size:clamp(2rem,7vw,3.6rem)}
+.band.b3 .track span::after{-webkit-text-stroke:0;background:var(--accent)}
+.band.b4{rotate:-1deg;margin-top:-4px;background:#000;color:#fff}
+.band.b4 .track span::after{background:#ff7a1a}
+footer{padding-block:2.4rem 1rem;color:var(--muted);font-size:.85rem;text-align:center}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
+  padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+.bar .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bar .btn{width:100%;overflow:visible;padding:11px 8px;font-size:.9rem}
+.progress{position:fixed;top:env(safe-area-inset-top,0px);left:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(var(--p,0));background:var(--accent);z-index:30}
+
+/* ---------- EFFECTS (chậm, mượt) ---------- */
+.ripple{position:absolute;border-radius:50%;pointer-events:none;background:currentColor;opacity:.28;transform:scale(0);animation:rip .9s ease-out forwards}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+.spark{position:fixed;width:8px;height:8px;border-radius:50%;pointer-events:none;z-index:50;animation:spark .9s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes spark{to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
+.ring{position:fixed;width:16px;height:16px;margin:-8px 0 0 -8px;border:2px solid var(--accent);border-radius:50%;pointer-events:none;z-index:50;animation:ring .8s ease-out forwards}
+@keyframes ring{to{transform:scale(5);opacity:0}}
+@media (prefers-reduced-motion:no-preference){
+  .phone{animation:phoneIn 2.2s var(--ease) both}
+  @keyframes phoneIn{from{transform:translateY(140px) scale(.9);opacity:0}to{transform:none;opacity:1}}
+  .lg-mark{animation:markIn 2s var(--ease) .4s both}
+  @keyframes markIn{from{transform:translateY(-60px) rotate(-14deg) scale(.6);opacity:0;filter:blur(8px)}to{transform:none;opacity:1;filter:none}}
+  .lg-text{animation:textIn 1.8s var(--ease) .9s both}
+  @keyframes textIn{from{transform:translateY(30px);opacity:0;letter-spacing:.2em;clip-path:inset(0 50% 0 50%)}to{transform:none;opacity:1;clip-path:inset(0 0 0 0)}}
+  .lg-shine{animation:sweep 4.5s ease-in-out 2.4s infinite}
+  @keyframes sweep{0%{background-position:150% 0}55%,100%{background-position:-60% 0}}
+  @keyframes breathe{50%{opacity:.75}}
+  .brandtag,.scrollhint{animation:up 1.4s var(--ease) 1s backwards}
+  .scrollhint i::after{animation:wheel 2s ease-in-out infinite}
+  @keyframes wheel{0%{transform:none;opacity:1}70%{transform:translateY(12px);opacity:0}100%{opacity:0}}
+  @keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+  .js [data-r]{opacity:0;transform:translateY(60px);transition:opacity 1.3s var(--ease),transform 1.3s var(--ease);transition-delay:var(--d,0s)}
+  .js [data-r="scale"]{transform:scale(.88)}
+  .js [data-r="left"]{transform:translateX(-70px)}
+  .js [data-r="right"]{transform:translateX(70px)}
+  .js [data-r].in{opacity:1;transform:none}
+  .ani{animation:aniIn 1s var(--ease) both;animation-delay:calc(var(--i,0) * 90ms)}
+  @keyframes aniIn{from{opacity:0;transform:translateY(34px) scale(.96)}to{opacity:1;transform:none}}
+  .result.pop{animation:popin .9s var(--ease)}
+  .type.ani{animation:flipIn 1.1s var(--ease) both;animation-delay:calc(var(--i,0) * 160ms);transform-origin:50% 0}
+  @keyframes flipIn{from{opacity:0;transform:rotateX(-70deg) translateY(30px)}to{opacity:1;transform:none}}
+  .scr i{animation:spin2 9s linear infinite}.scr.oled i{animation-duration:6s}.scr.zin i{animation-duration:7s}
+  @keyframes spin2{to{transform:rotate(360deg)}}
+  .scr.zin::after{animation:sweep 3.2s ease-in-out infinite}
+  .scr.lcd::after{animation:flick 4s steps(1) infinite}
+  @keyframes flick{0%,96%{opacity:1}97%{opacity:.6}98%{opacity:1}}
+  .type:hover .scr{transform:rotateY(-18deg) rotateX(6deg) scale(1.08);transition:transform .8s var(--ease)}
+  .type .scr{transition:transform .8s var(--ease)}
+  .type[aria-pressed="true"]{box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 25%,transparent),0 18px 34px -18px var(--accent)}
+  @keyframes popin{from{transform:translateY(24px) scale(.96);opacity:.3}to{transform:none;opacity:1}}
+  .btn,.model,.ser,.svc,.brand,.type,.proc li,.card{transition:transform .5s var(--ease),box-shadow .5s,border-color .4s,background-color .4s}
+  .btn:hover{transform:translateY(-3px) scale(1.03)}
+  .btn-call:hover{box-shadow:0 12px 26px -10px var(--call)}.btn-zalo:hover{box-shadow:0 12px 26px -10px var(--zalo)}
+  .btn:active,.model:active,.ser:active,.svc:active,.brand:active,.type:active{transform:scale(.95)}
+  .brand:hover{transform:translateY(-8px);border-color:var(--accent);box-shadow:0 20px 40px -20px var(--accent)}
+  .brand:hover svg{transform:rotate(-8deg) translateY(-4px) scale(1.07)}
+  .brand:hover .glow{opacity:.55}
+  .svc:hover,.type:hover{transform:translateY(-6px);border-color:var(--accent);box-shadow:0 18px 34px -18px var(--accent)}
+  .svc .ill{transition:transform .8s var(--ease)}.svc:hover .ill{transform:scale(1.12) rotate(-4deg)}
+  .model:hover,.ser:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .proc li:hover,.card:hover{transform:translateY(-6px);box-shadow:0 18px 34px -20px var(--accent)}
+  .bar .btn-call::before{content:"";position:absolute;inset:0;border-radius:inherit;animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--call) 60%,transparent)}70%,100%{box-shadow:0 0 0 12px transparent}}
+  .pin-drop{animation:drop 2.2s var(--ease) infinite}
+  @keyframes drop{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+}
+@media (prefers-reduced-motion:reduce){.free{animation:none}.free-in::after{display:none}}
+</style>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="minihead" id="minihead" aria-hidden="true"><img src="logo-mark.png" alt=""><img class="mt" src="logo-text.png" alt=""></div>
+
+<header class="hero" id="hero">
+ <div class="stage">
+  <div class="stars" aria-hidden="true"></div>
+  <div class="halo" aria-hidden="true"></div>
+  <div class="phone-wrap" id="phoneWrap" aria-hidden="true">
+    <svg class="phone" viewBox="0 0 300 610">
+      <defs>
+        <linearGradient id="frame" x1="0" x2="1"><stop offset="0" stop-color="#5a6372"/><stop offset=".5" stop-color="#c3cad4"/><stop offset="1" stop-color="#5a6372"/></linearGradient>
+        <linearGradient id="wall" x1="0" y1="0" x2=".6" y2="1"><stop offset="0" stop-color="#2a1408"/><stop offset=".55" stop-color="#0e0603"/><stop offset=".85" stop-color="#6a2a00"/><stop offset="1" stop-color="#c25210"/></linearGradient>
+        <radialGradient id="blob" cx=".3" cy=".75" r=".6"><stop offset="0" stop-color="#ff8a2a" stop-opacity=".55"/><stop offset="1" stop-color="#ff8a2a" stop-opacity="0"/></radialGradient>
+        <linearGradient id="gloss" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".35" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      </defs>
+      <rect x="-3" y="130" width="5" height="34" rx="2" fill="#7b8594"/><rect x="-3" y="180" width="5" height="54" rx="2" fill="#7b8594"/><rect x="-3" y="244" width="5" height="54" rx="2" fill="#7b8594"/><rect x="298" y="190" width="5" height="80" rx="2" fill="#7b8594"/>
+      <rect x="1" y="1" width="298" height="608" rx="52" fill="url(#frame)"/>
+      <rect x="6" y="6" width="288" height="598" rx="47" fill="#05070a"/>
+      <rect x="14" y="14" width="272" height="582" rx="40" fill="url(#wall)"/>
+      <rect x="14" y="14" width="272" height="582" rx="40" fill="url(#blob)"/>
+      <rect x="108" y="28" width="84" height="25" rx="12.5" fill="#000"/><circle cx="176" cy="40.5" r="5" fill="#0f1a2c"/>
+      <text x="40" y="45" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#fff">21:41</text>
+      <rect x="236" y="35" width="22" height="11" rx="3" fill="none" stroke="#fff" stroke-width="1.4"/><rect x="238" y="37" width="16" height="7" rx="1.5" fill="#fff"/>
+      
+      <rect x="28" y="404" width="244" height="70" rx="20" fill="#fff" fill-opacity=".2"/>
+      <rect x="40" y="418" width="40" height="40" rx="10" fill="#ff6a00"/><path d="M53 446l9-9m3-6a5 5 0 00-6 6l-9 9 3 3 9-9a5 5 0 006-6l-3 3-3-3z" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="92" y="433" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#fff">TrungHieuStore</text>
+      <text x="92" y="452" font-family="Arial,sans-serif" font-size="12" fill="#eef3fa">Máy của bạn đã sửa xong ✓</text>
+      <text x="258" y="433" text-anchor="end" font-family="Arial,sans-serif" font-size="10" fill="#dfe8ff">bây giờ</text>
+      <circle cx="62" cy="540" r="22" fill="#000" fill-opacity=".3"/><circle cx="238" cy="540" r="22" fill="#000" fill-opacity=".3"/>
+      <path d="M57 532h10v16H57zM60 529h4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <rect x="227" y="532" width="22" height="16" rx="3" fill="none" stroke="#fff" stroke-width="2"/><circle cx="238" cy="540" r="4" fill="none" stroke="#fff" stroke-width="2"/>
+      <rect x="100" y="578" width="100" height="5" rx="2.5" fill="#fff"/>
+      <rect x="14" y="14" width="272" height="582" rx="40" fill="url(#gloss)"/>
+    </svg>
+  </div>
+  <div class="brandline" id="brandline">
+    <h1 class="logo" id="logo"><span class="lg-mark-w" id="lgMark"><img class="lg-mark" src="logo-mark.png" alt="" width="420" height="247"></span><span class="lg-text-w" id="lgText"><img class="lg-text" src="logo-text.png" alt="TrungHieuStore, mua bán, sửa chữa, thu cũ đổi mới" width="900" height="90"><span class="lg-shine" aria-hidden="true"></span></span></h1>
+    <p class="brandtag">Sửa chữa chuyên sâu <b>iPhone, iPad</b>.<br>Samsung, Vivo, Xiaomi, OPPO, Realme: <b>sửa main, thay màn, thay pin</b>.</p>
+    <div class="scrollhint" aria-hidden="true"><i></i>Lướt xuống xem giá</div>
+  </div>
+ </div>
+</header>
+<div class="band top" aria-hidden="true"><div class="track" data-marquee="-0.3"><span>Thay màn hình</span><span>Thay pin</span><span>Face ID</span><span>Camera</span><span>Sửa main</span><span>Chân sạc</span><span>Kính lưng</span><span>Thay màn hình</span><span>Thay pin</span><span>Face ID</span><span>Camera</span></div></div>
+<div class="band b2" aria-hidden="true"><div class="track" data-marquee="0.25"><span>Kiểm tra miễn phí</span><span>Báo giá trước khi sửa</span><span>Sửa trước mặt khách</span><span>Bảo hành rõ ràng</span><span>Kiểm tra miễn phí</span><span>Báo giá trước khi sửa</span><span>Sửa trước mặt khách</span></div></div>
+
+<main class="wrap">
+  <div class="free" data-r="scale">
+    <div class="free-in">
+      <h2>Kiểm tra máy <span>miễn phí</span></h2>
+      <ul><li>Báo lỗi và giá trước khi sửa</li><li>Không sửa không mất phí</li><li>Sửa trước mặt khách</li><li>Bảo hành rõ ràng</li><li>Máy vào nước sấy miễn phí</li></ul>
+      <a class="btn btn-zalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Hẹn lịch qua Zalo</a>
+    </div>
+  </div>
+
+  <section id="s1">
+    <div class="sec-head" data-r><span class="n">1</span><h2>Chọn hãng máy</h2><p>Bấm vào hãng máy của bạn để bắt đầu.</p></div>
+    <div class="grid-c" id="brands"></div>
+  </section>
+
+  <section id="s2">
+    <div class="sec-head" data-r><span class="n">2</span><h2 id="t2">Chọn dòng và đời máy</h2><p id="p2">Chọn dòng máy trước, sau đó chọn đúng đời máy.</p></div>
+    <div class="panel" data-r>
+      <div class="preview" id="preview"></div>
+      <div class="divider"></div>
+      <div id="serBox"><div class="lbl">Dòng máy</div>
+      <div class="series" id="series"></div>
+      <div class="divider"></div></div>
+      <div class="lbl">Đời máy</div>
+      <input class="search" id="q" type="search" placeholder="Hoặc gõ tên máy, ví dụ: 13 Pro Max" aria-label="Tìm đời máy" autocomplete="off">
+      <div class="models" id="models"></div>
+    </div>
+  </section>
+
+  <section id="s3">
+    <div class="sec-head" data-r><span class="n">3</span><h2>Chọn dịch vụ cần sửa</h2><p>Dịch vụ khách sửa nhiều nhất xếp trước.</p><div class="crumb" id="crumb3"></div></div>
+    <div class="grid-c" id="svcs"></div>
+  </section>
+
+  <section id="s4">
+    <div class="sec-head" data-r><span class="n">4</span><h2 id="t4">Chọn loại linh kiện</h2><p id="p4">Chọn loại, giá hiện ngay bên dưới.</p></div>
+    <div id="stage4"></div>
+    <div class="result" id="result" aria-live="polite"></div>
+    <p class="other-hint" data-r>Không thấy lỗi của máy bạn? <button type="button" id="goOther">Chọn Lỗi khác và để lại số điện thoại</button></p>
+    <p class="note" data-r><strong>Giá, thời gian và bảo hành đang là bản tạm.</strong> Giá thật sẽ cập nhật sau. Gọi hoặc nhắn Zalo để được báo đúng giá cho máy của bạn.</p>
+  </section>
+
+  <section id="quy-trinh">
+    <div class="sec-head" data-r><div class="eyebrow">Quy trình</div><h2>Sửa máy tại TrungHieuStore</h2><p>Bốn bước, khách biết rõ máy mình được làm gì.</p></div>
+    <ol class="proc">
+      <li data-r style="--d:0s"><span class="pn">1</span><h3>Nhận máy, kiểm tra</h3><p>Kiểm tra toàn bộ chức năng, miễn phí.</p></li>
+      <li data-r style="--d:.15s"><span class="pn">2</span><h3>Báo lỗi và giá</h3><p>Khách đồng ý mới sửa. Không sửa không mất phí.</p></li>
+      <li data-r style="--d:.3s"><span class="pn">3</span><h3>Sửa và kiểm tra lại</h3><p>Thay linh kiện, test lại từng chức năng trước khi giao.</p></li>
+      <li data-r style="--d:.45s"><span class="pn">4</span><h3>Giao máy, bảo hành</h3><p>Dán tem, ghi phiếu bảo hành theo từng linh kiện.</p></li>
+    </ol>
+  </section>
+</main>
+
+
+
+<div class="band b3" aria-hidden="true"><div class="track" data-marquee="-0.28"><span>iPhone</span><span>iPad</span><span>Samsung</span><span>Vivo</span><span>Xiaomi</span><span>OPPO</span><span>Realme</span><span>iPhone</span><span>iPad</span><span>Samsung</span><span>Vivo</span><span>Xiaomi</span></div></div>
+<div class="band b4" aria-hidden="true"><div class="track" data-marquee="0.22"><span>Thay màn hình</span><span>Ép kính</span><span>Thay pin</span><span>Sửa main</span><span>Face ID</span><span>Thay màn hình</span><span>Ép kính</span><span>Thay pin</span><span>Sửa main</span></div></div>
+<main class="wrap">
+  <section id="lien-he">
+    <div class="sec-head" data-r><div class="eyebrow">Liên hệ</div><h2>Gọi, nhắn hoặc ghé cửa hàng</h2><p>Mang máy tới để được kiểm tra miễn phí.</p></div>
+    <div class="contact">
+      <div class="card" data-r="left">
+        <div class="ic" style="background:var(--call)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"/></svg></div>
+        <h3>Điện thoại</h3><div class="big" id="phone">0372 659 937</div>
+        <div class="row"><a class="btn btn-call" href="tel:0372659937">Gọi ngay</a><button class="btn btn-ghost" type="button" id="copy">Sao chép số</button></div>
+      </div>
+      <div class="card" data-r>
+        <div class="ic" style="background:var(--zalo)"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.6 1.4 4.9 3.6 6.5L5 21l3.4-1.8c1.1.3 2.3.5 3.6.5 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/><text x="12" y="14.2" text-anchor="middle" font-family="Arial" font-size="6.2" font-weight="900" fill="#0068ff">Zalo</text></svg></div>
+        <h3>Zalo</h3><p>0372 659 937</p>
+        <div class="row"><a class="btn btn-zalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Nhắn tin Zalo</a><a class="btn btn-zalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Gọi Zalo</a></div>
+      </div>
+      <div class="card" data-r="right">
+        <div class="ic" style="background:var(--fb)"><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M14 8V6.5c0-.8.2-1.5 1.5-1.5H17V2h-2.6C11.6 2 11 3.8 11 6v2H9v3h2v11h3V11h2.6l.4-3z"/></svg></div>
+        <h3>Facebook và TikTok</h3><p>Xem video sửa máy và cập nhật mới nhất.</p>
+        <div class="row"><a class="btn btn-fb" href="https://www.facebook.com/share/1CiXipCWGW/" target="_blank" rel="noopener">Facebook</a><a class="btn btn-tt" href="https://www.tiktok.com/@trunghieu.apple49" target="_blank" rel="noopener">TikTok @trunghieu.apple49</a></div>
+      </div>
+      <div class="card mapcard" data-r="scale">
+        <div class="ic" style="background:var(--hot)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg></div>
+        <h3>Địa chỉ cửa hàng</h3>
+        <div class="addr">32/9D Phan Văn Đối, Bà Điểm, Hóc Môn, TP.HCM</div>
+        <a class="map" href="https://www.google.com/maps/search/?api=1&query=32%2F9D%20Phan%20V%C4%83n%20%C4%90%E1%BB%91i%2C%20B%C3%A0%20%C4%90i%E1%BB%83m%2C%20H%C3%B3c%20M%C3%B4n%2C%20TP.HCM" target="_blank" rel="noopener" aria-label="Mở bản đồ Google Maps">
+          <svg viewBox="0 0 760 300" role="img" aria-hidden="true">
+            <rect width="760" height="300" fill="#e6ecf2"/>
+            <path d="M0 210 C150 190 260 230 400 200 S640 160 760 180" stroke="#9ec5ff" stroke-width="18" fill="none" opacity=".6"/>
+            <g fill="#d5dde6"><rect x="40" y="30" width="120" height="70" rx="8"/><rect x="190" y="30" width="90" height="70" rx="8"/><rect x="470" y="40" width="130" height="60" rx="8"/><rect x="630" y="40" width="100" height="60" rx="8"/><rect x="60" y="240" width="150" height="50" rx="8"/><rect x="520" y="230" width="180" height="60" rx="8"/></g>
+            <g fill="#cfe8d4"><rect x="300" y="30" width="140" height="70" rx="10"/><circle cx="260" cy="270" r="30"/></g>
+            <path d="M0 130 H760" stroke="#fff" stroke-width="26"/><path d="M0 130 H760" stroke="#ffd36b" stroke-width="4" stroke-dasharray="18 14"/>
+            <path d="M380 0 V300" stroke="#fff" stroke-width="16"/><path d="M170 130 V300" stroke="#fff" stroke-width="12"/><path d="M600 0 V130" stroke="#fff" stroke-width="12"/>
+            <text x="700" y="122" text-anchor="end" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#5b6676">Phan Văn Đối</text>
+            <g class="pin-drop"><path d="M420 118c0-18 13-30 28-30s28 12 28 30c0 22-28 44-28 44s-28-22-28-44z" fill="#ff5a5f"/><circle cx="448" cy="118" r="10" fill="#fff"/></g>
+            <ellipse cx="448" cy="166" rx="16" ry="5" fill="#000" opacity=".15"/>
+            <rect x="484" y="150" width="150" height="34" rx="10" fill="#0f1722"/><text x="559" y="172" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#fff">TrungHieuStore</text>
+          </svg>
+        </a>
+        <div class="row">
+          <a class="btn btn-map" href="https://www.google.com/maps/dir/?api=1&destination=32%2F9D%20Phan%20V%C4%83n%20%C4%90%E1%BB%91i%2C%20B%C3%A0%20%C4%90i%E1%BB%83m%2C%20H%C3%B3c%20M%C3%B4n%2C%20TP.HCM" target="_blank" rel="noopener">Chỉ đường tới cửa hàng</a>
+          <button class="btn btn-ghost" type="button" id="copyaddr">Sao chép địa chỉ</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <img class="footlogo" src="logo-full.png" alt="TrungHieuStore" width="900" height="344">
+  <div><strong>TrungHieuStore</strong> · Sửa điện thoại, iPad tất cả các hãng</div>
+  <div>32/9D Phan Văn Đối, Bà Điểm, Hóc Môn · 0372 659 937</div>
+  <div>Giá trên trang là giá tạm, cập nhật sau.</div>
+</footer>
+
+<div class="callsheet" id="callsheet" hidden role="dialog" aria-modal="true" aria-labelledby="csT">
+  <div class="box"><strong id="csT">Gọi TrungHieuStore</strong><div class="num" id="csNum">0372 659 937</div>
+  <p>Nếu điện thoại chưa tự mở cuộc gọi, hãy bấm lại số bên dưới hoặc sao chép số.</p>
+  <div class="row"><a class="btn btn-call" href="tel:0372659937" data-nosheet>Gọi 0372 659 937</a><button class="btn btn-ghost" type="button" id="csCopy">Sao chép số</button><a class="btn btn-zalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Gọi qua Zalo</a></div>
+  <button class="btn btn-ghost" type="button" id="csClose">Đóng</button></div>
+</div>
+<div class="updating" role="status"><span class="rdot" aria-hidden="true"></span><span><b>Bảng giá đang cập nhật.</b> Giá hiện tại chỉ mang tính tham khảo.</span></div>
+<nav class="bar" aria-label="Liên hệ nhanh">
+  <div class="in">
+    <a class="btn btn-call" href="tel:0372659937">Gọi</a>
+    <a class="btn btn-zalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Zalo</a>
+    <a class="btn btn-map" href="https://www.google.com/maps/dir/?api=1&destination=32%2F9D%20Phan%20V%C4%83n%20%C4%90%E1%BB%91i%2C%20B%C3%A0%20%C4%90i%E1%BB%83m%2C%20H%C3%B3c%20M%C3%B4n%2C%20TP.HCM" target="_blank" rel="noopener">Chỉ đường</a>
+  </div>
+</nav>
+
+<script>
+document.documentElement.classList.add("js");
+const $=id=>document.getElementById(id);
+const motionOK=!matchMedia("(prefers-reduced-motion: reduce)").matches;
+const r50=v=>v==null?null:Math.round(v/50)*50;
+const vnd=v=>(v*1000).toLocaleString("vi-VN");
+const money=(p,from)=>p===0?"Miễn phí":`${from?"từ ":""}${vnd(p)}đ`;
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d").replace(/\s+/g," ").trim();
+
+/* ===== Hình máy theo hãng (mặt lưng) ===== */
+function lens(x,y,r){return `<circle cx="${x}" cy="${y}" r="${r}" fill="#0b0f14" stroke="#5d6b7c" stroke-width="1.4"/><circle cx="${x}" cy="${y}" r="${r*.45}" fill="#1d3550"/><circle cx="${x-r*.25}" cy="${y-r*.25}" r="${r*.15}" fill="#9cc2ff" opacity=".8"/>`}
+function body(c,rx=16){return `<rect x="10" y="6" width="80" height="168" rx="${rx}" fill="${c}" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/><rect x="12" y="8" width="76" height="164" rx="${rx-2}" fill="url(#sh)" opacity=".5"/>`}
+const DEFS=`<defs><linearGradient id="sh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient></defs>`;
+const APPLE=`<path d="M50 92c1.8 0 3.4-1.5 3.4-3.5-1.9.1-3.6 1.6-3.4 3.5zm6.4 11.3c-1.3 2.4-2.6 4.2-4.4 4.2-1.6 0-2-.9-3.8-.9s-2.3.9-3.8.9c-2 0-4.6-4.5-4.6-8.6 0-3.6 2.3-5.6 4.4-5.6 1.6 0 2.7 1 3.8 1s2.4-1.1 4.1-1c1.5.1 2.8.7 3.6 1.9-3.3 2-2.7 6.7.7 8.1z" fill="rgba(255,255,255,.22)"/>`;
+const SVG={
+ iphone:()=>body("#3a4250")+`<rect x="18" y="14" width="38" height="38" rx="11" fill="rgba(0,0,0,.28)" stroke="rgba(255,255,255,.2)"/>`+lens(28,25,6.5)+lens(28,42,6.5)+lens(45,33.5,6.5)+`<circle cx="45" cy="20" r="2.4" fill="#f5e6b8"/>`+APPLE,
+ ipad:()=>`<rect x="6" y="10" width="88" height="160" rx="10" fill="#c9ced6" stroke="rgba(0,0,0,.15)" stroke-width="1.5"/><rect x="8" y="12" width="84" height="156" rx="8" fill="url(#sh)" opacity=".5"/><rect x="13" y="17" width="16" height="16" rx="5" fill="rgba(0,0,0,.2)"/>`+lens(21,25,5)+APPLE.replace("rgba(255,255,255,.22)","rgba(0,0,0,.14)"),
+ samsung:()=>body("#2d3b55",14)+lens(25,22,6.5)+lens(25,39,6.5)+lens(25,56,6.5)+`<circle cx="38" cy="22" r="2.4" fill="#f5e6b8"/><text x="50" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="rgba(255,255,255,.35)" letter-spacing="1">SAMSUNG</text>`,
+ xiaomi:()=>body("#e8e9ec",14)+`<rect x="17" y="14" width="46" height="46" rx="12" fill="#1a1d22"/>`+lens(29,26,6.5)+lens(51,26,6.5)+lens(29,48,6.5)+lens(51,48,6.5),
+ oppo:()=>body("#1d6f5f",15)+`<rect x="17" y="14" width="24" height="52" rx="12" fill="rgba(0,0,0,.3)"/>`+lens(29,27,7)+lens(29,52,7)+`<circle cx="47" cy="22" r="2.4" fill="#f5e6b8"/>`,
+ vivo:()=>body("#4b4fa8",16)+`<circle cx="50" cy="42" r="26" fill="#14161c" stroke="rgba(255,255,255,.3)" stroke-width="2"/>`+lens(40,32,6.5)+lens(60,32,6.5)+lens(50,52,6.5),
+ realme:()=>body("#d9a92e",14)+`<rect x="17" y="14" width="54" height="26" rx="10" fill="rgba(0,0,0,.35)"/>`+lens(30,27,6.5)+lens(47,27,6.5)+`<circle cx="62" cy="27" r="2.4" fill="#f5e6b8"/>`
+};
+const brandSvg=k=>`<svg viewBox="0 0 100 180" aria-hidden="true">${DEFS}${SVG[k]()}</svg>`;
+
+/* ===== Hình minh họa linh kiện ===== */
+const ILL={
+ man:(k)=>{const pad=k==="pad",w=pad?76:52,x=(120-w)/2,isI=k==="ip";
+   return `<svg viewBox="0 0 120 120" class="ill" aria-hidden="true"><defs><linearGradient id="sc${k}" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="#1e4fd8"/><stop offset=".6" stop-color="#7a3cff"/><stop offset="1" stop-color="#ff6aa0"/></linearGradient></defs>
+   <rect x="${x}" y="8" width="${w}" height="104" rx="${pad?8:11}" fill="#0b0f14" stroke="#8a96a8" stroke-width="2"/><rect x="${x+3}" y="11" width="${w-6}" height="98" rx="${pad?6:9}" fill="url(#sc${k})"/>
+   ${isI?`<rect x="51" y="15" width="18" height="5" rx="2.5" fill="#000"/>`:pad?`<circle cx="60" cy="14.5" r="1.6" fill="#000"/>`:`<circle cx="60" cy="17" r="2.6" fill="#000"/>`}
+   <path d="M${x+6} 70 L${x+w*.55} 40 L${x+w*.45} 58 L${x+w-6} 46" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/><rect x="${x+3}" y="11" width="${w-6}" height="98" rx="9" fill="#fff" opacity=".08"/></svg>`},
+ pin:()=>`<svg viewBox="0 0 120 120" class="ill" aria-hidden="true"><rect x="52" y="6" width="16" height="14" rx="2" fill="#c69a3a"/><rect x="55" y="9" width="10" height="8" fill="#8a6a22"/>
+   <rect x="30" y="18" width="60" height="94" rx="9" fill="#1f242b" stroke="#4b5563" stroke-width="2"/><rect x="38" y="30" width="44" height="28" rx="4" fill="#2c333d"/>
+   <text x="60" y="42" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" font-weight="700" fill="#cfd9e6">Li-ion</text><text x="60" y="52" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" fill="#93a0b2">3.87V</text>
+   <rect x="40" y="68" width="40" height="34" rx="5" fill="none" stroke="#12a150" stroke-width="2"/><rect x="43" y="71" width="34" height="28" rx="3" fill="#12a150" opacity=".85"/><path d="M62 74l-7 12h6l-2 9 8-13h-6z" fill="#fff"/></svg>`,
+ cam:()=>`<svg viewBox="0 0 120 120" class="ill" aria-hidden="true"><rect x="16" y="16" width="88" height="88" rx="24" fill="#2b313b" stroke="#6b7685" stroke-width="2"/>
+   ${[[40,40],[40,80],[78,60]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="17" fill="#0b0f14" stroke="#8a96a8" stroke-width="2.5"/><circle cx="${x}" cy="${y}" r="9" fill="#1d3550"/><circle cx="${x-3}" cy="${y-3}" r="2.6" fill="#9cc2ff"/>`).join("")}
+   <circle cx="80" cy="30" r="5" fill="#f5e6b8"/><circle cx="86" cy="88" r="3" fill="#0b0f14"/></svg>`,
+ faceid:()=>`<svg viewBox="0 0 120 120" class="ill" aria-hidden="true"><path d="M22 40V26a4 4 0 014-4h14M80 22h14a4 4 0 014 4v14M98 80v14a4 4 0 01-4 4H80M40 98H26a4 4 0 01-4-4V80" stroke="#4d90ff" stroke-width="5" fill="none" stroke-linecap="round"/>
+   <path d="M46 48v6M74 48v6M60 48v16h-4M48 78c8 6 16 6 24 0" stroke="#4d90ff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+   ${Array.from({length:14},(_,i)=>`<circle cx="${30+((i*37)%62)}" cy="${30+((i*53)%62)}" r="1.6" fill="#ff5a5f" opacity=".8"/>`).join("")}</svg>`,
+ sac:(k)=>`<svg viewBox="0 0 120 120" class="ill" aria-hidden="true"><path d="M18 30h56a8 8 0 018 8v10" stroke="#e08a2e" stroke-width="12" fill="none"/><rect x="10" y="22" width="20" height="16" rx="3" fill="#c69a3a"/>
+   <rect x="34" y="52" width="76" height="40" rx="10" fill="#2b313b" stroke="#6b7685" stroke-width="2"/><rect x="${k==="ipold"?54:52}" y="64" width="40" height="16" rx="8" fill="#0b0f14" stroke="#a9b4c2" stroke-width="2"/>
+   <rect x="60" y="70" width="28" height="4" rx="2" fill="#c69a3a"/><circle cx="44" cy="72" r="3" fill="#0b0f14"/><circle cx="100" cy="72" r="3" fill="#0b0f14"/><circle cx="16" cy="96" r="3" fill="#6b7685"/><circle cx="26" cy="96" r="3" fill="#6b7685"/></svg>`,
+ lung:(k)=>`<svg viewBox="0 0 120 120" class="ill" aria-hidden="true"><defs><linearGradient id="bg${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9fb4cf"/><stop offset="1" stop-color="#4d5f78"/></linearGradient></defs>
+   <rect x="32" y="8" width="56" height="104" rx="12" fill="url(#bg${k})" stroke="#c7d2e0" stroke-width="2"/><rect x="38" y="14" width="22" height="22" rx="7" fill="#1a1f27"/>
+   <path d="M34 60 L62 46 L54 66 L86 58 M58 66 L48 104 M62 46 L78 30" stroke="#fff" stroke-width="1.6" fill="none" opacity=".85"/><rect x="34" y="10" width="20" height="100" fill="#fff" opacity=".12"/></svg>`,
+ main:()=>`<svg viewBox="0 0 120 120" class="ill" aria-hidden="true"><rect x="12" y="20" width="96" height="80" rx="10" fill="#14392b" stroke="#2fb38f" stroke-width="2"/>
+   <rect x="42" y="42" width="30" height="30" rx="4" fill="#1a1f27" stroke="#8a96a8"/><text x="57" y="61" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#cfd9e6">CPU</text>
+   <rect x="80" y="32" width="18" height="12" rx="2" fill="#1a1f27"/><rect x="80" y="52" width="18" height="18" rx="2" fill="#1a1f27"/><rect x="22" y="32" width="12" height="22" rx="2" fill="#1a1f27"/><rect x="22" y="64" width="12" height="22" rx="2" fill="#c69a3a"/>
+   <path d="M42 50H34M42 64H34M72 50h8M72 64h8M57 42V28M57 72v16" stroke="#2fb38f" stroke-width="1.6"/>${[30,46,62,78,94].map(x=>`<circle cx="${x}" cy="94" r="2" fill="#c69a3a"/>`).join("")}</svg>`,
+ nuoc:()=>`<svg viewBox="0 0 120 120" class="ill" aria-hidden="true"><rect x="38" y="30" width="44" height="84" rx="9" fill="#1f242b" stroke="#6b7685" stroke-width="2"/><path d="M60 6c10 14 16 22 16 30a16 16 0 01-32 0c0-8 6-16 16-30z" fill="#3aa0ff"/><path d="M54 34a7 7 0 004 8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="30" cy="70" r="5" fill="#3aa0ff" opacity=".7"/><circle cx="92" cy="84" r="4" fill="#3aa0ff" opacity=".6"/><path d="M46 96h28M46 104h20" stroke="#ff7a1a" stroke-width="3" stroke-linecap="round"/></svg>`,
+ epkinh:(k)=>ILL.man(k).replace('<rect x="${x+3}"','<rect x="${x+3}"').replace('</svg>','<path d="M38 30l18 22-8 6 30 28" stroke="#fff" stroke-width="2.5" fill="none" opacity=".95"/><path d="M70 20l-6 20 14 6" stroke="#fff" stroke-width="2" fill="none" opacity=".8"/></svg>'),
+ khac:()=>`<svg viewBox="0 0 120 120" class="ill" aria-hidden="true"><rect x="24" y="22" width="72" height="62" rx="16" fill="#ff7a1a"/><path d="M44 96l10-12h-14z" fill="#ff7a1a"/><text x="60" y="66" text-anchor="middle" font-family="Arial,sans-serif" font-size="40" font-weight="900" fill="#fff">?</text></svg>`,
+ loa:()=>`<svg viewBox="0 0 120 120" class="ill" aria-hidden="true"><rect x="22" y="34" width="76" height="52" rx="12" fill="#2b313b" stroke="#6b7685" stroke-width="2"/>
+   ${Array.from({length:18},(_,i)=>`<circle cx="${36+(i%6)*10}" cy="${48+Math.floor(i/6)*12}" r="2.6" fill="#0b0f14"/>`).join("")}<path d="M104 46a18 18 0 010 28M110 38a28 28 0 010 44" stroke="#4d90ff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`
+};
+
+/* ===== Dữ liệu máy (giá tạm, nghìn đồng) ===== */
+// iPhone: tên | Z giá màn zin tháo máy | B giá pin cơ sở | L=1 máy gốc màn LCD | F nhóm Face ID
+const IPRAW={
+ "16 – 18":"iPhone 18 Pro Max|||0|18;iPhone 18 Pro|||0|18;iPhone 17 Pro Max||1000|0|17;iPhone 17 Pro||950|0|17;iPhone Air||900|0|17;iPhone 17||900|0|17;iPhone 17e||850|0|17;iPhone 16 Pro Max|9200|880|0|16;iPhone 16 Pro|7500|820|0|16;iPhone 16 Plus|4900|780|0|16;iPhone 16|4200|750|0|16;iPhone 16e|3800|700|0|16",
+ "14 – 15":"iPhone 15 Pro Max|7800|800|0|15;iPhone 15 Pro|6200|750|0|15;iPhone 15 Plus|4200|720|0|15;iPhone 15|3600|680|0|15;iPhone 14 Pro Max|6500|750|0|14;iPhone 14 Pro|5200|700|0|14;iPhone 14 Plus|3800|680|0|14;iPhone 14|3200|620|0|14",
+ "12 – 13":"iPhone 13 Pro Max|4900|680|0|13;iPhone 13 Pro|3900|620|0|13;iPhone 13|2900|580|0|13;iPhone 13 mini|2600|560|0|13;iPhone 12 Pro Max|3200|600|0|12;iPhone 12 Pro|2400|540|0|12;iPhone 12|2400|540|0|12;iPhone 12 mini|2200|520|0|12",
+ "X – 11":"iPhone 11 Pro Max|2600|560|0|11;iPhone 11 Pro|2200|520|0|11;iPhone 11|1200|480|1|11;iPhone XS Max|2300|520|0|X;iPhone XS|1900|480|0|X;iPhone XR|1100|450|1|X;iPhone X|1800|450|0|X",
+ "6 – 8 & SE":"iPhone SE 2022|800|380|1|;iPhone SE 2020|750|350|1|;iPhone 8 Plus|850|350|1|;iPhone 8|700|330|1|;iPhone 7 Plus|750|330|1|;iPhone 7|650|300|1|;iPhone 6s Plus|600|300|1|;iPhone 6s|500|280|1|;iPhone 6 Plus|550|280|1|;iPhone 6|450|250|1|"
+};
+// Android & iPad: tên:giá màn chính hãng:giá pin
+const ANRAW={
+ ipad:{"Pro":"iPad Pro 13 M5::2600,iPad Pro 11 M5::2400,iPad Pro 13 M4::2500,iPad Pro 11 M4::2300,iPad Pro 12.9 (2022):8500:1900,iPad Pro 11 (2022):5900:1700,iPad Pro 12.9 (2021):8500:1900,iPad Pro 11 (2021):5900:1700,iPad Pro 12.9 (2020):6500:1700,iPad Pro 11 (2020):4500:1500,iPad Pro 12.9 (2018):6200:1600,iPad Pro 11 (2018):4300:1400,iPad Pro 12.9 (2017):4500:1300,iPad Pro 10.5:3200:1100,iPad Pro 12.9 (2015):3900:1200,iPad Pro 9.7:2500:1000",
+   "Air":"iPad Air 13 M3:6800:1800,iPad Air 11 M3:5000:1600,iPad Air 13 M2:6500:1800,iPad Air 11 M2:4800:1600,iPad Air 5:3800:1400,iPad Air 4:3600:1300,iPad Air 3:2200:1100,iPad Air 2:1600:900,iPad Air 1:1100:800",
+   "Gen":"iPad Gen 11 (A16):2800:1300,iPad Gen 10:2600:1200,iPad Gen 9:1500:1000,iPad Gen 8:1400:950,iPad Gen 7:1300:900,iPad Gen 6:1100:850,iPad Gen 5:1000:800",
+   "mini":"iPad mini 7 (A17 Pro):3900:1400,iPad mini 6:3500:1300,iPad mini 5:2200:1000,iPad mini 4:1700:900"},
+ samsung:{"Dòng S":"Galaxy S26 Ultra::1400,Galaxy S26+::1200,Galaxy S26::1100,Galaxy S25 Ultra:7500:1300,Galaxy S25+:5200:1100,Galaxy S25:4500:1000,Galaxy S24 Ultra:6900:1200,Galaxy S24+:4600:1000,Galaxy S24:4300:950,Galaxy S23 Ultra:5900:1100,Galaxy S23+:4000:900,Galaxy S23:3800:850,Galaxy S22 Ultra:5200:1000,Galaxy S22+:3600:850,Galaxy S22:3300:800,Galaxy S21 Ultra:4500:900,Galaxy S21+:3200:800,Galaxy S21:3000:750,Galaxy S20 Ultra:4200:850,Galaxy S20+:3000:750,Galaxy S20:2800:700,Galaxy S10+:2600:650,Galaxy S10:2400:600",
+   "Dòng Note":"Galaxy Note 20 Ultra:5200:950,Galaxy Note 20:3200:800,Galaxy Note 10+:3500:750,Galaxy Note 10:2800:700,Galaxy Note 9:2600:650,Galaxy Note 8:2300:600",
+   "Dòng A":"Galaxy A57::800,Galaxy A37::750,Galaxy A27::700,Galaxy A18::550,Galaxy A08::500,Galaxy A07::500,Galaxy A56:2200:750,Galaxy A55:2100:700,Galaxy A54:1800:650,Galaxy A36:1800:700,Galaxy A35:1700:650,Galaxy A34:1600:600,Galaxy A26:1400:600,Galaxy A25:1300:600,Galaxy A16:1100:550,Galaxy A15:1000:550,Galaxy A06:800:500,Galaxy A05:750:450,Galaxy A73:1900:650,Galaxy A53:1600:600,Galaxy A52:1500:550,Galaxy A33:1300:550,Galaxy A32:1100:500",
+   "Dòng Z (gập)":"Galaxy Z Fold8 Ultra::1700,Galaxy Z Fold8::1600,Galaxy Z Flip8::1400,Galaxy Z Fold7::1600,Galaxy Z Flip7::1400,Galaxy Z Fold6::1500,Galaxy Z Fold5::1400,Galaxy Z Fold4::1300,Galaxy Z Flip6:6200:1300,Galaxy Z Flip5:5800:1200,Galaxy Z Flip4:5200:1100"},
+ vivo:{"Dòng V":"vivo V40:2900:800,vivo V30:2600:750,vivo V29:2400:700,vivo V27:2200:650","Dòng Y":"vivo Y100:1500:600,vivo Y36:1100:550,vivo Y28:950:500,vivo Y18:850:500,vivo Y17s:800:450,vivo Y03:750:450","Dòng X":"vivo X200 Pro::1100,vivo X100 Pro::1000"},
+ xiaomi:{"Xiaomi":"Xiaomi 15 Ultra::1200,Xiaomi 15::1100,Xiaomi 14 Ultra:6500:1100,Xiaomi 14:4500:1000,Xiaomi 14T Pro:4200:950,Xiaomi 14T:3600:900,Xiaomi 13T Pro:3800:900,Xiaomi 13T:3200:850",
+   "Redmi Note":"Redmi Note 14 Pro+:2600:750,Redmi Note 14 Pro:2200:700,Redmi Note 14:1400:600,Redmi Note 13 Pro+:2400:700,Redmi Note 13 Pro:2000:650,Redmi Note 13:1300:550,Redmi Note 12:1200:500",
+   "Redmi":"Redmi 14C:800:450,Redmi 13C:750:450,Redmi 13:900:500,Redmi 12:850:450,Redmi A3:650:400"},
+ oppo:{"Find":"OPPO Find X8 Pro::1200,OPPO Find X8::1100,OPPO Find N3 Flip::1100","Reno":"OPPO Reno13 Pro:3800:900,OPPO Reno13:2600:800,OPPO Reno12 Pro:3400:850,OPPO Reno12:2400:750,OPPO Reno11:2200:700,OPPO Reno10:2000:650,OPPO Reno8 T:1600:600",
+   "Dòng A":"OPPO A79:1300:600,OPPO A78:1200:550,OPPO A60:1100:550,OPPO A58:1000:500,OPPO A38:900:500,OPPO A18:800:450,OPPO A17:750:450"},
+ realme:{"Realme số":"Realme 13 Pro+:2600:750,Realme 13 Pro:2300:700,Realme 12 Pro+:2400:700,Realme 12 Pro:2200:650,Realme 11 Pro:2000:650","Dòng C":"Realme C75:1100:550,Realme C67:1000:550,Realme C65:950:500,Realme C55:900:500,Realme C53:850:450","Dòng Note":"Realme Note 60:750:450,Realme Note 50:700:400"}
+};
+const BR={
+ iphone:{n:"iPhone",s:"iPhone 6 đến 18 Pro Max",svg:"iphone",glow:"#4d90ff",kind:"ip",series:{}},
+ ipad:{n:"iPad",s:"Gen, mini, Air, Pro",svg:"ipad",glow:"#9aa6b8",kind:"pad",series:{}},
+ samsung:{n:"Samsung",s:"Dòng S, Note, A, Z",svg:"samsung",glow:"#5b7bd5",kind:"and",series:{}},
+ vivo:{n:"Vivo",s:"Dòng V, Y, X",svg:"vivo",glow:"#6b6fe0",kind:"and",series:{}},
+ xiaomi:{n:"Xiaomi",s:"Xiaomi, Redmi",svg:"xiaomi",glow:"#ff8a3d",kind:"and",series:{}},
+ oppo:{n:"OPPO",s:"Find, Reno, A",svg:"oppo",glow:"#2fb38f",kind:"and",series:{}},
+ realme:{n:"Realme",s:"Realme, C, Note",svg:"realme",glow:"#e2b93b",kind:"and",series:{}}
+};
+const num=x=>x===""||x==null?null:+x;
+for(const [ser,str] of Object.entries(IPRAW))BR.iphone.series[ser]=str.split(";").map(r=>{const [n,Z,B,L,F]=r.split("|");return {n,Z:num(Z),B:num(B),lcd:L==="1",fid:F||null}});
+for(const [b,obj] of Object.entries(ANRAW))for(const [ser,str] of Object.entries(obj))BR[b].series[ser]=str.split(",").map(r=>{const [n,S,B]=r.split(":");return {n,S:num(S),B:num(B)}});
+
+/* ===== Bảng giá Face ID (tạm) ===== */
+const FID_COLS=["Lỗi cụm chiếu điểm","Lỗi camera hồng ngoại, cảm biến","Máy vào nước, rơi vỡ"];
+const FID={X:["iPhone X, XS, XS Max, XR",[1200,900,1500]],"11":["iPhone 11, 11 Pro, 11 Pro Max",[1300,1000,1600]],"12":["iPhone 12 các loại",[1500,1100,1800]],"13":["iPhone 13 các loại",[1700,1300,2000]],
+ "14":["iPhone 14 các loại",[1900,1500,2300]],"15":["iPhone 15 các loại",[2200,1700,2600]],"16":["iPhone 16 các loại",[2500,1900,2900]],"17":["iPhone 17, Air",[null,null,null]],"18":["iPhone 18 Pro, Pro Max",[null,null,null]]};
+
+/* ===== Dịch vụ và loại linh kiện ===== */
+const SVN={man:"Màn hình",pin:"Pin",cam:"Camera",faceid:"Face ID",sac:"Chân sạc",lung:"Kính lưng",main:"Sửa main, IC",epkinh:"Ép kính màn hình",nuoc:"Máy vào nước",loa:"Loa, mic, rung",khac:"Lỗi khác"};
+function services(b,m){
+  const k=BR[b].kind;
+  if(k==="ip"){const o=["man","pin","epkinh","cam"];if(m.fid)o.push("faceid");o.push("sac");if(!/iPhone (6|6s|7)( Plus)?$/.test(m.n))o.push("lung");o.push("main","nuoc","loa","khac");return o;}
+  if(k==="pad")return ["man","pin","sac","cam","main","nuoc","loa","khac"];
+  return ["man","pin","epkinh","cam","sac","lung","main","nuoc","loa","khac"];
+}
+/* Giá iPhone theo cửa hàng (nghìn đ): màn zin tháo máy iCloud, hư IC, chân sạc, camera sau, kính lưng, nhóm pin (a: X–11, b: máy thường và Pro, c: Pro Max) */
+const IPP={
+"iPhone 18 Pro Max":[null,1200,null,null,null,"c"],"iPhone 18 Pro":[null,1200,null,null,null,"b"],
+"iPhone 17 Pro Max":[null,1200,null,null,null,"c"],"iPhone 17 Pro":[null,1200,null,null,null,"b"],"iPhone Air":[null,1200,null,null,null,"b"],
+"iPhone 17":[5900,1200,850,1300,600,"b"],"iPhone 17e":[4500,1200,800,1100,550,"b"],
+"iPhone 16 Pro Max":[7900,1200,850,1600,650,"c"],"iPhone 16 Pro":[6900,1200,850,1500,650,"b"],"iPhone 16 Plus":[4900,1200,800,1200,600,"b"],"iPhone 16":[4500,1200,800,1100,600,"b"],"iPhone 16e":[3900,1200,790,1000,550,"b"],
+"iPhone 15 Pro Max":[6800,1200,790,1400,600,"c"],"iPhone 15 Pro":[5900,1200,750,1300,600,"b"],"iPhone 15 Plus":[4200,1200,700,1100,600,"b"],"iPhone 15":[3800,1200,700,1000,550,"b"],
+"iPhone 14 Pro Max":[4800,1200,600,1200,600,"c"],"iPhone 14 Pro":[4200,1200,600,1100,600,"b"],"iPhone 14 Plus":[3200,990,600,900,550,"b"],"iPhone 14":[2900,990,550,850,550,"b"],
+"iPhone 13 Pro Max":[4800,990,600,1150,580,"c"],"iPhone 13 Pro":[3900,990,600,1050,560,"b"],"iPhone 13":[2500,900,550,800,520,"b"],"iPhone 13 mini":[2300,900,550,750,500,"b"],
+"iPhone 12 Pro Max":[2990,600,600,1100,550,"c"],"iPhone 12 Pro":[2200,600,500,900,520,"b"],"iPhone 12":[1700,600,500,600,500,"b"],"iPhone 12 mini":[1600,600,500,600,480,"b"],
+"iPhone 11 Pro Max":[1900,550,800,790,490,"c"],"iPhone 11 Pro":[1600,550,760,700,450,"b"],"iPhone 11":[900,500,490,600,390,"a"],
+"iPhone XS Max":[1500,490,490,550,450,"a"],"iPhone XS":[1300,490,490,550,400,"a"],"iPhone XR":[800,490,490,450,390,"a"],"iPhone X":[1200,490,490,550,390,"a"]};
+/* Giá ép kính của tiệm (đã duyệt 26/11/2026) */
+const EK={"iPhone X": 490, "iPhone XS": 490, "iPhone XS Max": 590, "iPhone XR": 590, "iPhone 11": 600, "iPhone 11 Pro": 600, "iPhone 11 Pro Max": 600, "iPhone 12 mini": 600, "iPhone 12": 600, "iPhone 12 Pro": 600, "iPhone 12 Pro Max": 600, "iPhone 13 mini": 600, "iPhone 13": 600, "iPhone 13 Pro": 600, "iPhone 13 Pro Max": 700, "iPhone 14": 700, "iPhone 14 Plus": 700, "iPhone 14 Pro": 700, "iPhone 14 Pro Max": 800, "iPhone 15": 700, "iPhone 15 Plus": 800, "iPhone 15 Pro": 800, "iPhone 15 Pro Max": 900, "iPhone 16e": 900, "iPhone 16": 1000, "iPhone 16 Plus": 1100, "iPhone 16 Pro": 1100, "iPhone 16 Pro Max": 1200, "iPhone 17": 1300, "iPhone 17e": 1500, "iPhone 17 Pro": 1500, "iPhone 17 Pro Max": 1700};
+/* Giá thị trường TP.HCM (tạm, nghìn đ): [ép kính, màn LCD, màn OLED] */
+const MKT={"iPhone XS Max":[350,650,1000],"iPhone XR":[300],"iPhone X":[300],"iPhone XS":[300],"iPhone 11":[300],"iPhone 11 Pro":[350],"iPhone 11 Pro Max":[400],
+"iPhone 12 mini":[400,650,1100],"iPhone 12":[400,650,1100],"iPhone 12 Pro":[400,650,1100],"iPhone 12 Pro Max":[500,750,1300],
+"iPhone 13 mini":[450,750,1300],"iPhone 13":[450,750,1300],"iPhone 13 Pro":[550,850,1600],"iPhone 13 Pro Max":[600,900,1800],
+"iPhone 14":[500,800,1400],"iPhone 14 Plus":[550,900,1600],"iPhone 14 Pro":[650,1000,2000],"iPhone 14 Pro Max":[700,1100,2200],
+"iPhone 15":[600,950,1800],"iPhone 15 Plus":[650,1050,2000],"iPhone 15 Pro":[750,1200,2500],"iPhone 15 Pro Max":[800,1300,2800],
+"iPhone 16e":[600,1000,1800],"iPhone 16":[650,1000,2000],"iPhone 16 Plus":[700,1100,2300],"iPhone 16 Pro":[850,1400,3000],"iPhone 16 Pro Max":[950,1500,3300],
+"iPhone 17e":[700,1100,2000],"iPhone 17":[800,1300,2500]};
+const PIN={a:[500,600,700],b:[600,700,800],c:[700,800,900]};
+const OVR={"iPhone X":{lcd:590,oled:890},"iPhone XS":{lcd:590,oled:890},"iPhone 11":{lcd:600},"iPhone 11 Pro":{lcd:650,oled:1200},"iPhone 11 Pro Max":{lcd:680,oled:1200}};
+function types(b,m,s){const r=types0(b,m,s);return r.slice().sort((a,c)=>(a.p??1e9)-(c.p??1e9));}
+function types0(b,m,s){
+  const k=BR[b].kind,P=k==="ip"?IPP[m.n]:null,Z=P?P[0]:k==="ip"?m.Z:m.S,B=m.B;
+  const T=(n,p,q,bh,t,d,from,na)=>({n,p:p==null||Number.isNaN(p)?null:p,q,bh,t,d,from,na});
+  if(s==="man"){
+    if(k==="ip"){
+      if(m.lcd)return [T("Màn LCD thay thế",OVR[m.n]?.lcd??(Z&&r50(Z*.5)),2,"6 tháng","30–45 phút","Màn LCD loại tốt, màu hiển thị ổn, giá dễ chịu."),
+                       T("Màn zin tháo máy iCloud",Z,3,"12 tháng","30–45 phút","Màn Apple chính hãng tháo từ máy iCloud. Giữ True Tone, màu và cảm ứng như nguyên bản.")];
+      return [T("Màn LCD",OVR[m.n]?.lcd??MKT[m.n]?.[1]??(Z&&Math.max(350,r50(Z*.25))),1,"6 tháng","30–45 phút","Loại rẻ nhất. Viền dày hơn một chút, màu nhạt hơn và hao pin hơn OLED."),
+              T("Màn OLED",OVR[m.n]?.oled??MKT[m.n]?.[2]??(Z&&r50(Z*.45)),2,"6 tháng","30–45 phút","Màu rực, đen sâu, mỏng gần như zin. Lựa chọn cân bằng giữa giá và chất lượng."),
+              T("Màn zin tháo máy iCloud",Z,3,"12 tháng","30–45 phút","Màn Apple chính hãng tháo từ máy iCloud. Giữ True Tone, đẹp nhất, như màn gốc của máy.")];
+    }
+    if(k==="pad")return [T("Ép kính cảm ứng",Z&&Math.max(350,r50(Z*.25)),2,"6 tháng","2–3 giờ","Kính hoặc cảm ứng bị vỡ, liệt. Màn hiển thị vẫn tốt."),T("Thay màn nguyên bộ",Z,3,"6 tháng","1–2 giờ","Màn sọc, chảy mực, không lên hình. Thay cả bộ màn và cảm ứng.")];
+    return [T("Màn chính hãng",Z,3,"6 tháng","45–60 phút","Màn chính hãng theo máy. Màu, độ sáng và cảm ứng như nguyên bản."),T("Màn thay thế loại tốt",Z&&r50(Z*.45),2,"3 tháng","45–60 phút","Giá tốt, hiển thị ổn định, phù hợp máy đời cũ.")];
+  }
+  if(s==="pin"){
+    if(k==="ip"){const pp=P?PIN[P[5]]:[B&&r50(B*.8),B&&r50(B*1.1),B&&r50(B*1.35)];
+      return [T("Pin không xác định",pp[0],1,"12 tháng","20–30 phút","Pin dung lượng chuẩn, dùng tốt. Cài đặt báo pin không xác định, không xem được % sức khỏe."),
+      T("Pin đã sử dụng",pp[1],2,"12 tháng","20–30 phút","Pin Apple zin tháo máy. Cài đặt hiện mục linh kiện đã sử dụng."),
+      T("Pin ép phôi, chạy lại 100%",pp[2],3,"12 tháng","1–2 giờ","Ép cell pin mới vào phôi pin zin, chạy lại phần mềm để hiện 100%, không báo lỗi."),
+      T("Pin chính hãng",null,3,"12 tháng","20–30 phút","Bao chính hãng, hiện đúng dung lượng, không báo lỗi.",false,"Tạm hết hàng")];}
+    return [T("Thay pin",B,3,"12 tháng","30–45 phút","Pin dung lượng chuẩn theo máy, kiểm tra dòng sạc trước khi giao.")];
+  }
+  if(s==="cam"){const base=B||800,big=/1[4-9] Pro|17|18/.test(m.n)&&/Pro|Air|17$|17e/.test(m.n),pro3=/1[4-9] Pro/.test(m.n);
+    return [T("Thay kính camera (giá mỗi kính)",k==="ip"?(pro3?200:150):r50(150+base*.1),2,"3 tháng","20–30 phút","Kính camera nứt, vỡ. Chỉ thay mặt kính bị vỡ, giữ nguyên cụm camera."),
+            T("Thay cụm camera sau",P?P[3]:Z&&r50(Z*.45),3,"6 tháng","30–60 phút","Camera rung, mờ, không lấy nét, đen camera.")];}
+  if(s==="sac")return [T(k==="ip"&&!/1[5-8]|Air|16e/.test(m.n)?"Thay cụm chân sạc Lightning":"Thay cụm chân sạc Type-C",P?P[2]:B&&r50(250+B*.4),3,"6 tháng","30–60 phút","Không nhận sạc, sạc chập chờn, lỏng cáp. Gồm cả mic dưới.")];
+  if(s==="lung")return [T("Thay kính lưng bằng máy laser",P?P[4]:Z&&r50(Z*.18+300),3,"3 tháng","1–2 giờ","Bóc kính vỡ bằng máy laser, giữ nguyên khung và linh kiện bên trong.")];
+  if(s==="main"){const ic=P?P[1]:B&&Math.max(500,r50((Z||3000)*.12));
+    return [T("Lỗi cơ bản, kiểm tra báo giá thêm",500,3,"3 tháng","1 ngày","Lỗi nhẹ trên main. Tiệm đo kiểm miễn phí rồi báo giá chính xác.",true),
+      T("Hư IC (IC sạc, IC nguồn, IC âm thanh...)",ic,3,"3 tháng","1–2 ngày","Thay IC bị hỏng trên main, kiểm tra lại toàn bộ chức năng.",true),
+      T("Mất sóng, không nhận sim",500,3,"3 tháng","1–2 ngày","Mất sóng, báo không có dịch vụ, không nhận sim.",true),
+      T("Mất wifi, bluetooth",500,3,"3 tháng","1 ngày","Wifi xám, không bật được bluetooth, dò không thấy mạng.",true),
+      T("Không lên nguồn",500,3,"3 tháng","1–2 ngày","Máy chết hẳn, cắm sạc không lên, không nhận sạc.",true),
+      T("Dùng một lúc tắt nguồn, nóng máy",500,3,"3 tháng","1–2 ngày","Tự tắt, tự khởi động lại, nóng bất thường ở vùng main.",true),
+      T("Lỗi ổ cứng, nâng cấp ổ cứng",500,3,"3 tháng","1 ngày","Lỗi ổ cứng, báo đầy bộ nhớ, hoặc nâng dung lượng ổ cứng.",true),
+      T("Treo logo, treo táo không lên",500,3,"3 tháng","1–2 ngày","Máy kẹt ở logo, khởi động lại liên tục, không vào được màn hình chính.",true)];}
+  if(s==="epkinh")return [T("Ép kính màn hình",k==="ip"?(EK[m.n]??(Z&&Math.min(450,Math.max(350,r50(Z*.5))))):k==="pad"?Z&&Math.max(350,r50(Z*.25)):Z&&Math.max(300,r50(Z*.2)),3,"3 tháng","2–3 giờ","Màn vẫn lên hình và cảm ứng tốt, chỉ vỡ mặt kính. Giữ nguyên màn zin, chỉ thay lớp kính bên ngoài.")];
+  if(s==="nuoc")return [T("Sấy khô, vệ sinh máy vào nước",0,3,"Không áp dụng","2–24 giờ","Máy rơi nước mang đến sớm nhất có thể, tắt nguồn, không sạc. Tiệm sấy và vệ sinh miễn phí."),
+      T("Xử lý main sau vào nước",B&&Math.max(500,r50((Z||3000)*.15)),3,"1 tháng","1–3 ngày","Máy đã sấy vẫn lỗi, cần vệ sinh và thay linh kiện trên main.",true)];
+  if(s==="loa")return [T("Loa, mic, rung",B&&r50(200+B*.25),3,"3 tháng","30–60 phút","Loa rè, nhỏ, mất tiếng, mic không nghe, không rung.")];
+  return [];
+}
+const minPrice=a=>{const v=a.map(t=>t.p).filter(p=>p!=null);return v.length?Math.min(...v):null};
+const illKey=(b,m)=>BR[b].kind==="ip"?"ip":BR[b].kind==="pad"?"pad":"and";
+const ill=(s,b,m)=>(ILL[s]||ILL.main)(illKey(b,m));
+
+/* ===== Trạng thái ===== */
+const firstSeries=b=>Object.keys(BR[b].series)[0];
+let st={b:"iphone",ser:"14 – 15",mi:0,s:"man",t:0};
+const model=()=>BR[st.b].series[st.ser][st.mi];
+
+/* ===== Ảnh máy thật theo màu (ảnh gốc Apple) ===== */
+const IMG={"sS":[["a","Titan Cam","#e9c8ad"],["b","Titan Tím","#55557a"]],"sZ":[["fold","Galaxy Z Fold8","#c9bfe0"],["flip","Galaxy Z Flip8","#f2c6dd"]],"sA":[["a","Xanh Đen","#1f2a44"]],"g18p":[["silver","Bạc","#dcdcdc"],["glacier","Xanh Băng","#c9d8e2"],["burgundy","Đỏ Burgundy","#5a2128"],["black","Đen","#2b2b2d"]],"g17p":[["cosmicorange","Cam Vũ Trụ","#e9772f"],["deepblue","Xanh Đậm","#2f3d5c"],["silver","Bạc","#e2e3e4"]],"gair":[["skyblue","Xanh Da Trời","#c4d6e6"],["lightgold","Vàng Nhạt","#ece0c4"],["cloudwhite","Trắng Mây","#f2f1ee"],["spaceblack","Đen Không Gian","#2a2b2f"]],"g17":[["lavender","Tím Oải Hương","#d4c9e2"],["sage","Xanh Xô Thơm","#c2ccb0"],["mistblue","Xanh Sương Mù","#b6c7d6"],["white","Trắng","#f3f3f1"],["black","Đen","#2d2e32"]],"g17e":[["softpink","Hồng Phấn","#f1d3d6"],["white","Trắng","#f3f3f1"],["black","Đen","#2d2e32"]],"g16p":[["deserttitanium","Titan Sa Mạc","#c4a68a"],["naturaltitanium","Titan Tự Nhiên","#bdb6ab"],["whitetitanium","Titan Trắng","#e6e4df"],["blacktitanium","Titan Đen","#3b3b3c"]],"g16":[["ultramarine","Xanh Lưu Ly","#5b6fd6"],["teal","Xanh Mòng Két","#6fa7a1"],["pink","Hồng","#f0b8cf"],["white","Trắng","#f4f4f2"],["black","Đen","#2d2e30"]],"g16e":[["white","Trắng","#f4f4f2"],["black","Đen","#2d2e30"]],"g15p":[["naturaltitanium","Titan Tự Nhiên","#bab4a9"],["bluetitanium","Titan Xanh","#3f4a5c"],["whitetitanium","Titan Trắng","#e5e3de"],["blacktitanium","Titan Đen","#3c3c3d"]],"g15":[["pink","Hồng","#f2d6da"],["yellow","Vàng","#f3eacb"],["green","Xanh Lá","#d7e3cf"],["blue","Xanh Dương","#cfdde6"],["black","Đen","#3a3b3d"]],"g14p":[["deeppurple","Tím Đậm","#594f63"],["gold","Vàng","#f4e8ce"],["silver","Bạc","#e3e4e2"],["spaceblack","Đen Không Gian","#403e3d"]],"g14":[["blue","Xanh Dương","#a0b4c7"],["purple","Tím","#e5ddea"],["yellow","Vàng","#f9e479"],["midnight","Nửa Đêm","#222930"],["starlight","Ánh Sao","#faf6f2"],["product-red","Đỏ","#bf0013"]],"g13p":[["blue","Xanh Sierra","#9bb5ce"],["green","Xanh Lá Alpine","#576856"],["gold","Vàng","#fae7cf"],["silver","Bạc","#f1f2ed"],["graphite","Than Chì","#54524f"]],"g13":[["pink","Hồng","#fae0d8"],["blue","Xanh Dương","#276787"],["product-red","Đỏ","#bf0013"],["starlight","Ánh Sao","#faf6f2"],["midnight","Nửa Đêm","#232a31"]],"g12p":[["blue","Xanh Thái Bình Dương","#2f4452"],["gold","Vàng","#fcebd3"],["silver","Bạc","#e3e4df"],["graphite","Than Chì","#52514d"]],"g12":[["purple","Tím","#b7afe6"]],"g11p":[["midnight-green","Xanh Bóng Đêm","#4e5851"],["gold","Vàng","#fad7bd"],["silver","Bạc","#ebebe3"],["space","Xám Không Gian","#535150"]],"g11":[["purple","Tím","#d1cdda"],["yellow","Vàng","#ffe681"],["green","Xanh Lá","#aee1cd"],["red","Đỏ","#ba0c2e"],["white","Trắng","#f9f6ef"],["black","Đen","#1f2020"]],"gxr":[["blue","Xanh Dương","#4eb5e6"],["yellow","Vàng","#f9d045"],["coral","San Hô","#ee7762"],["red","Đỏ","#b41325"],["white","Trắng","#f3f3f3"],["black","Đen","#2b2b2b"]],"gxs":[["gold","Vàng","#f5ddc5"],["silver","Bạc","#e4e4e2"],["space","Xám Không Gian","#4a4a4c"]],"gse22":[["red","Đỏ","#bf0013"],["starlight","Ánh Sao","#faf6f2"],["midnight","Nửa Đêm","#232a31"]],"gse20":[["red","Đỏ","#bf0013"],["white","Trắng","#f3f3f3"],["black","Đen","#2b2b2b"]]};
+function grpOf(n){
+  const t=[[/18 Pro/,"g18p"],[/17 Pro/,"g17p"],[/Air/,"gair"],[/17e/,"g17e"],[/iPhone 17$/,"g17"],[/16 Pro/,"g16p"],[/16e/,"g16e"],[/16/,"g16"],[/15 Pro/,"g15p"],[/15/,"g15"],[/14 Pro/,"g14p"],[/14/,"g14"],[/13 Pro/,"g13p"],[/13/,"g13"],[/12 Pro/,"g12p"],[/12/,"g12"],[/11 Pro/,"g11p"],[/11/,"g11"],[/XR/,"gxr"],[/X/,"gxs"],[/SE 2022/,"gse22"],[/SE 2020/,"gse20"]];
+  for(const [r,g] of t)if(r.test(n))return IMG[g]?g:null;return null;
+}
+const imgSrc=(g,c)=>`ph/${g}-${c}.webp`;
+const pv={m:null,g:null,i:0,timer:0,front:0};
+function pvRender(m,fast){
+  const g=BR[st.b].kind==="ip"?grpOf(m.n):st.b==="samsung"?({"Dòng S":"sS","Dòng Z (gập)":"sZ","Dòng A":"sA"})[st.ser]||null:null;pv.m=m;pv.g=g;pv.i=0;
+  const el=$("preview");
+  if(!g){el.innerHTML=`<div class="pv-stage">${brandSvg(BR[st.b].svg)}</div><div class="pv-name">${m.n}</div><div class="pv-hint">Ảnh màu thật của dòng này đang cập nhật</div>`;clearInterval(pv.timer);return;}
+  const cols=IMG[g];
+  el.innerHTML=`<div class="pv-stage"><img alt="" class="off"><img alt="" class="off"></div><div class="pv-name">${m.n}</div>
+    <div class="pv-color"><i></i><span></span></div>
+    <div class="dots">${cols.map((c,i)=>`<button class="dot" type="button" data-i="${i}" title="${c[1]}" aria-label="Màu ${c[1]}" style="background:${c[2]}"></button>`).join("")}</div>
+    <div class="pv-hint">${st.b==="samsung"?"Ảnh minh họa máy cao cấp nhất của dòng này":"Rê chuột vào đời máy để xem các màu, bấm chấm màu để chọn"}</div>`;
+  cols.forEach(c=>{const i=new Image();i.src=imgSrc(g,c[0]);});
+  pvShow(0);pvTimer(fast);
+}
+function pvShow(i){
+  const cols=IMG[pv.g];if(!cols)return;pv.i=(i+cols.length)%cols.length;const c=cols[pv.i];
+  const imgs=$("preview").querySelectorAll(".pv-stage img");if(imgs.length<2)return;
+  const next=imgs[1-pv.front],cur=imgs[pv.front];
+  next.alt=`${pv.m.n} màu ${c[1]}`;next.onload=()=>{next.classList.remove("off");cur.classList.add("off");};next.src=imgSrc(pv.g,c[0]);pv.front=1-pv.front;
+  const lab=$("preview").querySelector(".pv-color");lab.querySelector("i").style.background=c[2];lab.querySelector("span").textContent=c[1];
+  $("preview").querySelectorAll(".dot").forEach((d,k)=>d.setAttribute("aria-pressed",k===pv.i));
+}
+function pvTimer(fast){clearInterval(pv.timer);if(!motionOK)return;pv.timer=setInterval(()=>pvShow(pv.i+1),fast?1500:2600);}
+$("preview").addEventListener("click",e=>{const d=e.target.closest(".dot");if(!d)return;pvShow(+d.dataset.i);pvTimer(false);});
+let hoverT=0;
+$("models").addEventListener("pointerover",e=>{const t=e.target.closest(".model");if(!t||e.pointerType!=="mouse")return;clearTimeout(hoverT);
+  const m=BR[st.b].series[t.dataset.ser][+t.dataset.mi];if(pv.m!==m)pvRender(m,true);else pvTimer(true);});
+$("models").addEventListener("pointerleave",()=>{hoverT=setTimeout(()=>{if(pv.m!==model())pvRender(model(),false);else pvTimer(false);},500);});
+function brandCardCycle(btn){
+  const g=btn.dataset.g;if(!g)return;const cols=IMG[g],img=btn.querySelector(".bimg");let i=0;
+  btn.addEventListener("pointerenter",()=>{if(!motionOK)return;clearInterval(btn._t);btn._t=setInterval(()=>{i=(i+1)%cols.length;img.style.opacity=0;setTimeout(()=>{img.src=imgSrc(g,cols[i][0]);img.style.opacity=1;},350);},1300);});
+  btn.addEventListener("pointerleave",()=>clearInterval(btn._t));
+}
+
+function renderBrands(){
+  $("brands").innerHTML=Object.entries(BR).map(([k,b],i)=>{const g=k==="iphone"?"g18p":k==="samsung"?"sS":null;
+    const pic=g?`<img class="bimg" src="${imgSrc(g,IMG[g][0][0])}" alt="" width="94" height="112">`:brandSvg(b.svg);
+    return `<button class="brand ani" style="--i:${i}" type="button" data-k="${k}" ${g?`data-g="${g}"`:""} aria-pressed="${k===st.b}"><span class="tick">✓</span><span class="glow" style="background:${b.glow}"></span>${pic}<span class="bn">${b.n}</span><span class="bs">${b.s}</span></button>`}).join("");
+  document.querySelectorAll(".brand[data-g]").forEach(brandCardCycle);
+}
+function renderSeries(){
+  const b=BR[st.b];$("t2").textContent=b.kind==="ip"?"Chọn đời iPhone":`Chọn dòng và đời ${b.n}`;
+  $("serBox").hidden=b.kind==="ip";$("p2").textContent=b.kind==="ip"?"Tất cả đời iPhone, mới nhất xếp trước. Rê chuột để xem màu máy.":"Chọn dòng máy trước, sau đó chọn đúng đời máy.";
+  $("series").innerHTML=Object.keys(b.series).map((s,i)=>`<button class="ser ani" style="--i:${i}" type="button" data-s="${s}" aria-pressed="${s===st.ser}">${b.kind==="ip"?"iPhone "+s:s}</button>`).join("");
+}
+function renderModels(){
+  const b=BR[st.b],term=norm($("q").value);let html="",i=0;
+  const sets=(term||b.kind==="ip")?Object.entries(b.series):[[st.ser,b.series[st.ser]]];
+  for(const [ser,list] of sets)list.forEach((m,mi)=>{if(term&&!norm(m.n).includes(term)&&!norm(m.n).replace(/ /g,"").includes(term.replace(/ /g,"")))return;
+    html+=`<button class="model ani" style="--i:${Math.min(i++,14)}" type="button" data-ser="${ser}" data-mi="${mi}" aria-pressed="${ser===st.ser&&mi===st.mi}">${m.n}</button>`;});
+  $("models").innerHTML=html||`<div class="empty">Chưa có máy này trong danh sách. Gọi 0372 659 937 để được báo giá.</div>`;
+}
+function renderSvcs(){
+  const m=model(),list=services(st.b,m);if(!list.includes(st.s))st.s=list[0];
+  $("crumb3").innerHTML=`<span>${BR[st.b].n}</span><span>${m.n}</span>`;
+  $("svcs").innerHTML=list.map((s,i)=>{let mp;
+    if(s==="faceid"){mp=FID[m.fid][1][0];}else if(s==="khac"){mp=-1;}else mp=minPrice(types(st.b,m,s));
+    return `<button class="svc ani" style="--i:${i}" type="button" data-s="${s}" aria-pressed="${s===st.s}">${i<2?'<span class="hot">Hay sửa</span>':""}<span class="tick">✓</span>${ill(s,st.b,m)}<span class="sn">${SVN[s]}</span><span class="sp">${mp===-1?"Tả lỗi, tiệm gọi lại":mp==null?"Liên hệ":mp===0?"Sấy miễn phí":"từ "+vnd(mp)+"đ"}</span></button>`}).join("");
+}
+function renderStage4(){
+  const m=model(),s=st.s;
+  $("result").hidden=s==="khac";document.querySelector(".other-hint").hidden=s==="khac";
+  if(s==="khac"){
+    $("t4").textContent="Lỗi khác: để lại thông tin";$("p4").textContent="Tả lỗi máy của bạn, cửa hàng sẽ gọi lại báo giá.";
+    $("stage4").innerHTML=`<form class="lead ani" id="leadForm" novalidate>
+      <div class="lead-m">Máy: <b></b></div>
+      <label for="ldesc">Lỗi của máy</label>
+      <textarea id="ldesc" rows="3" required placeholder="Ví dụ: màn hình bị xanh, bể kính camera, loa rè..."></textarea>
+      <div class="lead-row"><div><label for="lname">Tên của bạn</label><input id="lname" autocomplete="name" placeholder="Không bắt buộc"></div>
+      <div><label for="lphone">Số điện thoại</label><input id="lphone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="Ví dụ: 0901 234 567"></div></div>
+      <p class="lead-err" id="lerr" hidden></p>
+      <button class="btn btn-call" type="submit">Gửi thông tin cho cửa hàng</button>
+      <div class="lead-done" id="ldone" hidden></div>
+    </form>`;
+    $("stage4").querySelector(".lead-m b").textContent=m.n;
+    return;
+  }
+  $("t4").textContent=s==="faceid"?"Bảng giá sửa Face ID":`Chọn loại ${SVN[s].toLowerCase()}`;
+  $("p4").textContent=s==="faceid"?`Dòng ${m.n} được tô sáng trong bảng.`:"Chọn loại, giá hiện ngay bên dưới.";
+  if(s==="faceid"){
+    $("stage4").innerHTML=`<div class="fid ani"><table><thead><tr><th>Dòng máy</th>${FID_COLS.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>`+
+      Object.entries(FID).map(([g,[n,ps]])=>`<tr class="${g===m.fid?"me":""}"><td>${n}</td>${ps.map(p=>`<td class="p">${p==null?"Liên hệ":vnd(p)}</td>`).join("")}</tr>`).join("")+`</tbody></table></div>`;
+    st.t=0;return;
+  }
+  const ts=types(st.b,m,s);if(st.t>=ts.length)st.t=0;
+  let note="";
+  if(s==="man"&&BR[st.b].kind==="ip"&&m.lcd)note=`<p class="typenote">${m.n} gốc dùng màn LCD nên không có loại OLED.</p>`;
+  $("stage4").innerHTML=`<div class="types">`+ts.map((t,i)=>`<button class="type ani" style="--i:${i}" type="button" data-t="${i}" aria-pressed="${i===st.t}"><span class="tick">✓</span>
+     ${s==="man"||s==="epkinh"?`<span class="scr ${/LCD/.test(t.n)?"lcd":/OLED/.test(t.n)?"oled":/zin/.test(t.n)?"zin":"gen"}" aria-hidden="true"><i></i></span>`:""}<span class="tn">${t.n}</span>${s==="main"||s==="nuoc"?"":`<span class="q">Chất lượng ${[1,2,3].map(x=>`<i class="${x<=t.q?"on":""}"></i>`).join("")}</span>`}
+     ${t.p==null?`<span class="tp na">${t.na||"Liên hệ báo giá"}</span>`:`<span class="tp">${money(t.p,t.from)}</span>`}
+     <span class="tp-tag"><i></i>Giá tham khảo</span><span class="td">${t.d}</span><span class="tb">Bảo hành ${t.bh}</span></button>`).join("")+`</div>`+note;
+}
+function renderResult(pop){
+  if(st.s==="khac")return;
+  const m=model(),s=st.s;let name,price,from=false,bh,time,desc;
+  if(s==="faceid"){const ps=FID[m.fid][1];name="Sửa Face ID";price=ps[0];from=true;bh="3 tháng";time="1–2 ngày";desc="Sửa lỗi không kích hoạt được Face ID. Kiểm tra miễn phí và báo đúng lỗi trước khi sửa.";}
+  else{const t=types(st.b,m,s)[st.t];name=t.n;price=t.p;from=!!t.from;var na=t.na;bh=t.bh;time=t.t;desc=t.d;}
+  $("result").innerHTML=`<div class="big">${ill(s,st.b,m).replace('class="ill"','width="130" height="130"')}</div>
+    <div class="rl">Giá và bảo hành</div><h3>${name}</h3><div class="rm">${m.n}</div>
+    <div class="price${price==null?" na":""}">${price==null?(typeof na!=="undefined"&&na||"Liên hệ báo giá"):price===0?"Miễn phí":`${from?"<small>từ </small>":""}${vnd(price)}<small> đ</small>`}</div>
+    <span class="tmp">● Đang cập nhật, giá tham khảo</span>
+    <div class="facts"><div class="fact"><div class="k">Bảo hành</div><div class="v">${bh}</div></div><div class="fact"><div class="k">Thời gian sửa</div><div class="v">${time}</div></div></div>
+    <p class="rdesc">${desc}</p>
+    <div class="r-cta"><a class="btn btn-call" href="tel:0372659937">Gọi đặt lịch</a><a class="btn btn-zalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Hỏi qua Zalo</a>
+    <button class="btn btn-ghost" type="button" id="copyq">Sao chép câu hỏi giá để dán vào Zalo</button></div>`;
+  if(pop&&motionOK){const r=$("result");r.classList.remove("pop");void r.offsetWidth;r.classList.add("pop");}
+}
+function renderFrom(level){ // 0 brand,1 series,2 model,3 service,4 type
+  if(level<=0)renderSeries();if(level<=1)renderModels();if(level<=2)pvRender(model(),false);if(level<=2)renderSvcs();if(level<=3)renderStage4();renderResult(level<5);
+}
+
+/* ===== Cuộn chậm, mượt ===== */
+let glideId=0;
+function glide(el,off=-16){
+  const start=scrollY,end=Math.max(0,el.getBoundingClientRect().top+scrollY+off),d=motionOK?1400:0,t0=performance.now(),id=++glideId;
+  if(!d){scrollTo(0,end);return}
+  const ease=k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+  (function step(t){if(id!==glideId)return;const k=Math.min(1,(t-t0)/d);scrollTo(0,start+(end-start)*ease(k));if(k<1)requestAnimationFrame(step)})(t0);
+}
+["wheel","touchstart","keydown"].forEach(ev=>addEventListener(ev,()=>glideId++,{passive:true}));
+const later=(el)=>setTimeout(()=>glide(el),350);
+
+$("brands").addEventListener("click",e=>{const t=e.target.closest(".brand");if(!t)return;
+  st.b=t.dataset.k;st.ser=st.b==="iphone"?"14 – 15":firstSeries(st.b);st.mi=0;st.t=0;$("q").value="";
+  document.querySelectorAll(".brand").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===st.b));renderFrom(0);later($("s2"));});
+$("series").addEventListener("click",e=>{const t=e.target.closest(".ser");if(!t)return;
+  st.ser=t.dataset.s;st.mi=0;st.t=0;$("q").value="";
+  document.querySelectorAll(".ser").forEach(x=>x.setAttribute("aria-pressed",x===t));renderFrom(1);});
+$("models").addEventListener("click",e=>{const t=e.target.closest(".model");if(!t)return;
+  st.ser=t.dataset.ser;st.mi=+t.dataset.mi;st.t=0;
+  if($("q").value){$("q").value="";renderSeries();renderModels();}else document.querySelectorAll(".model").forEach(x=>x.setAttribute("aria-pressed",x===t));
+  renderFrom(2);later($("s3"));});
+$("svcs").addEventListener("click",e=>{const t=e.target.closest(".svc");if(!t)return;
+  st.s=t.dataset.s;st.t=0;document.querySelectorAll(".svc").forEach(x=>x.setAttribute("aria-pressed",x===t));renderFrom(3);later($("s4"));});
+$("stage4").addEventListener("click",e=>{const t=e.target.closest(".type");if(!t)return;
+  st.t=+t.dataset.t;document.querySelectorAll(".type").forEach(x=>x.setAttribute("aria-pressed",x===t));renderResult(true);
+  setTimeout(()=>glide($("result"),-80),300);});
+$("q").addEventListener("input",renderModels);
+
+async function copyText(btn,text,done,orig,selEl){
+  try{await navigator.clipboard.writeText(text);btn.textContent=done}
+  catch(err){if(selEl){const r=document.createRange();r.selectNodeContents(selEl);const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent="Đã chọn sẵn, hãy bấm sao chép"}else btn.textContent="Không sao chép được"}
+  setTimeout(()=>btn.textContent=orig,2400);
+}
+$("copy").addEventListener("click",e=>copyText(e.currentTarget,"0372659937","Đã sao chép","Sao chép số",$("phone")));
+$("copyaddr").addEventListener("click",e=>copyText(e.currentTarget,"32/9D Phan Văn Đối, Bà Điểm, Hóc Môn, TP.HCM","Đã sao chép","Sao chép địa chỉ",document.querySelector(".addr")));
+$("result").addEventListener("click",e=>{if(e.target.id!=="copyq")return;const m=model();
+  const tn=st.s==="faceid"?"sửa Face ID":(types(st.b,m,st.s)[st.t].n).toLowerCase();
+  copyText(e.target,`Chào TrungHieuStore, mình cần báo giá ${SVN[st.s].toLowerCase()} (${tn}) cho ${m.n}.`,"Đã sao chép, mở Zalo và dán vào","Sao chép câu hỏi giá để dán vào Zalo");});
+
+$("goOther").addEventListener("click",()=>{st.s="khac";st.t=0;renderFrom(2);setTimeout(()=>glide($("s4")),200);});
+let dbP=null;const getDb=()=>dbP||(dbP=(async()=>{try{const c=window.claude;if(!c?.use)return null;const [db,user]=await Promise.all([c.use("db"),c.use("user")]);if(!db||!user)return null;const id=await user.id();return id?{db,id}:null}catch(e){return null}})());
+$("stage4").addEventListener("submit",async e=>{
+  e.preventDefault();const f=e.target;if(f.id!=="leadForm")return;
+  const desc=$("ldesc").value.trim(),name=$("lname").value.trim(),phone=$("lphone").value.replace(/[^\d+]/g,""),err=$("lerr");
+  if(desc.length<3){err.textContent="Hãy tả lỗi của máy.";err.hidden=false;$("ldesc").focus();return;}
+  if(!/^(\+?84|0)\d{9}$/.test(phone)){err.textContent="Số điện thoại chưa đúng, hãy nhập đủ 10 số.";err.hidden=false;$("lphone").focus();return;}
+  err.hidden=true;const btn=f.querySelector("button[type=submit]");btn.disabled=true;btn.textContent="Đang gửi...";
+  const m=model(),msg=`Chào TrungHieuStore, máy ${m.n} bị lỗi: ${desc}. Tên: ${name||"(không ghi)"}. SĐT: ${phone}.`;
+  let saved=false;
+  try{const h=await Promise.race([getDb(),new Promise(r=>setTimeout(()=>r(null),6000))]);
+    if(h){await h.db.doc("leads/"+h.id).set({model:m.n,brand:BR[st.b].n,desc:desc.slice(0,1000),name:name.slice(0,80),phone,at:new Date().toISOString()});saved=true;}}catch(e){saved=false}
+  btn.hidden=true;const d=$("ldone");d.hidden=false;
+  d.innerHTML=(saved?`<strong>Đã gửi. Cửa hàng sẽ gọi lại cho bạn sớm.</strong><span>Muốn nhanh hơn, nhắn Zalo luôn:</span>`:`<strong>Gửi nhanh qua Zalo để cửa hàng nhận ngay</strong><span>Bấm sao chép, mở Zalo và dán tin nhắn.</span>`)+
+    `<div class="row"><button class="btn btn-ghost" type="button" id="lcopy">Sao chép tin nhắn</button><a class="btn btn-zalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Mở Zalo</a><a class="btn btn-call" href="tel:0372659937">Gọi ngay</a></div>`;
+  $("lcopy").addEventListener("click",ev=>copyText(ev.currentTarget,msg,"Đã sao chép","Sao chép tin nhắn"));
+});
+/* Nút Gọi: mở ứng dụng gọi; nếu trình duyệt chặn (ví dụ khi xem trong khung) thì hiện số để bấm lại hoặc sao chép */
+document.addEventListener("click",e=>{const a=e.target.closest('a[href^="tel:"]');if(!a||a.hasAttribute("data-nosheet"))return;
+  let left=false;const onHide=()=>{if(document.visibilityState==="hidden")left=true;};
+  document.addEventListener("visibilitychange",onHide);addEventListener("blur",onHide);
+  setTimeout(()=>{document.removeEventListener("visibilitychange",onHide);removeEventListener("blur",onHide);if(!left)$("callsheet").hidden=false;},1500);
+});
+$("csClose").addEventListener("click",()=>$("callsheet").hidden=true);
+$("callsheet").addEventListener("click",e=>{if(e.target.id==="callsheet")$("callsheet").hidden=true;});
+$("csCopy").addEventListener("click",e=>copyText(e.currentTarget,"0372659937","Đã sao chép số","Sao chép số",$("csNum")));
+renderBrands();st.mi=0;renderFrom(0);
+
+/* ===== Hiệu ứng bấm ===== */
+const COLORS=["#0a66ff","#4d90ff","#12a150","#ffb020","#ff5a5f","#8b5cf6"];
+document.addEventListener("pointerdown",e=>{
+  if(!motionOK)return;
+  const el=e.target.closest(".btn,.model,.ser,.svc,.brand,.type");
+  if(el){const r=el.getBoundingClientRect(),s=Math.max(r.width,r.height)*2.2,d=document.createElement("span");
+    d.className="ripple";d.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;el.appendChild(d);setTimeout(()=>d.remove(),950);}
+  const ring=document.createElement("span");ring.className="ring";ring.style.left=e.clientX+"px";ring.style.top=e.clientY+"px";document.body.appendChild(ring);setTimeout(()=>ring.remove(),850);
+  const n=el?14:8;
+  for(let i=0;i<n;i++){const p=document.createElement("span"),a=Math.PI*2*i/n+Math.random()*.5,dist=40+Math.random()*50;
+    p.className="spark";p.style.left=e.clientX-4+"px";p.style.top=e.clientY-4+"px";p.style.background=COLORS[i%COLORS.length];
+    p.style.setProperty("--dx",Math.cos(a)*dist+"px");p.style.setProperty("--dy",Math.sin(a)*dist+"px");document.body.appendChild(p);setTimeout(()=>p.remove(),950);}
+},{passive:true});
+
+/* ===== Lướt tới đâu hiện tới đó ===== */
+const rv=[...document.querySelectorAll("[data-r]")];
+if(motionOK&&"IntersectionObserver" in window){
+  const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target);}}),{threshold:.15,rootMargin:"0px 0px -8% 0px"});
+  rv.forEach(t=>{if(t.getBoundingClientRect().top<innerHeight*.9)t.classList.add("in");else io.observe(t);});
+}else rv.forEach(t=>t.classList.add("in"));
+
+/* ===== Parallax: điện thoại trôi lên, tên mờ dần, dải chữ chạy ngang ===== */
+const lgMark=$("lgMark"),lgText=$("lgText"),mh=$("minihead");
+const prog=$("progress"),hero=document.querySelector(".hero"),pw=$("phoneWrap"),bl=$("brandline"),marquees=[...document.querySelectorAll("[data-marquee]")];
+let mx=0,my=0,tx=0,ty=0,ticking=false;
+function frame(){
+  ticking=false;const y=scrollY,h=document.documentElement.scrollHeight-innerHeight;
+  prog.style.setProperty("--p",h>0?y/h:0);
+  const hh=hero.offsetHeight,vh=innerHeight,run=Math.max(1,hh-vh);
+  mh.classList.toggle("show",y>run+vh*.3);
+  if(!motionOK)return;
+  tx+=(mx-tx)*.06;ty+=(my-ty)*.06;
+  if(y<hh+200){
+    const p=Math.min(1,Math.max(0,y/run));
+    // 0–0.3: logo đứng yên, điện thoại nằm sau như ngọn núi; 0.3–1: điện thoại trôi lên
+    const k=Math.min(1,Math.max(0,(p-.3)/.7)),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+    const ph=pw.firstElementChild.getBoundingClientRect().height||vh,top=vh*.06;
+    const startY=vh*.66-top,endY=Math.max(0,(vh-ph)/2-top);
+    pw.style.transform=`translateY(${startY+(endY-startY)*e}px) rotateX(${(1-e)*18+ty*-8}deg) rotateY(${tx*12}deg) scale(${.92+e*.08})`;
+    lgMark.style.transform=`translateZ(0) rotate(${tx*-4}deg) scale(${1-e*.12})`;
+    lgText.style.transform=`scale(${1-e*.08})`;
+    bl.style.transform=`translateY(calc(-50% + ${-e*vh*.04}px))`;
+    document.querySelector(".brandtag").style.opacity=1-Math.min(1,p/.35);
+    document.querySelector(".scrollhint").style.opacity=1-Math.min(1,p/.2);
+  }
+  marquees.forEach(m=>{const r=m.parentNode.getBoundingClientRect(),k=+m.dataset.marquee;m.style.translate=`${(r.top-innerHeight)*k-600}px 0`;});
+  if(Math.abs(mx-tx)>.001||Math.abs(my-ty)>.001)req();
+}
+function req(){if(!ticking){ticking=true;requestAnimationFrame(frame);}}
+if(!motionOK)hero.classList.add("static");
+addEventListener("scroll",req,{passive:true});addEventListener("resize",req);
+hero.addEventListener("pointermove",e=>{if(e.pointerType!=="mouse")return;const r=hero.getBoundingClientRect();mx=(e.clientX-r.left)/r.width-.5;my=(e.clientY-r.top)/r.height-.5;req();});
+hero.addEventListener("pointerleave",()=>{mx=my=0;req();});
+req();
+</script>
+
+</body>
+</html>
