@@ -363,6 +363,20 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 @media (max-width:640px){.tm-perks{grid-template-columns:1fr 1fr}.tm-tab{flex-direction:column;text-align:center;padding:12px 8px;gap:8px}}
 @media (max-width:420px){.tm-cond{grid-template-columns:1fr 1fr}.tm-cond button{padding:9px 8px;font-size:.84rem}.tm-how li{padding:10px 6px;font-size:.76rem}.tm-how li b{font-size:.82rem}}
 
+/* ===== Gợi ý chỗ cần bấm: nhấp nháy nhẹ, vệt sáng lướt ===== */
+.tm-tab{position:relative;overflow:hidden}
+.tm-tab[aria-selected="false"]{animation:swPulse 2.6s ease-in-out infinite}
+.tm-tab[aria-selected="false"] .ti{animation:swBob 2.6s ease-in-out infinite}
+.tm-tab .live{position:absolute;top:9px;right:9px;width:12px;height:12px;border-radius:50%;background:#ff2d2d;border:2px solid #fff;animation:liveDot 1.4s ease-in-out infinite}
+.tm-tab .live::after{content:"";position:absolute;inset:0;border-radius:50%;background:#ff2d2d;animation:liveRing 1.4s ease-out infinite}
+.need>.ser,.need>.model:not(.other):not(.xb){animation:needPulse 2.2s ease-in-out infinite}
+.need>:nth-child(3n+2){animation-delay:.25s!important}.need>:nth-child(3n){animation-delay:.5s!important}
+@keyframes needPulse{0%,100%{border-color:var(--line);box-shadow:none}50%{border-color:var(--accent);box-shadow:0 0 0 4px rgba(255,106,0,.16)}}
+.sec-head .n,.tm-step .lbl i{animation:badgeGlow 2.4s ease-in-out infinite}
+@keyframes badgeGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,106,0,.5)}60%{box-shadow:0 0 0 9px rgba(255,106,0,0)}}
+.brand[aria-pressed="false"]::after,.svc[aria-pressed="false"]::after,.tm-tab[aria-selected="false"]::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-130%);animation:swShine 5s ease-in-out infinite;pointer-events:none}
+.svc[aria-pressed="false"]::after{animation-delay:1.2s}
+@media (prefers-reduced-motion:reduce){.tm-tab,.tm-tab .ti,.tm-tab .live,.tm-tab .live::after,.need>*,.sec-head .n,.tm-step .lbl i,.brand::after,.svc::after{animation:none!important}}
 /* ---------- PROCESS ---------- */
 .proc{list-style:none;margin:1.8rem auto 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;max-width:1000px}
 .proc li{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px 14px;text-align:center}
@@ -528,8 +542,8 @@ footer .seo-note{max-width:640px;margin:.5rem auto;line-height:1.5;font-size:.8r
   <section id="thu-mua" hidden>
     <div class="sec-head" data-r><div class="eyebrow">Thu mua</div><h2>Bán máy cũ, <span>bán xác máy</span></h2><p>Máy còn dùng hay đã hư, vỡ, không lên nguồn đều thu. Chọn máy để xem giá thu tham khảo.</p></div>
     <div class="tm-tabs" role="tablist" data-r>
-      <button class="tm-tab" type="button" role="tab" data-mode="cu" aria-selected="true"><span class="ti"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></span><span><b>Máy cũ còn dùng</b><small>Giá thu cao, nhận tiền ngay</small></span></button>
-      <button class="tm-tab" type="button" role="tab" data-mode="xac" aria-selected="false"><span class="ti"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M9 6l3 4-2 3 4 5"/></svg></span><span><b>Xác máy hư, vỡ</b><small>Vỡ nát, chết nguồn vẫn thu</small></span></button>
+      <button class="tm-tab" type="button" role="tab" data-mode="cu" aria-selected="true"><span class="live" aria-hidden="true"></span><span class="ti"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></span><span><b>Máy cũ còn dùng</b><small>Giá thu cao, nhận tiền ngay</small></span></button>
+      <button class="tm-tab" type="button" role="tab" data-mode="xac" aria-selected="false"><span class="live" aria-hidden="true"></span><span class="ti"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M9 6l3 4-2 3 4 5"/></svg></span><span><b>Xác máy hư, vỡ</b><small>Vỡ nát, chết nguồn vẫn thu</small></span></button>
     </div>
     <ul class="tm-perks" data-r>
       <li class="tm-zl"><a href="https://zalo.me/0372659937" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.6 1.4 4.9 3.6 6.5L5 21l3.4-1.8c1.1.3 2.3.5 3.6.5 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/></svg>Nhắn Zalo định giá nhanh, chính xác ›</a></li>
@@ -1031,6 +1045,7 @@ function renderSeries(){
   const b=BR[st.b];$("t2").textContent=st.b==="khac"?"Máy hãng khác":b.kind==="ip"?"Chọn đời iPhone":`Chọn dòng và đời ${b.n}`;
   $("serBox").hidden=b.kind==="ip"||st.b==="khac";$("p2").textContent=st.b==="khac"?"Máy hãng khác hoặc không có trong danh sách: bấm ô bên dưới để ghi dòng máy và lỗi.":b.kind==="ip"?"Tất cả đời iPhone, mới nhất xếp trước. Rê chuột để xem màu máy.":"Chọn dòng máy trước, sau đó chọn đúng đời máy.";
   $("series").innerHTML=Object.keys(b.series).map((s,i)=>`<button class="ser ani" style="--i:${i}" type="button" data-s="${s}" aria-pressed="${st.pick&&s===st.ser}">${b.kind==="ip"?"iPhone "+s:s}</button>`).join("");
+  $("series").classList.toggle("need",!st.pick);
 }
 /* Tìm máy: hiểu cách gõ tắt (ip 13 pm, s24u, rn13...) và tìm cả hãng khác */
 const ALIAS=[[/(\d)\s?(pm|prm)\b/g,"$1 pro max"],[/(\d)\s?p\b/g,"$1 pro"],[/\bip(hone)?\s?(?=\d|x|se)/g,"iphone "],[/\bip(hone)?\b/g,"iphone "],[/\bpm\b/g,"pro max"],[/\bprm\b/g,"pro max"],[/\bss\b/g,"galaxy "],[/\brn(?=\d)/g,"redmi note "],[/\bmi(?=\d)/g,"mi "],
@@ -1130,7 +1145,7 @@ $("brands").addEventListener("click",e=>{const t=e.target.closest(".brand");if(!
   st.b=t.dataset.k;st.ser=st.b==="iphone"?"14 – 15":firstSeries(st.b);st.pick=st.b==="iphone"||st.b==="khac"||BR[st.b].kind!=="and";st.mi=st.b==="khac"?-1:0;st.t=0;if(st.b==="khac")st.s="khac";$("q").value="";
   document.querySelectorAll(".brand").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===st.b));renderFrom(0);later($("s2"));});
 $("series").addEventListener("click",e=>{const t=e.target.closest(".ser");if(!t)return;
-  st.ser=t.dataset.s;st.pick=true;st.mi=st.b==="khac"?-1:0;st.t=0;$("q").value="";
+  st.ser=t.dataset.s;st.pick=true;$("series").classList.remove("need");st.mi=st.b==="khac"?-1:0;st.t=0;$("q").value="";
   document.querySelectorAll(".ser").forEach(x=>x.setAttribute("aria-pressed",x===t));renderFrom(1);});
 $("models").addEventListener("click",e=>{const t=e.target.closest(".model");if(!t)return;
   if(t.dataset.other){st.mi=-1;st.s="khac";st.t=0;$("q").value="";renderModels();renderFrom(2);later($("s4"));return;}
@@ -1189,6 +1204,7 @@ function tmRender(){
   const C=tmCond();if(tm.c>=C.length)tm.c=0;
   $("tmC").innerHTML=C.map((c,i)=>`<button type="button" data-c="${i}" aria-pressed="${i===tm.c}">${c[0]}<small>${c[1]}</small></button>`).join("");
   $("tmF").innerHTML=tm.mode==="xac"?"":TMF.filter(f=>!(f[0]==="fid"&&tm.b!=="iphone"&&tm.b!=="ipad")).map(f=>`<label><input type="checkbox" data-f="${f[0]}"${tm.f.has(f[0])?" checked":""}>${f[1]}</label>`).join("");
+  $("tmM").classList.toggle("need",!tm.m);$("tmS").classList.toggle("need",!tm.s&&BR[tm.b].kind==="and");
   tmResult();
 }
 function tmPrice(){const bu=BUY[tm.m];if(!bu)return null;
