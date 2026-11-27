@@ -716,7 +716,7 @@ function types0(b,m,s){
       const NQ=T("Pin nguyên quả",nq,1,"12 tháng","20–30 phút","Pin thay thế nguyên quả, giá tốt, thay nhanh, dùng ổn định."),
             DL=T("Pin dung lượng chuẩn",dl,2,"12 tháng","20–30 phút","Pin dung lượng chuẩn theo máy, bền, giữ pin tốt hơn.");
       if(gen<12)return dl?[NQ,DL,CH]:[NQ,CH];
-      return [NQ,DL,T("Pin chẩn đoán",dl&&r50(dl*1.2),3,"12 tháng","20–30 phút","Pin có chẩn đoán, xem được tình trạng pin trong cài đặt."),CH];}
+      return [NQ,DL,T("Pin chẩn đoán",dl&&Math.round(dl*1.2/10)*10,3,"12 tháng","20–30 phút","Pin có chẩn đoán, xem được tình trạng pin trong cài đặt."),CH];}
     return [T("Thay pin",B,3,"12 tháng","30–45 phút","Pin dung lượng chuẩn theo máy, kiểm tra dòng sạc trước khi giao."),CH];
   }
   if(s==="cam"){const base=B||800,big=/1[4-9] Pro|17|18/.test(m.n)&&/Pro|Air|17$|17e/.test(m.n),pro3=/1[4-9] Pro/.test(m.n);
