@@ -690,7 +690,7 @@ const MKT={"iPhone XS Max":[350,650,1000],"iPhone XR":[300],"iPhone X":[300],"iP
 "iPhone 15":[600,950,1800],"iPhone 15 Plus":[650,1050,2000],"iPhone 15 Pro":[750,1200,2500],"iPhone 15 Pro Max":[800,1300,2800],
 "iPhone 16e":[600,1000,1800],"iPhone 16":[650,1000,2000],"iPhone 16 Plus":[700,1100,2300],"iPhone 16 Pro":[850,1400,3000],"iPhone 16 Pro Max":[950,1500,3300],
 "iPhone 17e":[700,1100,2000],"iPhone 17":[800,1300,2500]};
-/* Giá pin anh hiếu chốt 27/11/2026: [pin nguyên quả, pin dung lượng chuẩn]. Pin chẩn đoán = dung lượng chuẩn +20% (từ đời 12) */
+/* Giá pin nguyên quả anh hiếu chốt 27/11/2026 (số thứ 2 không dùng nữa). Từ iPhone 11 có thêm pin chẩn đoán = nguyên quả +10% */
 const BAT={"iPhone 6":[280],"iPhone 6s":[290],"iPhone 6 Plus":[300],"iPhone 6s Plus":[300],"iPhone 7":[290],"iPhone 7 Plus":[350],"iPhone 8":[300],"iPhone 8 Plus":[350],"iPhone SE 2020":[300],"iPhone SE 2022":[320],"iPhone X":[490],"iPhone XS":[500],"iPhone XS Max":[520],"iPhone XR":[500],"iPhone 11":[500],"iPhone 11 Pro":[550,700],"iPhone 11 Pro Max":[590,790],"iPhone 12 mini":[550,680],"iPhone 12":[550,680],"iPhone 12 Pro":[580,730],"iPhone 12 Pro Max":[600,800],"iPhone 13 mini":[550,680],"iPhone 13":[550,700],"iPhone 13 Pro":[580,750],"iPhone 13 Pro Max":[600,800],"iPhone 14":[570,730],"iPhone 14 Plus":[590,770],"iPhone 14 Pro":[590,770],"iPhone 14 Pro Max":[600,800],"iPhone 15":[750,900],"iPhone 15 Plus":[780,990],"iPhone 15 Pro":[780,990],"iPhone 15 Pro Max":[800,1150],"iPhone 16e":[750,900],"iPhone 16":[750,900],"iPhone 16 Plus":[790,1050],"iPhone 16 Pro":[790,1050],"iPhone 16 Pro Max":[880,1250],"iPhone 17e":[750,900],"iPhone 17":[800,1000],"iPhone Air":[850,1100],"iPhone 17 Pro":[900,1200],"iPhone 17 Pro Max":[950,1350],"iPhone 18 Pro":[950,1300],"iPhone 18 Pro Max":[1000,1400]};
 const PIN={a:[500,600,700],b:[600,700,800],c:[700,800,900]};
 /* Giá màn LCD anh hiếu chốt 27/11/2026: X 680k ... 15 Pro Max 1,2tr; bản thường rẻ hơn rõ bản Pro/Pro Max */
@@ -711,12 +711,11 @@ function types0(b,m,s){
     return [T("Màn chính hãng",Z,3,"6 tháng","45–60 phút","Màn chính hãng theo máy. Màu, độ sáng và cảm ứng như nguyên bản."),T("Màn thay thế loại tốt",Z&&r50(Z*.45),2,"3 tháng","45–60 phút","Giá tốt, hiển thị ổn định, phù hợp máy đời cũ.")];
   }
   if(s==="pin"){const CH=T("Pin chính hãng",null,3,"12 tháng","20–30 phút","Pin chính hãng, hiện đúng dung lượng, không báo lỗi.",false,"Tạm hết hàng");
-    if(k==="ip"){const v=BAT[m.n]||(P?PIN[P[5]]:[B&&r50(B*.8),B&&r50(B*1.1)]),nq=v[0],dl=v[1]??null;
+    if(k==="ip"){const v=BAT[m.n]||(P?PIN[P[5]]:[B&&r50(B*.8)]),nq=v[0];
       const gen=/Air|Fold/.test(m.n)?99:+(m.n.match(/iPhone (\d+)/)||[0,0])[1];
-      const NQ=T("Pin nguyên quả",nq,1,"12 tháng","20–30 phút","Pin thay thế nguyên quả, giá tốt, thay nhanh, dùng ổn định."),
-            DL=T("Pin dung lượng chuẩn",dl,2,"12 tháng","20–30 phút","Pin dung lượng chuẩn theo máy, bền, giữ pin tốt hơn.");
-      if(gen<12)return dl?[NQ,DL,CH]:[NQ,CH];
-      return [NQ,DL,T("Pin chẩn đoán",dl&&Math.round(dl*1.2/10)*10,3,"12 tháng","20–30 phút","Pin có chẩn đoán, xem được tình trạng pin trong cài đặt."),CH];}
+      const NQ=T("Pin nguyên quả",nq,2,"12 tháng","20–30 phút","Pin thay thế nguyên quả, thay nhanh, dùng ổn định.");
+      if(gen<11)return [NQ,CH];
+      return [NQ,T("Pin chẩn đoán",nq&&Math.round(nq*1.1/10)*10,3,"12 tháng","20–30 phút","Pin có chẩn đoán, xem được tình trạng pin trong cài đặt."),CH];}
     return [T("Thay pin",B,3,"12 tháng","30–45 phút","Pin dung lượng chuẩn theo máy, kiểm tra dòng sạc trước khi giao."),CH];
   }
   if(s==="cam"){const base=B||800,big=/1[4-9] Pro|17|18/.test(m.n)&&/Pro|Air|17$|17e/.test(m.n),pro3=/1[4-9] Pro/.test(m.n);
