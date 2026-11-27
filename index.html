@@ -346,8 +346,10 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 .tm-flags input{accent-color:var(--accent);width:16px;height:16px;margin:0}
 .tm-res .tm-img{display:block;width:120px;height:150px;object-fit:contain;margin:0 auto}
 .tm-res.xac .tm-img{filter:grayscale(.6) brightness(.85)}
-.tm-res .price{font-size:clamp(1.8rem,7vw,2.6rem)}
-.tm-res .price .to{font-size:.55em;opacity:.7;margin:0 .15em}
+.tm-res .price{font:800 clamp(1.5rem,6.4vw,2.1rem)/1.25 var(--f-body);letter-spacing:0;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:2px 8px}
+.tm-res .price .pv{white-space:nowrap}
+.tm-res .price small{font-size:.7em;color:#fff;margin-left:1px}
+.tm-res .price .to{font-size:.55em;font-weight:600;color:#8fa3bd}
 .tm-res .r-cta{grid-template-columns:1fr 1fr}
 .tm-how{list-style:none;padding:0;margin:1.4rem auto 0;max-width:760px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;counter-reset:h}
 .tm-how li{counter-increment:h;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;font-size:.85rem;color:var(--muted)}
@@ -1167,7 +1169,7 @@ const TMX=[["Vỡ màn, còn lên nguồn","Màn nứt, sọc, liệt cảm ứn
 const TMF=[["pin","Pin dưới 85%",.05,150],["man","Đã thay màn",.12,0],["fid","Lỗi Face ID / vân tay",.2,0]];
 const tm={mode:"cu",b:"iphone",s:null,m:null,g:0,c:0,f:new Set()};
 const fmtTr=v=>v>=1000?(v/1000).toLocaleString("vi-VN",{maximumFractionDigits:2})+" <small>triệu</small>":v+" <small>nghìn</small>";
-const tmRange=([a,b])=>{const tr=b>=1000,f=v=>tr?(v/1000).toLocaleString("vi-VN",{maximumFractionDigits:2}):v;return `${a<b?f(a)+'<span class="to">–</span>':""}${f(b)} <small>${tr?"triệu":"nghìn"}</small>`;};
+const tmRange=([a,b])=>{const f=v=>`<span class="pv">${(v*1000).toLocaleString("vi-VN")}<small>đ</small></span>`;return a<b?`${f(a)}<span class="to">đến</span>${f(b)}`:f(b);};
 const gb=v=>v>=1024?(v/1024)+"TB":v+"GB";
 const tmCond=()=>tm.mode==="xac"?TMX:TMC;
 function tmModels(){const ser=BR[tm.b].series,t=qTerm($("tmQ").value);
