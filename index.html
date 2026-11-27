@@ -628,9 +628,9 @@ const ILL={
 /* ===== Dữ liệu máy (giá tạm, nghìn đồng) ===== */
 // iPhone: tên | Z giá màn zin tháo máy | B giá pin cơ sở | L=1 máy gốc màn LCD | F nhóm Face ID
 const IPRAW={
- "16 – 18":"iPhone Fold||||;iPhone 18 Pro Max|||0|18;iPhone 18 Pro|||0|18;iPhone 17 Pro Max||1000|0|17;iPhone 17 Pro||950|0|17;iPhone Air||900|0|17;iPhone 17||900|0|17;iPhone 17e||850|0|17;iPhone 16 Pro Max|9200|880|0|16;iPhone 16 Pro|7500|820|0|16;iPhone 16 Plus|4900|780|0|16;iPhone 16|4200|750|0|16;iPhone 16e|3800|700|0|16",
- "14 – 15":"iPhone 15 Pro Max|7800|800|0|15;iPhone 15 Pro|6200|750|0|15;iPhone 15 Plus|4200|720|0|15;iPhone 15|3600|680|0|15;iPhone 14 Pro Max|6500|750|0|14;iPhone 14 Pro|5200|700|0|14;iPhone 14 Plus|3800|680|0|14;iPhone 14|3200|620|0|14",
- "12 – 13":"iPhone 13 Pro Max|4900|680|0|13;iPhone 13 Pro|3900|620|0|13;iPhone 13|2900|580|0|13;iPhone 13 mini|2600|560|0|13;iPhone 12 Pro Max|3200|600|0|12;iPhone 12 Pro|2400|540|0|12;iPhone 12|2400|540|0|12;iPhone 12 mini|2200|520|0|12",
+ "16 – 18":"iPhone Fold||||;iPhone 18 Pro Max|||0|18;iPhone 18 Pro|||0|18;iPhone 17 Pro Max||1000|0|17;iPhone 17 Pro||950|0|17;iPhone Air||900|0|17;iPhone 17||900|0|17;iPhone 17e||850|0|17;iPhone 16 Pro Max|9200|880|0|16;iPhone 16 Pro|7500|820|0|16;iPhone 16 Plus|4900|780|0|16t;iPhone 16|4200|750|0|16t;iPhone 16e|3800|700|0|16t",
+ "14 – 15":"iPhone 15 Pro Max|7800|800|0|15;iPhone 15 Pro|6200|750|0|15;iPhone 15 Plus|4200|720|0|15t;iPhone 15|3600|680|0|15t;iPhone 14 Pro Max|6500|750|0|14;iPhone 14 Pro|5200|700|0|14;iPhone 14 Plus|3800|680|0|14t;iPhone 14|3200|620|0|14t",
+ "12 – 13":"iPhone 13 Pro Max|4900|680|0|13;iPhone 13 Pro|3900|620|0|13;iPhone 13|2900|580|0|13t;iPhone 13 mini|2600|560|0|13t;iPhone 12 Pro Max|3200|600|0|12;iPhone 12 Pro|2400|540|0|12;iPhone 12|2400|540|0|12;iPhone 12 mini|2200|520|0|12",
  "X – 11":"iPhone 11 Pro Max|2600|560|0|11;iPhone 11 Pro|2200|520|0|11;iPhone 11|1200|480|1|11;iPhone XS Max|2300|520|0|X;iPhone XS|1900|480|0|X;iPhone XR|1100|450|1|X;iPhone X|1800|450|0|X",
  "6 – 8 & SE":"iPhone SE 2022|800|380|1|;iPhone SE 2020|750|350|1|;iPhone 8 Plus|850|350|1|;iPhone 8|700|330|1|;iPhone 7 Plus|750|330|1|;iPhone 7|650|300|1|;iPhone 6s Plus|600|300|1|;iPhone 6s|500|280|1|;iPhone 6 Plus|550|280|1|;iPhone 6|450|250|1|"
 };
@@ -660,8 +660,8 @@ for(const b of Object.values(BR))b.oth={n:"Máy khác",other:true};
 
 /* ===== Bảng giá Face ID (tạm) ===== */
 const FID_COLS=["Lỗi cụm chiếu điểm","Lỗi camera hồng ngoại, cảm biến","Máy vào nước, rơi vỡ"];
-const FID={X:["iPhone X, XS, XS Max, XR",[500,500,600]],"11":["iPhone 11, 11 Pro, 11 Pro Max",[550,500,600]],"12":["iPhone 12 các loại",[600,550,600]],"13":["iPhone 13 các loại",[800,800,1000]],
- "14":["iPhone 14 các loại",[900,900,1100]],"15":["iPhone 15 các loại",[1100,1000,1300]],"16":["iPhone 16 các loại",[1300,1200,1500]],"17":["iPhone 17, Air",[1500,1400,1500]],"18":["iPhone 18 Pro, Pro Max",[null,null,null]]};
+const FID={X:["iPhone X, XS, XS Max, XR",[500,500,600]],"11":["iPhone 11, 11 Pro, 11 Pro Max",[550,500,600]],"12":["iPhone 12 các loại",[600,550,600]],"13t":["iPhone 13, 13 mini",[790,790,990]],"13":["iPhone 13 Pro, 13 Pro Max",[800,800,1000]],
+ "14t":["iPhone 14, 14 Plus",[890,890,1090]],"14":["iPhone 14 Pro, 14 Pro Max",[900,900,1100]],"15t":["iPhone 15, 15 Plus",[1020,1020,1220]],"15":["iPhone 15 Pro, 15 Pro Max",[1100,1000,1300]],"16t":["iPhone 16, 16 Plus, 16e",[1150,1150,1350]],"16":["iPhone 16 Pro, 16 Pro Max",[1300,1200,1500]],"17":["iPhone 17, Air",[1500,1400,1500]],"18":["iPhone 18 Pro, Pro Max",[null,null,null]]};
 
 /* ===== Dịch vụ và loại linh kiện ===== */
 const SVN={man:"Màn hình",pin:"Pin",cam:"Camera",faceid:"Face ID",sac:"Chân sạc",lung:"Kính lưng",main:"Sửa main, IC",epkinh:"Ép kính màn hình",nuoc:"Máy vào nước",loa:"Loa, mic, rung",khac:"Lỗi khác"};
