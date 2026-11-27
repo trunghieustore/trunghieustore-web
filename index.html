@@ -681,6 +681,8 @@ const IPP={
 "iPhone 11 Pro Max":[1900,550,800,790,490,"c"],"iPhone 11 Pro":[1600,550,760,700,450,"b"],"iPhone 11":[900,500,490,600,390,"a"],
 "iPhone XS Max":[1500,490,490,550,450,"a"],"iPhone XS":[1300,490,490,550,400,"a"],"iPhone XR":[800,490,490,450,390,"a"],"iPhone X":[1200,490,490,550,390,"a"]};
 /* Giá ép kính của tiệm (đã duyệt 26/11/2026) */
+/* Giá ép cảm ứng anh hiếu chốt 27/11/2026 */
+const ECU={"iPhone X":590,"iPhone XS":590,"iPhone XR":600,"iPhone 11":600,"iPhone XS Max":690,"iPhone 11 Pro":750,"iPhone 11 Pro Max":800,"iPhone 12 mini":790,"iPhone 12":790,"iPhone 12 Pro":790,"iPhone 12 Pro Max":990};
 const EK={"iPhone X": 490, "iPhone XS": 490, "iPhone XS Max": 590, "iPhone XR": 590, "iPhone 11": 600, "iPhone 11 Pro": 600, "iPhone 11 Pro Max": 600, "iPhone 12 mini": 600, "iPhone 12": 600, "iPhone 12 Pro": 600, "iPhone 12 Pro Max": 600, "iPhone 13 mini": 600, "iPhone 13": 600, "iPhone 13 Pro": 600, "iPhone 13 Pro Max": 700, "iPhone 14": 700, "iPhone 14 Plus": 700, "iPhone 14 Pro": 700, "iPhone 14 Pro Max": 800, "iPhone 15": 700, "iPhone 15 Plus": 800, "iPhone 15 Pro": 800, "iPhone 15 Pro Max": 900, "iPhone 16e": 900, "iPhone 16": 1000, "iPhone 16 Plus": 1100, "iPhone 16 Pro": 1100, "iPhone 16 Pro Max": 1200, "iPhone 17": 1300, "iPhone 17e": 1500, "iPhone 17 Pro": 1500, "iPhone 17 Pro Max": 1700};
 /* Giá thị trường TP.HCM (tạm, nghìn đ): [ép kính, màn LCD, màn OLED] */
 const MKT={"iPhone XS Max":[350,650,1000],"iPhone XR":[300],"iPhone X":[300],"iPhone XS":[300],"iPhone 11":[300],"iPhone 11 Pro":[350],"iPhone 11 Pro Max":[400],
@@ -732,7 +734,7 @@ function types0(b,m,s){
       T("Treo logo, treo táo không lên",500,3,"3 tháng","1–2 ngày","Máy kẹt ở logo, khởi động lại liên tục, không vào được màn hình chính.",true)];}
   if(s==="epkinh"){let ek=k==="ip"?(EK[m.n]??(Z&&Math.min(450,Math.max(350,r50(Z*.5))))):k==="pad"?Z&&Math.max(350,r50(Z*.25)):Z&&Math.max(300,r50(Z*.2));
     if(!(k==="ip"&&EK[m.n]!=null)&&ek){const cm=minPrice(types0(b,m,"man"));if(cm&&ek>=cm)ek=Math.max(150,r50(cm*.8));} /* ép kính không được đắt bằng thay màn */
-    return [T("Ép kính màn hình",ek,3,"3 tháng","2–3 giờ","Màn vẫn lên hình và cảm ứng tốt, chỉ vỡ mặt kính. Giữ nguyên màn zin, chỉ thay lớp kính bên ngoài.")];}
+    return [T("Ép kính màn hình",ek,3,"3 tháng","2–3 giờ","Màn vẫn lên hình và cảm ứng tốt, chỉ vỡ mặt kính. Giữ nguyên màn zin, chỉ thay lớp kính bên ngoài.")].concat(k==="ip"&&ECU[m.n]?[T("Ép cảm ứng",ECU[m.n],3,"6 tháng","2–3 giờ","Cảm ứng liệt, loạn, kính vỡ. Giữ nguyên màn hiển thị zin của máy, chỉ thay lớp kính và cảm ứng.")]:[]);}
   if(s==="nuoc")return [T("Sấy khô, vệ sinh máy vào nước",0,3,"Không áp dụng","2–24 giờ","Máy rơi nước mang đến sớm nhất có thể, tắt nguồn, không sạc. Tiệm sấy và vệ sinh miễn phí."),
       T("Xử lý main sau vào nước",B&&Math.max(500,r50((Z||3000)*.15)),3,"1 tháng","1–3 ngày","Máy đã sấy vẫn lỗi, cần vệ sinh và thay linh kiện trên main.",true)];
   if(s==="loa")return [T("Loa, mic, rung",B&&r50(200+B*.25),3,"3 tháng","30–60 phút","Loa rè, nhỏ, mất tiếng, mic không nghe, không rung.")];
