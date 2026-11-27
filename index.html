@@ -711,7 +711,7 @@ function types0(b,m,s){
   }
   if(s==="pin"){const CH=T("Pin chính hãng",null,3,"12 tháng","20–30 phút","Pin chính hãng, hiện đúng dung lượng, không báo lỗi.",false,"Tạm hết hàng");
     if(k==="ip"){const pp=BAT[m.n]!=null?[BAT[m.n],Math.round(BAT[m.n]*1.25/50)*50]:P?PIN[P[5]]:[B&&r50(B*.8),B&&r50(B*1.1)];
-      const gen=+(m.n.match(/iPhone (\d+)/)||[0,0])[1];
+      const gen=/Air|Fold/.test(m.n)?99:+(m.n.match(/iPhone (\d+)/)||[0,0])[1];
       if(gen<12)return [T("Pin nguyên quả",pp[0],2,"12 tháng","20–30 phút","Pin nguyên quả dung lượng chuẩn, thay nhanh, dùng ổn định."),CH];
       return [T("Pin dung lượng chuẩn",pp[0],2,"12 tháng","20–30 phút","Pin dung lượng chuẩn theo máy, thay nhanh, dùng ổn định."),
       T("Pin chẩn đoán",pp[1],3,"12 tháng","20–30 phút","Pin có chẩn đoán, xem được tình trạng pin trong cài đặt."),CH];}
