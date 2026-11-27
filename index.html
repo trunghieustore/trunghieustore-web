@@ -234,6 +234,10 @@ section{padding-block:4.2rem 0}
 .models{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
 .model{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px 15px;font:600 .88rem var(--f-body);cursor:pointer;position:relative;overflow:hidden}
 .model[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.giftline{margin:12px auto 0;width:fit-content;max-width:100%;padding:7px 14px;border-radius:999px;background:linear-gradient(90deg,#ff7a18,#ffb347);color:#1a0d00;font:700 .86rem var(--f-body);text-align:center;box-shadow:0 0 0 0 rgba(255,122,24,.5);animation:giftPulse 2.8s ease-in-out infinite}
+@keyframes giftPulse{50%{box-shadow:0 0 18px 2px rgba(255,122,24,.45)}}
+@media (prefers-reduced-motion:reduce){.giftline{animation:none}}
+li.gift{color:var(--accent);font-weight:700}
 .model.other{border:1.5px dashed var(--accent);color:var(--accent);font-weight:700}
 .model.xb small{display:block;font:700 .62rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#888);margin-bottom:1px}.model.xb{border-radius:14px;padding:6px 14px;text-align:center}.model.xb:hover small{color:inherit}
 .xb-h{flex-basis:100%;width:100%;text-align:center;font:600 .8rem var(--f-body);color:var(--muted,#888);margin:10px 0 2px}
@@ -433,13 +437,13 @@ footer .seo-note{max-width:640px;margin:.5rem auto;line-height:1.5;font-size:.8r
  </div>
 </header>
 <div class="band top" aria-hidden="true"><div class="track" data-marquee="-0.3"><span>Thay màn hình</span><span>Thay pin</span><span>Face ID</span><span>Camera</span><span>Sửa main</span><span>Chân sạc</span><span>Kính lưng</span><span>Thay màn hình</span><span>Thay pin</span><span>Face ID</span><span>Camera</span></div></div>
-<div class="band b2" aria-hidden="true"><div class="track" data-marquee="0.25"><span>Kiểm tra miễn phí</span><span>Báo giá trước khi sửa</span><span>Sửa trước mặt khách</span><span>Bảo hành rõ ràng</span><span>Kiểm tra miễn phí</span><span>Báo giá trước khi sửa</span><span>Sửa trước mặt khách</span></div></div>
+<div class="band b2" aria-hidden="true"><div class="track" data-marquee="0.25"><span>Kiểm tra miễn phí</span><span>Báo giá trước khi sửa</span><span>Sửa trước mặt khách</span><span>Bảo hành rõ ràng</span><span>Tặng cường lực</span><span>Kiểm tra miễn phí</span><span>Báo giá trước khi sửa</span><span>Sửa trước mặt khách</span></div></div>
 
 <main class="wrap">
   <div class="free" data-r="scale">
     <div class="free-in">
       <h2>Kiểm tra máy <span>miễn phí</span></h2>
-      <ul><li>Báo lỗi và giá trước khi sửa</li><li>Không sửa không mất phí</li><li>Sửa trước mặt khách</li><li>Bảo hành rõ ràng</li><li>Máy vào nước sấy miễn phí</li></ul>
+      <ul><li>Báo lỗi và giá trước khi sửa</li><li>Không sửa không mất phí</li><li>Sửa trước mặt khách</li><li>Bảo hành rõ ràng</li><li>Máy vào nước sấy miễn phí</li><li class="gift">🎁 Tặng cường lực khi làm bất kỳ dịch vụ nào</li></ul>
       <a class="btn btn-zalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Hẹn lịch qua Zalo</a>
     </div>
   </div>
@@ -704,10 +708,10 @@ function types0(b,m,s){
   if(s==="man"){
     if(k==="ip"){
       if(m.lcd)return [T("Màn LCD thay thế",OVR[m.n]?.lcd??(Z&&r50(Z*.5)),2,"6 tháng","30–45 phút","Màn LCD loại tốt, màu hiển thị ổn, giá dễ chịu."),
-                       T("Màn zin tháo máy",Z,3,"12 tháng","30–45 phút","Màn Apple chính hãng tháo máy. Giữ True Tone, màu và cảm ứng như nguyên bản.")];
+                       T("Màn zin tháo máy",Z,3,"6 tháng","30–45 phút","Màn Apple chính hãng tháo máy. Giữ True Tone, màu và cảm ứng như nguyên bản.")];
       return [T("Màn LCD",OVR[m.n]?.lcd??MKT[m.n]?.[1]??(Z&&Math.max(350,r50(Z*.25))),1,"6 tháng","30–45 phút","Loại rẻ nhất. Viền dày hơn một chút, màu nhạt hơn và hao pin hơn OLED."),
-              T("Màn OLED",OVR[m.n]?.oled??MKT[m.n]?.[2]??(Z&&r50(Z*.45)),2,"6 tháng","30–45 phút","Màu rực, đen sâu, mỏng gần như zin. Lựa chọn cân bằng giữa giá và chất lượng."),
-              T("Màn zin tháo máy",Z,3,"12 tháng","30–45 phút","Màn Apple chính hãng tháo máy. Giữ True Tone, đẹp nhất, như màn gốc của máy.")];
+              T("Màn OLED",OVR[m.n]?.oled??MKT[m.n]?.[2]??(Z&&r50(Z*.45)),2,"9 tháng","30–45 phút","Màu rực, đen sâu, mỏng gần như zin. Lựa chọn cân bằng giữa giá và chất lượng."),
+              T("Màn zin tháo máy",Z,3,"6 tháng","30–45 phút","Màn Apple chính hãng tháo máy. Giữ True Tone, đẹp nhất, như màn gốc của máy.")];
     }
     if(k==="pad")return [T("Ép kính cảm ứng",Z&&Math.max(350,r50(Z*.25)),2,"6 tháng","2–3 giờ","Kính hoặc cảm ứng bị vỡ, liệt. Màn hiển thị vẫn tốt."),T("Thay màn nguyên bộ",Z,3,"6 tháng","1–2 giờ","Màn sọc, chảy mực, không lên hình. Thay cả bộ màn và cảm ứng.")];
     return [T("Màn chính hãng",Z,3,"6 tháng","45–60 phút","Màn chính hãng theo máy. Màu, độ sáng và cảm ứng như nguyên bản."),T("Màn thay thế loại tốt",Z&&r50(Z*.45),2,"3 tháng","45–60 phút","Giá tốt, hiển thị ổn định, phù hợp máy đời cũ.")];
@@ -715,7 +719,7 @@ function types0(b,m,s){
   if(s==="pin"){const CH=T("Pin chính hãng",null,3,"12 tháng","20–30 phút","Pin chính hãng, hiện đúng dung lượng, không báo lỗi.",false,"Tạm hết hàng");
     if(k==="ip"){const v=BAT[m.n]||(P?PIN[P[5]]:[B&&r50(B*.8)]),nq=v[0];
       const gen=/Air|Fold/.test(m.n)?99:+(m.n.match(/iPhone (\d+)/)||[0,0])[1];
-      return [T("Pin nguyên quả",nq,2,"12 tháng","20–30 phút","Pin thay thế nguyên quả, thay nhanh, dùng ổn định.",false,nq==null?"Máy mới, chưa có pin":undefined),CH];}
+      return [T("Pin nguyên quả",nq,2,"12 tháng","20–30 phút","Pin thay thế nguyên quả, thay nhanh, dùng ổn định. Bảo hành 12 tháng, lỗi là đổi, không mất phí.",false,nq==null?"Máy mới, chưa có pin":undefined),CH];}
     return [T("Thay pin",B,3,"12 tháng","30–45 phút","Pin dung lượng chuẩn theo máy, kiểm tra dòng sạc trước khi giao."),CH];
   }
   if(s==="cam"){const base=B||800,big=/1[4-9] Pro|17|18/.test(m.n)&&/Pro|Air|17$|17e/.test(m.n),pro3=/1[4-9] Pro/.test(m.n);
@@ -734,7 +738,7 @@ function types0(b,m,s){
       T("Treo logo, treo táo không lên",500,3,"3 tháng","1–2 ngày","Máy kẹt ở logo, khởi động lại liên tục, không vào được màn hình chính.",true)];}
   if(s==="epkinh"){let ek=k==="ip"?(EK[m.n]??(Z&&Math.min(450,Math.max(350,r50(Z*.5))))):k==="pad"?Z&&Math.max(350,r50(Z*.25)):Z&&Math.max(300,r50(Z*.2));
     if(!(k==="ip"&&EK[m.n]!=null)&&ek){const cm=minPrice(types0(b,m,"man"));if(cm&&ek>=cm)ek=Math.max(150,r50(cm*.8));} /* ép kính không được đắt bằng thay màn */
-    return [T("Ép kính màn hình",ek,3,"3 tháng","2–3 giờ","Màn vẫn lên hình và cảm ứng tốt, chỉ vỡ mặt kính. Giữ nguyên màn zin, chỉ thay lớp kính bên ngoài.")].concat(k==="ip"&&ECU[m.n]?[T("Ép cảm ứng",ECU[m.n],3,"6 tháng","2–3 giờ","Cảm ứng liệt, loạn, kính vỡ. Giữ nguyên màn hiển thị zin của máy, chỉ thay lớp kính và cảm ứng.")]:[]);}
+    return [T("Ép kính màn hình",ek,3,"3 tháng","2–3 giờ","Màn vẫn lên hình và cảm ứng tốt, chỉ vỡ mặt kính. Giữ nguyên màn zin, chỉ thay lớp kính bên ngoài.")].concat(k==="ip"&&ECU[m.n]?[T("Ép cảm ứng",ECU[m.n],3,"3 tháng","2–3 giờ","Cảm ứng liệt, loạn, kính vỡ. Giữ nguyên màn hiển thị zin của máy, chỉ thay lớp kính và cảm ứng.")]:[]);}
   if(s==="nuoc")return [T("Sấy khô, vệ sinh máy vào nước",0,3,"Không áp dụng","2–24 giờ","Máy rơi nước mang đến sớm nhất có thể, tắt nguồn, không sạc. Tiệm sấy và vệ sinh miễn phí."),
       T("Xử lý main sau vào nước",B&&Math.max(500,r50((Z||3000)*.15)),3,"1 tháng","1–3 ngày","Máy đã sấy vẫn lỗi, cần vệ sinh và thay linh kiện trên main.",true)];
   if(s==="loa")return [T("Loa, mic, rung",B&&r50(200+B*.25),3,"3 tháng","30–60 phút","Loa rè, nhỏ, mất tiếng, mic không nghe, không rung.")];
@@ -991,6 +995,7 @@ function renderResult(pop){
     <div class="price${price==null?" na":""}">${price==null?(typeof na!=="undefined"&&na||"Liên hệ báo giá"):price===0?"Miễn phí":`${from?"<small>từ </small>":""}${vnd(price)}<small> đ</small>`}</div>
     <span class="tmp">● Đang cập nhật, giá tham khảo</span>
     <div class="facts"><div class="fact"><div class="k">Bảo hành</div><div class="v">${bh}</div></div><div class="fact"><div class="k">Thời gian sửa</div><div class="v">${time}</div></div></div>
+    <div class="giftline">🎁 Tặng kính cường lực khi sửa tại tiệm</div>
     <p class="rdesc">${desc}</p>
     <div class="r-cta"><a class="btn btn-call" href="tel:0372659937">Gọi đặt lịch</a><a class="btn btn-zalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Hỏi qua Zalo</a>
     <button class="btn btn-ghost" type="button" id="copyq">Sao chép câu hỏi giá để dán vào Zalo</button></div>`;
