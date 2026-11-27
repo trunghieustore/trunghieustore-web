@@ -179,7 +179,7 @@ section{padding-block:4.2rem 0}
 .crumb span{background:var(--soft);color:var(--accent);border-radius:999px;padding:4px 12px;font-weight:700}
 .btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 18px;font:700 .95rem var(--f-body);text-decoration:none;cursor:pointer;color:#fff}
 .btn svg{flex:none}
-.btn-call{background:var(--call)}.btn-zalo{background:var(--zalo)}.btn-fb{background:var(--fb)}.btn-tt{background:#000;color:#fff;box-shadow:inset 0 0 0 1px #333}.btn-map{background:var(--ink);color:var(--bg)}
+.btn-call{background:var(--call)}.btn-zalo{background:var(--zalo)}.btn-fb{background:var(--fb)}.btn-tt{background:#000;color:#fff;box-shadow:inset 0 0 0 1px #333}.btn-map{background:#fff;color:#1f1f1f;box-shadow:inset 0 0 0 1.5px #dadce0}.btn-map .bi{width:24px;height:24px}
 .btn-call,.btn-zalo,.btn-fb,.btn-tt,.btn-map{box-shadow:0 8px 20px -8px rgba(0,0,0,.45),inset 0 -2px 0 rgba(0,0,0,.18);min-height:46px;font-size:1rem}
 .btn svg.bi{width:20px!important;height:20px!important;flex:none}
 .btn .go{opacity:.85;font-weight:800;margin-left:2px}
@@ -369,8 +369,10 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 .tm-tab[aria-selected="false"] .ti{animation:swBob 2.6s ease-in-out infinite}
 .tm-tab .live{position:absolute;top:9px;right:9px;width:12px;height:12px;border-radius:50%;background:#ff2d2d;border:2px solid #fff;animation:liveDot 1.4s ease-in-out infinite}
 .tm-tab .live::after{content:"";position:absolute;inset:0;border-radius:50%;background:#ff2d2d;animation:liveRing 1.4s ease-out infinite}
-.need>.ser,.need>.model:not(.other):not(.xb){animation:needWave 2.4s ease-in-out infinite;animation-delay:calc(var(--k,0)*.11s)}
-@keyframes needWave{0%,46%,100%{transform:none;border-color:var(--line);box-shadow:none}14%{transform:translateY(-5px);border-color:#16c8f0;box-shadow:0 6px 16px rgba(22,200,240,.38),0 0 0 3px rgba(22,200,240,.22)}28%{transform:translateY(1px);border-color:rgba(22,200,240,.45);box-shadow:0 0 0 2px rgba(22,200,240,.1)}}
+:is(.wv:not(.done),.need)>:is(.brand,.ser,.model:not(.other):not(.xb),.svc,button):not([aria-pressed="true"]),.wv:not(.done) .types>.type:not([aria-pressed="true"]){animation:needWave 2.4s ease-in-out infinite;animation-delay:calc(var(--k,0)*.11s)}
+:is(.wv:not(.done),.need)>.ani:not([aria-pressed="true"]){animation:aniIn 1s var(--ease) both,needWave 2.4s ease-in-out infinite;animation-delay:calc(var(--i,0)*90ms),calc(var(--k,0)*.11s)}
+.wv:not(.done) .types>.type.ani:not([aria-pressed="true"]){animation:flipIn 1.1s var(--ease) both,needWave 2.4s ease-in-out infinite;animation-delay:calc(var(--i,0)*160ms),calc(var(--k,0)*.11s)}
+@keyframes needWave{0%,46%,100%{translate:0 0;border-color:var(--line);box-shadow:none}14%{translate:0 -6px;border-color:#16c8f0;box-shadow:0 6px 16px rgba(22,200,240,.38),0 0 0 3px rgba(22,200,240,.22)}28%{translate:0 1px;border-color:rgba(22,200,240,.45);box-shadow:0 0 0 2px rgba(22,200,240,.1)}}
 .go-up{cursor:pointer}.go-up .go-hint{display:inline-block;margin-top:.7rem;padding:7px 16px;border-radius:999px;background:#16c8f0;color:#04202b;font-weight:800;font-size:.9rem;animation:goBob 1.6s ease-in-out infinite}
 @keyframes goBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .crumb.go-up span:last-child{background:#16c8f0;color:#04202b}
@@ -379,7 +381,7 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 @keyframes badgeGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,106,0,.5)}60%{box-shadow:0 0 0 9px rgba(255,106,0,0)}}
 .brand[aria-pressed="false"]::after,.svc[aria-pressed="false"]::after,.tm-tab[aria-selected="false"]::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-130%);animation:swShine 5s ease-in-out infinite;pointer-events:none}
 .svc[aria-pressed="false"]::after{animation-delay:1.2s}
-@media (prefers-reduced-motion:reduce){.tm-tab,.tm-tab .ti,.tm-tab .live,.tm-tab .live::after,.need>*,.go-up .go-hint,.sec-head .n,.tm-step .lbl i,.brand::after,.svc::after{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.tm-tab,.tm-tab .ti,.tm-tab .live,.tm-tab .live::after,.need>*,.wv>*,.wv .types>*,.go-up .go-hint,.sec-head .n,.tm-step .lbl i,.brand::after,.svc::after{animation:none!important}}
 /* ---------- PROCESS ---------- */
 .proc{list-style:none;margin:1.8rem auto 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;max-width:1000px}
 .proc li{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px 14px;text-align:center}
@@ -476,8 +478,10 @@ footer .seo-note{max-width:640px;margin:.5rem auto;line-height:1.5;font-size:.8r
   .svc .ill{transition:transform .8s var(--ease)}.svc:hover .ill{transform:scale(1.12) rotate(-4deg)}
   .model:hover,.ser:hover{transform:translateY(-2px);border-color:var(--accent)}
   .proc li:hover,.card:hover{transform:translateY(-6px);box-shadow:0 18px 34px -20px var(--accent)}
-  .bar .btn-call::before{content:"";position:absolute;inset:0;border-radius:inherit;animation:pulse 2.4s infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--call) 60%,transparent)}70%,100%{box-shadow:0 0 0 12px transparent}}
+  .bar .btn-call,.bar .btn-zalo,.bar .btn-map{--rc:var(--call)}.bar .btn-zalo{--rc:var(--zalo)}.bar .btn-map{--rc:#ea4335}
+  .bar .btn-call::before,.bar .btn-zalo::before,.bar .btn-map::before{content:"";position:absolute;inset:0;border-radius:inherit;animation:pulse 2.4s infinite;pointer-events:none}
+  .bar .btn-zalo::before{animation-delay:.8s}.bar .btn-map::before{animation-delay:1.6s}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--rc) 70%,transparent)}70%,100%{box-shadow:0 0 0 16px transparent}}
   .pin-drop{animation:drop 2.2s var(--ease) infinite}
   @keyframes drop{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 }
@@ -1044,7 +1048,11 @@ function renderBrands(){
     return `<button class="brand ani" style="--i:${i}" type="button" data-k="${k}" ${g?`data-g="${g}"`:""} aria-pressed="${k===st.b}"><span class="tick">✓</span><span class="glow" style="background:${b.glow}"></span>${pic}<span class="bn">${b.n}</span><span class="bs">${b.s}</span></button>`}).join("");
   document.querySelectorAll(".brand[data-g]").forEach(brandCardCycle);
 }
-function waveIdx(){document.querySelectorAll(".need").forEach(c=>{let k=0;for(const x of c.children)x.style.setProperty("--k",k++)})}
+const WV=["brands","series","models","svcs","stage4","tmB","tmS","tmM","tmG","tmC"];
+function waveIdx(){WV.forEach(id=>{const e=$(id);if(e)e.classList.add("wv")});
+  document.querySelectorAll(".wv,.need,.wv .types").forEach(c=>{let k=0;for(const x of c.children)x.style.setProperty("--k",k++)})}
+function wvReset(...ids){ids.forEach(id=>{const e=$(id);if(e)e.classList.remove("done")})}
+document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const c=b.closest(".wv");if(c)c.classList.add("done");},true);
 function renderSeries(){
   const b=BR[st.b];$("t2").textContent=st.b==="khac"?"Máy hãng khác":b.kind==="ip"?"Chọn đời iPhone":`Chọn dòng và đời ${b.n}`;
   $("serBox").hidden=b.kind==="ip"||st.b==="khac";$("p2").textContent=st.b==="khac"?"Máy hãng khác hoặc không có trong danh sách: bấm ô bên dưới để ghi dòng máy và lỗi.":b.kind==="ip"?"Tất cả đời iPhone, mới nhất xếp trước. Rê chuột để xem màu máy.":"Chọn dòng máy trước, sau đó chọn đúng đời máy.";
@@ -1147,10 +1155,10 @@ function glide(el,off=-16){
 const later=(el)=>setTimeout(()=>glide(el),350);
 
 $("brands").addEventListener("click",e=>{const t=e.target.closest(".brand");if(!t)return;
-  st.b=t.dataset.k;st.ser=st.b==="iphone"?"14 – 15":firstSeries(st.b);st.pick=st.b==="iphone"||st.b==="khac"||BR[st.b].kind!=="and";st.mi=st.b==="khac"?-1:0;st.t=0;if(st.b==="khac")st.s="khac";$("q").value="";
+  st.b=t.dataset.k;wvReset("series","models","svcs","stage4");st.ser=st.b==="iphone"?"14 – 15":firstSeries(st.b);st.pick=st.b==="iphone"||st.b==="khac"||BR[st.b].kind!=="and";st.mi=st.b==="khac"?-1:0;st.t=0;if(st.b==="khac")st.s="khac";$("q").value="";
   document.querySelectorAll(".brand").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===st.b));renderFrom(0);later($("s2"));});
 $("series").addEventListener("click",e=>{const t=e.target.closest(".ser");if(!t)return;
-  st.ser=t.dataset.s;st.pick=true;$("series").classList.remove("need");st.mi=st.b==="khac"?-1:0;st.t=0;$("q").value="";
+  st.ser=t.dataset.s;st.pick=true;wvReset("models");$("series").classList.remove("need");st.mi=st.b==="khac"?-1:0;st.t=0;$("q").value="";
   document.querySelectorAll(".ser").forEach(x=>x.setAttribute("aria-pressed",x===t));renderFrom(1);});
 $("models").addEventListener("click",e=>{const t=e.target.closest(".model");if(!t)return;
   if(t.dataset.other){st.mi=-1;st.s="khac";st.t=0;$("q").value="";renderModels();renderFrom(2);later($("s4"));return;}
@@ -1235,8 +1243,8 @@ function tmCta(){return `<p class="rdesc tm-ref">Giá thu mua là giá tham kh�
 $("thu-mua").addEventListener("click",e=>{const t=e.target.closest("button,a");if(!t)return;
   if(t.id==="tmZalo"){try{navigator.clipboard.writeText(tmText()).then(()=>{const h=$("tmHint");if(h)h.textContent="Đã chép thông tin máy, dán vào Zalo và gửi kèm ảnh.";});}catch(err){}return;}
   if(t.dataset.mode){tm.mode=t.dataset.mode;tm.c=0;tmRender();return;}
-  if(t.dataset.b){tm.b=t.dataset.b;tm.s=null;tm.m=null;tm.g=0;$("tmQ").value="";tmRender();return;}
-  if(t.dataset.s){tm.s=t.dataset.s;$("tmQ").value="";tmRender();return;}
+  if(t.dataset.b){wvReset("tmS","tmM","tmG","tmC");tm.b=t.dataset.b;tm.s=null;tm.m=null;tm.g=0;$("tmQ").value="";tmRender();return;}
+  if(t.dataset.s){wvReset("tmM");tm.s=t.dataset.s;$("tmQ").value="";tmRender();return;}
   if(t.dataset.m){tm.m=t.dataset.m;tm.g=0;tmRender();setTimeout(()=>{try{glide($("tmR"),-80)}catch(e){}},250);return;}
   if(t.dataset.g){tm.g=+t.dataset.g;tmRender();return;}
   if(t.dataset.c){tm.c=+t.dataset.c;tmRender();return;}
@@ -1349,7 +1357,7 @@ req();
 zalo:'<svg class="bi" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.6 1.4 4.9 3.6 6.5L5 21l3.4-1.8c1.1.3 2.3.5 3.6.5 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/></svg>',
 fb:'<svg class="bi" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8V6.5c0-.8.2-1.5 1.5-1.5H17V2h-2.6C11.6 2 11 3.8 11 6v2H9v3h2v11h3V11h2.6l.4-3z"/></svg>',
 tt:'<svg class="bi" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 2h-3.3v13.3a2.9 2.9 0 11-2.9-2.9c.3 0 .6 0 .9.1V9.1a6.3 6.3 0 105.3 6.2V8.6a7.9 7.9 0 004.4 1.3V6.6a4.5 4.5 0 01-4.4-4.6z"/></svg>',
-map:'<svg class="bi" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>'};
+map:'<svg class="bi" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l5.5-2 7 2 5.5-2v15l-5.5 2-7-2-5.5 2z" fill="#e8f0fe"/><path d="M8.5 3.5v15" stroke="#c6d4ee" stroke-width="1"/><path d="M3 14.5l6-4 6 5 6-4" fill="none" stroke="#34a853" stroke-width="2.4" stroke-linecap="round"/><path d="M3 9l18 6" fill="none" stroke="#fbbc04" stroke-width="2" stroke-linecap="round"/><path d="M16 1.5a4.5 4.5 0 00-4.5 4.5c0 3.4 4.5 8 4.5 8s4.5-4.6 4.5-8A4.5 4.5 0 0016 1.5z" fill="#ea4335" stroke="#fff" stroke-width="1.2"/><circle cx="16" cy="6" r="1.7" fill="#fff"/></svg>'};
 const deco=root=>root.querySelectorAll('a.btn-call,a.btn-zalo,a.btn-fb,a.btn-tt,a.btn-map').forEach(a=>{if(a.dataset.deco)return;a.dataset.deco=1;const k=["call","zalo","fb","tt","map"].find(x=>a.classList.contains("btn-"+x));a.insertAdjacentHTML("afterbegin",I[k]);if(!a.closest(".bar"))a.insertAdjacentHTML("beforeend",'<span class="go" aria-hidden="true">›</span>');});
 deco(document);new MutationObserver(()=>deco(document)).observe(document.body,{childList:true,subtree:true});})();
 </script>
