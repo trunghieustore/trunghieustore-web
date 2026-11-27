@@ -522,13 +522,14 @@ const APPLE=`<path d="M50 92c1.8 0 3.4-1.5 3.4-3.5-1.9.1-3.6 1.6-3.4 3.5zm6.4 11
 const SVG={
  iphone:()=>body("#3a4250")+`<rect x="18" y="14" width="38" height="38" rx="11" fill="rgba(0,0,0,.28)" stroke="rgba(255,255,255,.2)"/>`+lens(28,25,6.5)+lens(28,42,6.5)+lens(45,33.5,6.5)+`<circle cx="45" cy="20" r="2.4" fill="#f5e6b8"/>`+APPLE,
  ipad:()=>`<rect x="6" y="10" width="88" height="160" rx="10" fill="#c9ced6" stroke="rgba(0,0,0,.15)" stroke-width="1.5"/><rect x="8" y="12" width="84" height="156" rx="8" fill="url(#sh)" opacity=".5"/><rect x="13" y="17" width="16" height="16" rx="5" fill="rgba(0,0,0,.2)"/>`+lens(21,25,5)+APPLE.replace("rgba(255,255,255,.22)","rgba(0,0,0,.14)"),
- samsung:()=>body("#2d3b55",14)+lens(25,22,6.5)+lens(25,39,6.5)+lens(25,56,6.5)+`<circle cx="38" cy="22" r="2.4" fill="#f5e6b8"/><text x="50" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="rgba(255,255,255,.35)" letter-spacing="1">SAMSUNG</text>`,
- xiaomi:()=>body("#e8e9ec",14)+`<rect x="17" y="14" width="46" height="46" rx="12" fill="#1a1d22"/>`+lens(29,26,6.5)+lens(51,26,6.5)+lens(29,48,6.5)+lens(51,48,6.5),
- oppo:()=>body("#1d6f5f",15)+`<rect x="17" y="14" width="24" height="52" rx="12" fill="rgba(0,0,0,.3)"/>`+lens(29,27,7)+lens(29,52,7)+`<circle cx="47" cy="22" r="2.4" fill="#f5e6b8"/>`,
- vivo:()=>body("#4b4fa8",16)+`<circle cx="50" cy="42" r="26" fill="#14161c" stroke="rgba(255,255,255,.3)" stroke-width="2"/>`+lens(40,32,6.5)+lens(60,32,6.5)+lens(50,52,6.5),
- realme:()=>body("#d9a92e",14)+`<rect x="17" y="14" width="54" height="26" rx="10" fill="rgba(0,0,0,.35)"/>`+lens(30,27,6.5)+lens(47,27,6.5)+`<circle cx="62" cy="27" r="2.4" fill="#f5e6b8"/>`
+ samsung:(c)=>body(c||"#2d3b55",14)+lens(25,22,6.5)+lens(25,39,6.5)+lens(25,56,6.5)+`<circle cx="38" cy="22" r="2.4" fill="#f5e6b8"/><text x="50" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="rgba(255,255,255,.35)" letter-spacing="1">SAMSUNG</text>`,
+ xiaomi:(c)=>body(c||"#e8e9ec",14)+`<rect x="17" y="14" width="46" height="46" rx="12" fill="#1a1d22"/>`+lens(29,26,6.5)+lens(51,26,6.5)+lens(29,48,6.5)+lens(51,48,6.5),
+ oppo:(c)=>body(c||"#1d6f5f",15)+`<rect x="17" y="14" width="24" height="52" rx="12" fill="rgba(0,0,0,.3)"/>`+lens(29,27,7)+lens(29,52,7)+`<circle cx="47" cy="22" r="2.4" fill="#f5e6b8"/>`,
+ vivo:(c)=>body(c||"#4b4fa8",16)+`<circle cx="50" cy="42" r="26" fill="#14161c" stroke="rgba(255,255,255,.3)" stroke-width="2"/>`+lens(40,32,6.5)+lens(60,32,6.5)+lens(50,52,6.5),
+ realme:(c)=>body(c||"#d9a92e",14)+`<rect x="17" y="14" width="54" height="26" rx="10" fill="rgba(0,0,0,.35)"/>`+lens(30,27,6.5)+lens(47,27,6.5)+`<circle cx="62" cy="27" r="2.4" fill="#f5e6b8"/>`
 };
-const brandSvg=k=>`<svg viewBox="0 0 100 180" aria-hidden="true">${DEFS}${SVG[k]()}</svg>`;
+const brandSvg=(k,c,flip)=>`<svg viewBox="0 0 100 180" aria-hidden="true">${DEFS}${SVG[k](c)}${flip?'<path d="M10 92h80" stroke="rgba(0,0,0,.28)" stroke-width="2.5"/><path d="M10 95h80" stroke="rgba(255,255,255,.18)" stroke-width="1"/>':''}</svg>`;
+const svgURI=(k,c,flip)=>"data:image/svg+xml,"+encodeURIComponent(brandSvg(k,c,flip).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" '));
 
 /* ===== Hình minh họa linh kiện ===== */
 const ILL={
@@ -579,10 +580,14 @@ const ANRAW={
    "Air":"iPad Air 13 M3:6800:1800,iPad Air 11 M3:5000:1600,iPad Air 13 M2:6500:1800,iPad Air 11 M2:4800:1600,iPad Air 5:3800:1400,iPad Air 4:3600:1300,iPad Air 3:2200:1100,iPad Air 2:1600:900,iPad Air 1:1100:800",
    "Gen":"iPad Gen 11 (A16):2800:1300,iPad Gen 10:2600:1200,iPad Gen 9:1500:1000,iPad Gen 8:1400:950,iPad Gen 7:1300:900,iPad Gen 6:1100:850,iPad Gen 5:1000:800",
    "mini":"iPad mini 7 (A17 Pro):3900:1400,iPad mini 6:3500:1300,iPad mini 5:2200:1000,iPad mini 4:1700:900"},
- samsung:{"Dòng S":"Galaxy S26 Ultra::1400,Galaxy S26+::1200,Galaxy S26::1100,Galaxy S25 Ultra:7500:1300,Galaxy S25+:5200:1100,Galaxy S25:4500:1000,Galaxy S24 Ultra:6900:1200,Galaxy S24+:4600:1000,Galaxy S24:4300:950,Galaxy S23 Ultra:5900:1100,Galaxy S23+:4000:900,Galaxy S23:3800:850,Galaxy S22 Ultra:5200:1000,Galaxy S22+:3600:850,Galaxy S22:3300:800,Galaxy S21 Ultra:4500:900,Galaxy S21+:3200:800,Galaxy S21:3000:750,Galaxy S20 Ultra:4200:850,Galaxy S20+:3000:750,Galaxy S20:2800:700,Galaxy S10+:2600:650,Galaxy S10:2400:600",
-   "Dòng Note":"Galaxy Note 20 Ultra:5200:950,Galaxy Note 20:3200:800,Galaxy Note 10+:3500:750,Galaxy Note 10:2800:700,Galaxy Note 9:2600:650,Galaxy Note 8:2300:600",
-   "Dòng A":"Galaxy A57::800,Galaxy A37::750,Galaxy A27::700,Galaxy A18::550,Galaxy A08::500,Galaxy A07::500,Galaxy A56:2200:750,Galaxy A55:2100:700,Galaxy A54:1800:650,Galaxy A36:1800:700,Galaxy A35:1700:650,Galaxy A34:1600:600,Galaxy A26:1400:600,Galaxy A25:1300:600,Galaxy A16:1100:550,Galaxy A15:1000:550,Galaxy A06:800:500,Galaxy A05:750:450,Galaxy A73:1900:650,Galaxy A53:1600:600,Galaxy A52:1500:550,Galaxy A33:1300:550,Galaxy A32:1100:500",
-   "Dòng Z (gập)":"Galaxy Z Fold8 Ultra::1700,Galaxy Z Fold8::1600,Galaxy Z Flip8::1400,Galaxy Z Fold7::1600,Galaxy Z Flip7::1400,Galaxy Z Fold6::1500,Galaxy Z Fold5::1400,Galaxy Z Fold4::1300,Galaxy Z Flip6:6200:1300,Galaxy Z Flip5:5800:1200,Galaxy Z Flip4:5200:1100"},
+ samsung:{"Dòng S":"Galaxy S26 Ultra::1400,Galaxy S26+::1200,Galaxy S26::1100,Galaxy S26 FE::900,Galaxy S25 Ultra:7500:1300,Galaxy S25 Edge::1100,Galaxy S25+:5200:1100,Galaxy S25:4500:1000,Galaxy S25 FE:3200:850,Galaxy S24 Ultra:6900:1200,Galaxy S24+:4600:1000,Galaxy S24:4300:950,Galaxy S24 FE:3000:800,Galaxy S23 Ultra:5900:1100,Galaxy S23+:4000:900,Galaxy S23:3800:850,Galaxy S23 FE:2800:750,Galaxy S22 Ultra:5200:1000,Galaxy S22+:3600:850,Galaxy S22:3300:800,Galaxy S21 Ultra:4500:900,Galaxy S21+:3200:800,Galaxy S21:3000:750,Galaxy S21 FE:2600:700,Galaxy S20 Ultra:4200:850,Galaxy S20+:3000:750,Galaxy S20:2800:700,Galaxy S20 FE:2200:650,Galaxy S10+:2600:650,Galaxy S10:2400:600,Galaxy S10e:1900:550,Galaxy S10 Lite:1800:550,Galaxy S9+:2200:550,Galaxy S9:2000:500",
+   "Dòng Note":"Galaxy Note 20 Ultra:5200:950,Galaxy Note 20:3200:800,Galaxy Note 10+:3500:750,Galaxy Note 10:2800:700,Galaxy Note 10 Lite:1800:600,Galaxy Note 9:2600:650,Galaxy Note 8:2300:600",
+   "Dòng Z (gập)":"Galaxy Z Fold8 Ultra::1700,Galaxy Z Fold8::1600,Galaxy Z Flip8::1400,Galaxy Z Fold7::1600,Galaxy Z Flip7::1400,Galaxy Z Flip7 FE::1200,Galaxy Z Fold6::1500,Galaxy Z Flip6:6200:1300,Galaxy Z Fold5::1400,Galaxy Z Flip5:5800:1200,Galaxy Z Fold4::1300,Galaxy Z Flip4:5200:1100,Galaxy Z Fold3::1200,Galaxy Z Flip3:4200:1000,Galaxy Z Fold2::1100,Galaxy Z Flip 5G:3600:900,Galaxy Z Flip:3500:900,Galaxy Fold::1000",
+   "Dòng A 2024–2026":"Galaxy A57::800,Galaxy A37::750,Galaxy A27::700,Galaxy A18::550,Galaxy A08::500,Galaxy A07::500,Galaxy A56:2200:750,Galaxy A36:1800:700,Galaxy A26:1400:600,Galaxy A17:1100:550,Galaxy A16:1100:550,Galaxy A06:800:500,Galaxy A55:2100:700,Galaxy A35:1700:650,Galaxy A25:1300:600,Galaxy A15:1000:550",
+   "Dòng A 2021–2023":"Galaxy A05s:850:500,Galaxy A05:750:450,Galaxy A54:1800:650,Galaxy A34:1600:600,Galaxy A24:1300:550,Galaxy A14:900:500,Galaxy A04s:800:450,Galaxy A04:700:450,Galaxy A73:1900:650,Galaxy A53:1600:600,Galaxy A33:1300:550,Galaxy A23:1000:500,Galaxy A13:850:450,Galaxy A03s:700:400,Galaxy A03:650:400,Galaxy A72:1700:600,Galaxy A52s:1600:600,Galaxy A52:1500:550,Galaxy A32:1100:500,Galaxy A22:950:450,Galaxy A12:750:400,Galaxy A02s:650:400,Galaxy A02:600:400",
+   "Dòng A 2018–2020":"Galaxy A71:1600:550,Galaxy A51:1300:500,Galaxy A31:1000:450,Galaxy A21s:800:400,Galaxy A11:700:400,Galaxy A01:550:350,Galaxy A80:1800:550,Galaxy A70:1300:500,Galaxy A50s:1100:450,Galaxy A50:1000:450,Galaxy A30s:950:450,Galaxy A30:900:450,Galaxy A20s:750:400,Galaxy A20:750:400,Galaxy A10s:600:350,Galaxy A10:550:350,Galaxy A9 2018:1000:450,Galaxy A8+ 2018:1000:450,Galaxy A8 2018:900:450,Galaxy A7 2018:850:400,Galaxy A6+:750:400,Galaxy A6:700:400",
+   "Dòng M":"Galaxy M55:1700:600,Galaxy M35:1400:600,Galaxy M15:1000:550,Galaxy M54:1700:600,Galaxy M34:1300:550,Galaxy M14:950:500,Galaxy M53:1500:550,Galaxy M33:1200:500,Galaxy M23:1000:500,Galaxy M52:1400:550,Galaxy M32:1000:500,Galaxy M22:900:450,Galaxy M12:700:400,Galaxy M62:1100:550,Galaxy M51:1300:550,Galaxy M31:1100:500,Galaxy M21:900:450,Galaxy M11:650:400,Galaxy M40:1000:450,Galaxy M30s:1000:450,Galaxy M30:950:450,Galaxy M20:750:400,Galaxy M10:600:350",
+   "Dòng J":"Galaxy J8:800:400,Galaxy J6+:700:350,Galaxy J6:700:350,Galaxy J4+:600:350,Galaxy J4:600:350,Galaxy J4 Core:550:350,Galaxy J2 Core:450:300"},
  vivo:{"Dòng V":"vivo V40:2900:800,vivo V30:2600:750,vivo V29:2400:700,vivo V27:2200:650","Dòng Y":"vivo Y100:1500:600,vivo Y36:1100:550,vivo Y28:950:500,vivo Y18:850:500,vivo Y17s:800:450,vivo Y03:750:450","Dòng X":"vivo X200 Pro::1100,vivo X100 Pro::1000"},
  xiaomi:{"Xiaomi":"Xiaomi 15 Ultra::1200,Xiaomi 15::1100,Xiaomi 14 Ultra:6500:1100,Xiaomi 14:4500:1000,Xiaomi 14T Pro:4200:950,Xiaomi 14T:3600:900,Xiaomi 13T Pro:3800:900,Xiaomi 13T:3200:850",
    "Redmi Note":"Redmi Note 14 Pro+:2600:750,Redmi Note 14 Pro:2200:700,Redmi Note 14:1400:600,Redmi Note 13 Pro+:2400:700,Redmi Note 13 Pro:2000:650,Redmi Note 13:1300:550,Redmi Note 12:1200:500",
@@ -696,22 +701,80 @@ let st={b:"iphone",ser:"14 – 15",mi:0,s:"man",t:0};
 const model=()=>BR[st.b].series[st.ser][st.mi];
 
 /* ===== Ảnh máy thật theo màu (ảnh gốc Apple) ===== */
-const IMG={"sS":[["a","Titan Cam","#e9c8ad"],["b","Titan Tím","#55557a"]],"sZ":[["fold","Galaxy Z Fold8","#c9bfe0"],["flip","Galaxy Z Flip8","#f2c6dd"]],"sA":[["a","Xanh Đen","#1f2a44"]],"g18p":[["silver","Bạc","#dcdcdc"],["glacier","Xanh Băng","#c9d8e2"],["burgundy","Đỏ Burgundy","#5a2128"],["black","Đen","#2b2b2d"]],"g17p":[["cosmicorange","Cam Vũ Trụ","#e9772f"],["deepblue","Xanh Đậm","#2f3d5c"],["silver","Bạc","#e2e3e4"]],"gair":[["skyblue","Xanh Da Trời","#c4d6e6"],["lightgold","Vàng Nhạt","#ece0c4"],["cloudwhite","Trắng Mây","#f2f1ee"],["spaceblack","Đen Không Gian","#2a2b2f"]],"g17":[["lavender","Tím Oải Hương","#d4c9e2"],["sage","Xanh Xô Thơm","#c2ccb0"],["mistblue","Xanh Sương Mù","#b6c7d6"],["white","Trắng","#f3f3f1"],["black","Đen","#2d2e32"]],"g17e":[["softpink","Hồng Phấn","#f1d3d6"],["white","Trắng","#f3f3f1"],["black","Đen","#2d2e32"]],"g16p":[["deserttitanium","Titan Sa Mạc","#c4a68a"],["naturaltitanium","Titan Tự Nhiên","#bdb6ab"],["whitetitanium","Titan Trắng","#e6e4df"],["blacktitanium","Titan Đen","#3b3b3c"]],"g16":[["ultramarine","Xanh Lưu Ly","#5b6fd6"],["teal","Xanh Mòng Két","#6fa7a1"],["pink","Hồng","#f0b8cf"],["white","Trắng","#f4f4f2"],["black","Đen","#2d2e30"]],"g16e":[["white","Trắng","#f4f4f2"],["black","Đen","#2d2e30"]],"g15p":[["naturaltitanium","Titan Tự Nhiên","#bab4a9"],["bluetitanium","Titan Xanh","#3f4a5c"],["whitetitanium","Titan Trắng","#e5e3de"],["blacktitanium","Titan Đen","#3c3c3d"]],"g15":[["pink","Hồng","#f2d6da"],["yellow","Vàng","#f3eacb"],["green","Xanh Lá","#d7e3cf"],["blue","Xanh Dương","#cfdde6"],["black","Đen","#3a3b3d"]],"g14p":[["deeppurple","Tím Đậm","#594f63"],["gold","Vàng","#f4e8ce"],["silver","Bạc","#e3e4e2"],["spaceblack","Đen Không Gian","#403e3d"]],"g14":[["blue","Xanh Dương","#a0b4c7"],["purple","Tím","#e5ddea"],["yellow","Vàng","#f9e479"],["midnight","Nửa Đêm","#222930"],["starlight","Ánh Sao","#faf6f2"],["product-red","Đỏ","#bf0013"]],"g13p":[["blue","Xanh Sierra","#9bb5ce"],["green","Xanh Lá Alpine","#576856"],["gold","Vàng","#fae7cf"],["silver","Bạc","#f1f2ed"],["graphite","Than Chì","#54524f"]],"g13":[["pink","Hồng","#fae0d8"],["blue","Xanh Dương","#276787"],["product-red","Đỏ","#bf0013"],["starlight","Ánh Sao","#faf6f2"],["midnight","Nửa Đêm","#232a31"]],"g12p":[["blue","Xanh Thái Bình Dương","#2f4452"],["gold","Vàng","#fcebd3"],["silver","Bạc","#e3e4df"],["graphite","Than Chì","#52514d"]],"g12":[["purple","Tím","#b7afe6"]],"g11p":[["midnight-green","Xanh Bóng Đêm","#4e5851"],["gold","Vàng","#fad7bd"],["silver","Bạc","#ebebe3"],["space","Xám Không Gian","#535150"]],"g11":[["purple","Tím","#d1cdda"],["yellow","Vàng","#ffe681"],["green","Xanh Lá","#aee1cd"],["red","Đỏ","#ba0c2e"],["white","Trắng","#f9f6ef"],["black","Đen","#1f2020"]],"gxr":[["blue","Xanh Dương","#4eb5e6"],["yellow","Vàng","#f9d045"],["coral","San Hô","#ee7762"],["red","Đỏ","#b41325"],["white","Trắng","#f3f3f3"],["black","Đen","#2b2b2b"]],"gxs":[["gold","Vàng","#f5ddc5"],["silver","Bạc","#e4e4e2"],["space","Xám Không Gian","#4a4a4c"]],"gse22":[["red","Đỏ","#bf0013"],["starlight","Ánh Sao","#faf6f2"],["midnight","Nửa Đêm","#232a31"]],"gse20":[["red","Đỏ","#bf0013"],["white","Trắng","#f3f3f3"],["black","Đen","#2b2b2b"]]};
+const IMG={"s26u":[["black","Đen Classic","#383b40"],["white","Trắng Classic","#f1f1ef"],["silvershadow","Bạc Shadow","#959698"],["cobaltviolet","Tím Cobalt","#56576d"],["pinkgold","Vàng Hồng","#ebddd3"],["skyblue","Xanh Sky Blue","#cbdbe6"]],"s26":[["black","Đen Classic","#36383d"],["white","Trắng Classic","#f1f1ef"],["silvershadow","Bạc Shadow","#9c9d9f"],["cobaltviolet","Tím Cobalt","#55556e"],["pinkgold","Vàng Hồng","#edddd2"],["skyblue","Xanh Sky Blue","#cddde7"]],"s25u":[["silverblue","Xanh Titan","#abb1bf"],["gray","Xám Titan","#bab5b1"],["black","Đen Titan","#36363b"],["whitesilver","Bạc Titan","#ceced0"],["jetblack","Đen Tuyền Titan","#34363d"],["jadegreen","Xanh Ngọc Titan","#b3baad"],["pinkgold","Vàng Hồng Titan","#ebdbce"]],"s25":[["navy","Xanh Navy","#23375f"],["icyblue","Xanh Icy","#d0d8e4"],["silvershadow","Bạc Shadow","#a5a6a8"],["mint","Xanh Mint","#d3e3d7"],["blueblack","Đen Ocean","#373c46"],["coralred","Đỏ Coral","#fb6a75"],["pinkgold","Vàng Rose","#edddd1"]],"s25e":[["titaniumsilver","Bạc Titan","#c9bfbd"],["titaniumicyblue","Xanh Icy Titan","#abb4e1"],["titaniumjetblack","Đen Tuyền Titan","#232327"]],"zf8u":[["graphite","Đen Graphite","#4c4c54"],["cream","Trắng Cream","#dacfcd"],["green","Xanh Lá","#323b36"],["violet","Tím","#362d36"]],"zf8":[["graphite","Đen Graphite","#4d4d55"],["cream","Trắng Cream","#d9d9d5"],["lavender","Tím Lavender","#c7c0d0"],["pistachio","Xanh Pistachio","#bdc7c8"]],"zp8":[["graphite","Đen Graphite","#3c3c40"],["cream","Trắng Cream","#ded0d1"],["mint","Xanh Mint","#d5dfba"],["pink","Hồng","#eac1ba"]],"zf7":[["blueshadow","Xanh Shadow","#4e5b91"],["jetblack","Đen Tuyền","#3c393d"],["silvershadow","Bạc Shadow","#91898a"]],"zp7":[["jetblack","Đen Tuyền","#3c393d"],["blueshadow","Xanh Shadow","#485786"],["coralred","Đỏ Coral","#d27568"],["mint","Xanh Mint","#c9e4da"]],"s25fe":[["navy","Xanh Navy","#384467"],["icyblue","Xanh Icy","#e1e2f3"],["jetblack","Đen Smoke","#333439"],["white","Trắng Snow","#f0f0f0"]],"s26fe":[["blueberry","Xanh Blueberry","#43486c"],["graphite","Xám Graphite","#383d43"],["pistachio","Xanh Pistachio","#c9dcd8"]],"sS":[["a","Titan Cam","#e9c8ad"],["b","Titan Tím","#55557a"]],"sZ":[["fold","Galaxy Z Fold8","#c9bfe0"],["flip","Galaxy Z Flip8","#f2c6dd"]],"sA":[["a","Xanh Đen","#1f2a44"]],"g18p":[["silver","Bạc","#dcdcdc"],["glacier","Xanh Băng","#c9d8e2"],["burgundy","Đỏ Burgundy","#5a2128"],["black","Đen","#2b2b2d"]],"g17p":[["cosmicorange","Cam Vũ Trụ","#e9772f"],["deepblue","Xanh Đậm","#2f3d5c"],["silver","Bạc","#e2e3e4"]],"gair":[["skyblue","Xanh Da Trời","#c4d6e6"],["lightgold","Vàng Nhạt","#ece0c4"],["cloudwhite","Trắng Mây","#f2f1ee"],["spaceblack","Đen Không Gian","#2a2b2f"]],"g17":[["lavender","Tím Oải Hương","#d4c9e2"],["sage","Xanh Xô Thơm","#c2ccb0"],["mistblue","Xanh Sương Mù","#b6c7d6"],["white","Trắng","#f3f3f1"],["black","Đen","#2d2e32"]],"g17e":[["softpink","Hồng Phấn","#f1d3d6"],["white","Trắng","#f3f3f1"],["black","Đen","#2d2e32"]],"g16p":[["deserttitanium","Titan Sa Mạc","#c4a68a"],["naturaltitanium","Titan Tự Nhiên","#bdb6ab"],["whitetitanium","Titan Trắng","#e6e4df"],["blacktitanium","Titan Đen","#3b3b3c"]],"g16":[["ultramarine","Xanh Lưu Ly","#5b6fd6"],["teal","Xanh Mòng Két","#6fa7a1"],["pink","Hồng","#f0b8cf"],["white","Trắng","#f4f4f2"],["black","Đen","#2d2e30"]],"g16e":[["white","Trắng","#f4f4f2"],["black","Đen","#2d2e30"]],"g15p":[["naturaltitanium","Titan Tự Nhiên","#bab4a9"],["bluetitanium","Titan Xanh","#3f4a5c"],["whitetitanium","Titan Trắng","#e5e3de"],["blacktitanium","Titan Đen","#3c3c3d"]],"g15":[["pink","Hồng","#f2d6da"],["yellow","Vàng","#f3eacb"],["green","Xanh Lá","#d7e3cf"],["blue","Xanh Dương","#cfdde6"],["black","Đen","#3a3b3d"]],"g14p":[["deeppurple","Tím Đậm","#594f63"],["gold","Vàng","#f4e8ce"],["silver","Bạc","#e3e4e2"],["spaceblack","Đen Không Gian","#403e3d"]],"g14":[["blue","Xanh Dương","#a0b4c7"],["purple","Tím","#e5ddea"],["yellow","Vàng","#f9e479"],["midnight","Nửa Đêm","#222930"],["starlight","Ánh Sao","#faf6f2"],["product-red","Đỏ","#bf0013"]],"g13p":[["blue","Xanh Sierra","#9bb5ce"],["green","Xanh Lá Alpine","#576856"],["gold","Vàng","#fae7cf"],["silver","Bạc","#f1f2ed"],["graphite","Than Chì","#54524f"]],"g13":[["pink","Hồng","#fae0d8"],["blue","Xanh Dương","#276787"],["product-red","Đỏ","#bf0013"],["starlight","Ánh Sao","#faf6f2"],["midnight","Nửa Đêm","#232a31"]],"g12p":[["blue","Xanh Thái Bình Dương","#2f4452"],["gold","Vàng","#fcebd3"],["silver","Bạc","#e3e4df"],["graphite","Than Chì","#52514d"]],"g12":[["purple","Tím","#b7afe6"]],"g11p":[["midnight-green","Xanh Bóng Đêm","#4e5851"],["gold","Vàng","#fad7bd"],["silver","Bạc","#ebebe3"],["space","Xám Không Gian","#535150"]],"g11":[["purple","Tím","#d1cdda"],["yellow","Vàng","#ffe681"],["green","Xanh Lá","#aee1cd"],["red","Đỏ","#ba0c2e"],["white","Trắng","#f9f6ef"],["black","Đen","#1f2020"]],"gxr":[["blue","Xanh Dương","#4eb5e6"],["yellow","Vàng","#f9d045"],["coral","San Hô","#ee7762"],["red","Đỏ","#b41325"],["white","Trắng","#f3f3f3"],["black","Đen","#2b2b2b"]],"gxs":[["gold","Vàng","#f5ddc5"],["silver","Bạc","#e4e4e2"],["space","Xám Không Gian","#4a4a4c"]],"gse22":[["red","Đỏ","#bf0013"],["starlight","Ánh Sao","#faf6f2"],["midnight","Nửa Đêm","#232a31"]],"gse20":[["red","Đỏ","#bf0013"],["white","Trắng","#f3f3f3"],["black","Đen","#2b2b2b"]]};
+/* Màu máy Samsung (tên màu theo Samsung VN, mã màu gần đúng). Khóa là regex khớp tên máy, ưu tiên khớp trước */
+const SCOL=[
+[/S24 Ultra/,"Đen Titan#3b3b3d|Xám Titan#8d8a85|Tím Titan#5d5671|Vàng Titan#e3d7b8"],
+[/S24 FE/,"Xanh Dương#4b6a9b|Xám#6f7076|Xanh Mint#c7e3d4|Vàng#f2df8c|Đen#2a2a2c"],
+[/S24/,"Đen Onyx#2b2b2e|Xám Marble#c8c6c2|Tím Cobalt#7d6f9e|Vàng Amber#f1dfa0"],
+[/S23 Ultra/,"Đen Phantom#2c2c2e|Kem#ece3d3|Xanh Botanic#4f5b4a|Tím Lilac#c9b8d6"],
+[/S23 FE/,"Kem#efe6d8|Tím#c7b6d8|Xanh Mint#c9e2d0|Đen Graphite#3a3b3d"],
+[/S23/,"Đen Phantom#2c2c2e|Kem#ece3d3|Xanh Botanic#9fae94|Tím Lavender#d8cce4"],
+[/S22 Ultra/,"Đen Phantom#2c2c2e|Trắng Phantom#eeeeec|Xanh Lá#3f5a4c|Đỏ Burgundy#6b2a33"],
+[/S22/,"Đen Phantom#2c2c2e|Trắng Phantom#eeeeec|Xanh Lá#a6b8a0|Vàng Hồng#f1d3c3"],
+[/S21 Ultra/,"Đen Phantom#2b2b2d|Bạc Phantom#c9c9cb"],
+[/S21 FE/,"Trắng#efefef|Xanh Olive#a7b098|Tím Lavender#c9bfe0|Xám#4e4f53"],
+[/S21\+/,"Tím Phantom#b7a8d6|Đen Phantom#2b2b2d|Bạc Phantom#c9c9cb"],
+[/S21/,"Tím Phantom#b7a8d6|Xám Phantom#4a4a4e|Trắng Phantom#efefef|Hồng Phantom#f1cfc9"],
+[/S20 Ultra/,"Đen Cosmic#2b2b2d|Xám Cosmic#8a8a8c"],
+[/S20 FE/,"Xanh Navy#2f4769|Đỏ#c8484a|Trắng#efefef|Cam#f19a6a|Xanh Mint#b8d9c5|Tím#b9a8d8"],
+[/S20\+/,"Xám Cosmic#6f6f72|Xanh Cloud#b9d1e6|Đen Cosmic#2b2b2d"],
+[/S20/,"Xám Cosmic#6f6f72|Xanh Cloud#b9d1e6|Hồng Cloud#f0cfd1"],
+[/S10 Lite/,"Đen#232325|Trắng#eeeeee|Xanh#3c6bb0"],
+[/S10e/,"Vàng Canary#f3d670|Trắng Ngọc Trai#f1f1ee|Đen Ngọc Trai#232325|Xanh Ngọc Lục Bảo#69b1a4"],
+[/S10/,"Trắng Ngọc Trai#f1f1ee|Đen Ngọc Trai#232325|Xanh Ngọc Lục Bảo#69b1a4|Xanh Dương#2e6ac4"],
+[/S9/,"Tím Lilac#b49dc9|Đen Midnight#232325|Xanh Coral#6c90c6|Vàng Sunrise#d9b98a"],
+[/Note 20 Ultra/,"Đồng Mystic#c7a58f|Đen Mystic#2a2a2c|Trắng Mystic#eeeeee"],
+[/Note 20/,"Đồng Mystic#c7a58f|Xám Mystic#5b5b5e|Xanh Mystic#a9c3b6"],
+[/Note 10 Lite/,"Đen Aura#232325|Bạc Aura#d7d7d7|Đỏ Aura#c33a3a"],
+[/Note 10/,"Bạc Aura Glow#d6d6e2|Đen Aura#232325|Trắng Aura#f2f2f2|Xanh Aura#4f78a8"],
+[/Note 9/,"Xanh Ocean#2c5496|Tím Lavender#8d7fb7|Đen Midnight#232325|Đồng Metallic#c18b5f"],
+[/Note 8/,"Đen Midnight#232325|Vàng Maple#d9c3a0|Xám Orchid#8d8a9e|Xanh Deepsea#33549a"],
+[/Fold6/,"Bạc Shadow#b9babd|Hồng#f1c9c9|Xanh Navy#34405e"],
+[/Flip7 FE/,"Đen#2b2b2d|Trắng#f1f1f1"],
+[/Flip6/,"Xanh Dương#9cb6d8|Xanh Mint#c8e4d2|Vàng#f3e59a|Bạc Shadow#c6c6c8"],
+[/Fold5/,"Xanh Icy#c9d6e5|Kem#ece3d3|Đen Phantom#2c2c2e"],
+[/Flip5/,"Xanh Mint#c6e4d3|Kem#ece3d3|Tím Lavender#cdbfe3|Xám Graphite#4a4a4c"],
+[/Fold4/,"Xanh Graygreen#6f7a72|Đen Phantom#2c2c2e|Vàng Beige#e8dccb"],
+[/Flip4/,"Tím Bora#b8a6dc|Xám Graphite#4a4a4c|Vàng Hồng#f3d4c6|Xanh Dương#9bb7d8"],
+[/Fold3/,"Đen Phantom#2c2c2e|Xanh Rêu#576e5d|Bạc Phantom#c9c9cb"],
+[/Flip3/,"Kem#efe7d6|Xanh Rêu#586e58|Tím Lavender#c7b8e0|Đen Phantom#2c2c2e"],
+[/Fold2/,"Đen Mystic#2a2a2c|Đồng Mystic#c7a58f"],
+[/Z Flip/,"Tím Mirror#a593c9|Đen Mirror#232325|Xám Mystic#7a7a7d"],
+[/Galaxy Fold/,"Bạc Space#c9c9cd|Đen Cosmos#232325"],
+[/A5[4-7]|A3[4-7]/,"Đen Graphite#3a3b3f|Xám Nhạt#c9c9cb|Tím Lavender#c9bfe0|Xanh Lime#d5e6a8"],
+[/A[12][4-8]|A0[4-8]/,"Đen#2b2b2d|Xanh Dương#a9c2e0|Bạc#d4d4d6|Xanh Lá#c4dcc0"],
+[/A[5-7][23]|A[3-4]3/,"Đen Awesome#2b2b2d|Trắng Awesome#efefef|Xanh Awesome#7fa8d6|Cam Awesome#f2a37c"],
+[/A[0-2][0-3]s?|M[0-3][0-3]/,"Đen#2b2b2d|Xanh Dương#3d5f99|Trắng#eeeeee|Đỏ#c44040"],
+[/A[5-8][0-2]s?|A[3-4][0-2]s?|A9 2018|A8/,"Đen Prism#232325|Trắng Prism#efefef|Xanh Prism#5b7ec4|Hồng Prism#e9b9c8"],
+[/A[67]|J/,"Đen#232325|Vàng#d9c3a0|Xanh#3b5ea3|Tím#9b88c2"],
+[/M5|M6|M4/,"Xanh Đậm#2f4769|Xanh Lá#5a8c7a|Đen#232325"],
+[/M/,"Đen#232325|Xanh Dương#4a6fb0|Xanh Lá#7fae95"]
+];
+const COLS={samsung:SCOL};
+const PHOTO={samsung:[[/S26 Ultra/,"s26u"],[/S26 FE/,"s26fe"],[/S26/,"s26"],[/S25 Ultra/,"s25u"],[/S25 Edge/,"s25e"],[/S25 FE/,"s25fe"],[/S25/,"s25"],[/Fold8 Ultra/,"zf8u"],[/Fold8/,"zf8"],[/Flip8/,"zp8"],[/Fold7/,"zf7"],[/Flip7$/,"zp7"]]};
+const SVGK={};
+function grpAnd(b,m){
+  for(const [r,g] of PHOTO[b]||[])if(r.test(m.n))return g;
+  for(const [r,str] of COLS[b]||[])if(r.test(m.n)){const g="c|"+b+"|"+m.n;
+    if(!IMG[g]){IMG[g]=str.split("|").map(x=>{const [n,h]=x.split("#");return [h,n,"#"+h]});SVGK[g]=[BR[b].svg,/Flip/.test(m.n)];}return g;}
+  return null;
+}
 function grpOf(n){
   const t=[[/18 Pro/,"g18p"],[/17 Pro/,"g17p"],[/Air/,"gair"],[/17e/,"g17e"],[/iPhone 17$/,"g17"],[/16 Pro/,"g16p"],[/16e/,"g16e"],[/16/,"g16"],[/15 Pro/,"g15p"],[/15/,"g15"],[/14 Pro/,"g14p"],[/14/,"g14"],[/13 Pro/,"g13p"],[/13/,"g13"],[/12 Pro/,"g12p"],[/12/,"g12"],[/11 Pro/,"g11p"],[/11/,"g11"],[/XR/,"gxr"],[/X/,"gxs"],[/SE 2022/,"gse22"],[/SE 2020/,"gse20"]];
   for(const [r,g] of t)if(r.test(n))return IMG[g]?g:null;return null;
 }
-const imgSrc=(g,c)=>`ph/${g}-${c}.webp`;
+const imgSrc=(g,c)=>g.startsWith("c|")?svgURI(SVGK[g][0],"#"+c,SVGK[g][1]):`ph/${g}-${c}.webp`;
 const pv={m:null,g:null,i:0,timer:0,front:0};
 function pvRender(m,fast){
-  const g=BR[st.b].kind==="ip"?grpOf(m.n):st.b==="samsung"?({"Dòng S":"sS","Dòng Z (gập)":"sZ","Dòng A":"sA"})[st.ser]||null:null;pv.m=m;pv.g=g;pv.i=0;
+  const g=BR[st.b].kind==="ip"?grpOf(m.n):grpAnd(st.b,m);pv.m=m;pv.g=g;pv.i=0;
   const el=$("preview");
   if(!g){el.innerHTML=`<div class="pv-stage">${brandSvg(BR[st.b].svg)}</div><div class="pv-name">${m.n}</div><div class="pv-hint">Ảnh màu thật của dòng này đang cập nhật</div>`;clearInterval(pv.timer);return;}
   const cols=IMG[g];
   el.innerHTML=`<div class="pv-stage"><img alt="" class="off"><img alt="" class="off"></div><div class="pv-name">${m.n}</div>
     <div class="pv-color"><i></i><span></span></div>
     <div class="dots">${cols.map((c,i)=>`<button class="dot" type="button" data-i="${i}" title="${c[1]}" aria-label="Màu ${c[1]}" style="background:${c[2]}"></button>`).join("")}</div>
-    <div class="pv-hint">${st.b==="samsung"?"Ảnh minh họa máy cao cấp nhất của dòng này":"Rê chuột vào đời máy để xem các màu, bấm chấm màu để chọn"}</div>`;
+    <div class="pv-hint">${g.startsWith("c|")?"Hình minh họa theo màu thật của máy, bấm chấm màu để đổi màu":"Ảnh máy thật, rê chuột vào đời máy để xem các màu, bấm chấm màu để chọn"}</div>`;
   cols.forEach(c=>{const i=new Image();i.src=imgSrc(g,c[0]);});
   pvShow(0);pvTimer(fast);
 }
@@ -736,7 +799,7 @@ function brandCardCycle(btn){
 }
 
 function renderBrands(){
-  $("brands").innerHTML=Object.entries(BR).map(([k,b],i)=>{const g=k==="iphone"?"g18p":k==="samsung"?"sS":null;
+  $("brands").innerHTML=Object.entries(BR).map(([k,b],i)=>{const g=k==="iphone"?"g18p":k==="samsung"?"s26u":null;
     const pic=g?`<img class="bimg" src="${imgSrc(g,IMG[g][0][0])}" alt="" width="94" height="112">`:brandSvg(b.svg);
     return `<button class="brand ani" style="--i:${i}" type="button" data-k="${k}" ${g?`data-g="${g}"`:""} aria-pressed="${k===st.b}"><span class="tick">✓</span><span class="glow" style="background:${b.glow}"></span>${pic}<span class="bn">${b.n}</span><span class="bs">${b.s}</span></button>`}).join("");
   document.querySelectorAll(".brand[data-g]").forEach(brandCardCycle);
