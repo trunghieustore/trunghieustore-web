@@ -478,10 +478,16 @@ footer .seo-note{max-width:640px;margin:.5rem auto;line-height:1.5;font-size:.8r
   .svc .ill{transition:transform .8s var(--ease)}.svc:hover .ill{transform:scale(1.12) rotate(-4deg)}
   .model:hover,.ser:hover{transform:translateY(-2px);border-color:var(--accent)}
   .proc li:hover,.card:hover{transform:translateY(-6px);box-shadow:0 18px 34px -20px var(--accent)}
-  .bar .btn-call,.bar .btn-zalo,.bar .btn-map{--rc:var(--call)}.bar .btn-zalo{--rc:var(--zalo)}.bar .btn-map{--rc:#ea4335}
-  .bar .btn-call::before,.bar .btn-zalo::before,.bar .btn-map::before{content:"";position:absolute;inset:0;border-radius:inherit;animation:pulse 2.4s infinite;pointer-events:none}
-  .bar .btn-zalo::before{animation-delay:.4s}.bar .btn-map::before{animation-delay:.8s}
-  .bar .btn::after{animation-duration:2.4s!important}.bar .btn-call::after{animation-delay:0s!important}.bar .btn-zalo::after{animation-delay:.4s!important}.bar .btn-map::after{animation-delay:.8s!important}
+  /* Thanh dưới: 1 hiệu ứng sóng chung, lần lượt trái sang phải */
+  .bar .btn{--rc:var(--call);--d:0s}.bar .btn-zalo{--rc:var(--zalo);--d:.7s}.bar .btn-map{--rc:#4285f4;--d:1.4s}
+  .bar .btn.btn-call,.bar .btn{animation:barLift 4.2s ease-in-out infinite;animation-delay:var(--d)}
+  .bar .btn::before{content:"";position:absolute;inset:0;border-radius:inherit;animation:barRing 4.2s ease-out infinite;animation-delay:var(--d);pointer-events:none}
+  .bar .btn::after{animation:barShine 4.2s ease-in-out infinite!important;animation-delay:var(--d)!important}
+  .bar .btn .bi,.bar .btn-call .bi{animation:barIcon 4.2s ease-in-out infinite;animation-delay:var(--d)}
+  @keyframes barLift{0%,34%,100%{transform:none}10%{transform:translateY(-5px)}20%{transform:translateY(1px)}}
+  @keyframes barRing{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--rc) 65%,transparent)}30%,100%{box-shadow:0 0 0 16px transparent}}
+  @keyframes barShine{0%{left:-60%}30%,100%{left:130%}}
+  @keyframes barIcon{0%,30%,100%{transform:none}8%{transform:rotate(-14deg) scale(1.12)}16%{transform:rotate(12deg) scale(1.12)}24%{transform:none}}
   @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--rc) 70%,transparent)}70%,100%{box-shadow:0 0 0 16px transparent}}
   .pin-drop{animation:drop 2.2s var(--ease) infinite}
   @keyframes drop{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
