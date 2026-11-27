@@ -668,7 +668,7 @@ function services(b,m){
   if(k==="pad")return ["man","pin","sac","cam","main","nuoc","loa","khac"];
   return ["man","pin","epkinh","cam","sac","lung","main","nuoc","loa","khac"];
 }
-/* Giá iPhone theo cửa hàng (nghìn đ): màn zin tháo máy iCloud, hư IC, chân sạc, camera sau, kính lưng, nhóm pin (a: X–11, b: máy thường và Pro, c: Pro Max) */
+/* Giá iPhone theo cửa hàng (nghìn đ): màn zin tháo máy, hư IC, chân sạc, camera sau, kính lưng, nhóm pin (a: X–11, b: máy thường và Pro, c: Pro Max) */
 const IPP={
 "iPhone 18 Pro Max":[null,1200,null,null,null,"c"],"iPhone 18 Pro":[null,1200,null,null,null,"b"],
 "iPhone 17 Pro Max":[null,1200,null,null,null,"c"],"iPhone 17 Pro":[null,1200,null,null,null,"b"],"iPhone Air":[null,1200,null,null,null,"b"],
@@ -702,10 +702,10 @@ function types0(b,m,s){
   if(s==="man"){
     if(k==="ip"){
       if(m.lcd)return [T("Màn LCD thay thế",OVR[m.n]?.lcd??(Z&&r50(Z*.5)),2,"6 tháng","30–45 phút","Màn LCD loại tốt, màu hiển thị ổn, giá dễ chịu."),
-                       T("Màn zin tháo máy iCloud",Z,3,"12 tháng","30–45 phút","Màn Apple chính hãng tháo từ máy iCloud. Giữ True Tone, màu và cảm ứng như nguyên bản.")];
+                       T("Màn zin tháo máy",Z,3,"12 tháng","30–45 phút","Màn Apple chính hãng tháo máy. Giữ True Tone, màu và cảm ứng như nguyên bản.")];
       return [T("Màn LCD",OVR[m.n]?.lcd??MKT[m.n]?.[1]??(Z&&Math.max(350,r50(Z*.25))),1,"6 tháng","30–45 phút","Loại rẻ nhất. Viền dày hơn một chút, màu nhạt hơn và hao pin hơn OLED."),
               T("Màn OLED",OVR[m.n]?.oled??MKT[m.n]?.[2]??(Z&&r50(Z*.45)),2,"6 tháng","30–45 phút","Màu rực, đen sâu, mỏng gần như zin. Lựa chọn cân bằng giữa giá và chất lượng."),
-              T("Màn zin tháo máy iCloud",Z,3,"12 tháng","30–45 phút","Màn Apple chính hãng tháo từ máy iCloud. Giữ True Tone, đẹp nhất, như màn gốc của máy.")];
+              T("Màn zin tháo máy",Z,3,"12 tháng","30–45 phút","Màn Apple chính hãng tháo máy. Giữ True Tone, đẹp nhất, như màn gốc của máy.")];
     }
     if(k==="pad")return [T("Ép kính cảm ứng",Z&&Math.max(350,r50(Z*.25)),2,"6 tháng","2–3 giờ","Kính hoặc cảm ứng bị vỡ, liệt. Màn hiển thị vẫn tốt."),T("Thay màn nguyên bộ",Z,3,"6 tháng","1–2 giờ","Màn sọc, chảy mực, không lên hình. Thay cả bộ màn và cảm ứng.")];
     return [T("Màn chính hãng",Z,3,"6 tháng","45–60 phút","Màn chính hãng theo máy. Màu, độ sáng và cảm ứng như nguyên bản."),T("Màn thay thế loại tốt",Z&&r50(Z*.45),2,"3 tháng","45–60 phút","Giá tốt, hiển thị ổn định, phù hợp máy đời cũ.")];
