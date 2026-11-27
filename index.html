@@ -311,6 +311,11 @@ li.gift{color:var(--accent);font-weight:700}
 @keyframes swBob{0%,100%{transform:none}50%{transform:translateY(-4px) scale(1.06)}}
 @keyframes swShine{0%,55%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
 @media (prefers-reduced-motion:reduce){.mode-sw button,.mode-sw .mi,.mode-sw button::after{animation:none!important}}
+.mode-sw .live{position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;gap:5px;background:#e11d2a;color:#fff;font:800 .64rem/1 var(--f-body);letter-spacing:.06em;border-radius:6px;padding:4px 7px;box-shadow:0 0 0 0 rgba(225,29,42,.6);animation:liveRing 1.6s ease-out infinite;z-index:2}
+.mode-sw .live i{width:7px;height:7px;border-radius:50%;background:#fff;animation:liveDot 1s steps(2,start) infinite}
+@keyframes liveRing{0%{box-shadow:0 0 0 0 rgba(225,29,42,.55)}100%{box-shadow:0 0 0 10px rgba(225,29,42,0)}}
+@keyframes liveDot{to{visibility:hidden}}
+@media (prefers-reduced-motion:reduce){.mode-sw .live,.mode-sw .live i{animation:none!important}}
 body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy-trinh{display:none}
 /* ---------- THU MUA MÁY CŨ, THU XÁC ---------- */
 #thu-mua .sec-head h2 span{color:var(--accent)}
@@ -503,8 +508,8 @@ footer .seo-note{max-width:640px;margin:.5rem auto;line-height:1.5;font-size:.8r
 
 <main class="wrap">
   <div class="mode-sw" id="modeSw" role="tablist" aria-label="Chọn dịch vụ" data-r>
-    <button type="button" role="tab" data-mode-sw="sua" aria-selected="true"><span class="mi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 00-5.4 5.2L3 17.8 6.2 21l6.3-6.3a4 4 0 005.2-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></span><b>Sửa chữa</b><small>Báo giá thay màn, pin, Face ID...</small><span class="go">Bấm để xem ›</span><span class="go on">✓ Đang xem</span></button>
-    <button type="button" role="tab" data-mode-sw="mua" aria-selected="false"><span class="mi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/></svg></span><b>Thu mua</b><small>Bán máy cũ, bán xác máy</small><span class="go">Bấm để xem ›</span><span class="go on">✓ Đang xem</span></button>
+    <button type="button" role="tab" data-mode-sw="sua" aria-selected="true"><span class="mi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 00-5.4 5.2L3 17.8 6.2 21l6.3-6.3a4 4 0 005.2-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></span><span class="live" aria-hidden="true"><i></i>BẤM</span><b>Sửa chữa</b><small>Báo giá thay màn, pin, Face ID...</small><span class="go">Bấm để xem ›</span><span class="go on">✓ Đang xem</span></button>
+    <button type="button" role="tab" data-mode-sw="mua" aria-selected="false"><span class="mi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/></svg></span><span class="live" aria-hidden="true"><i></i>BẤM</span><b>Thu mua</b><small>Bán máy cũ, bán xác máy</small><span class="go">Bấm để xem ›</span><span class="go on">✓ Đang xem</span></button>
   </div>
   <div class="free" data-r="scale">
     <div class="free-in">
