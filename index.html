@@ -270,6 +270,8 @@ li.gift{color:var(--accent);font-weight:700}
 .fid td.p{font-family:var(--f-num);font-variant-numeric:tabular-nums}
 .fid tr.me td{background:var(--soft);color:var(--accent)}
 .fid tbody tr:last-child td{border-bottom:0}
+@media (prefers-reduced-motion:no-preference){.fid tbody tr:not(.me) td{animation:rowWave 5.2s ease-in-out infinite;animation-delay:calc(var(--r,0)*.17s + var(--c,0)*.13s)}}
+@keyframes rowWave{0%,34%,100%{background-color:rgba(124,92,255,0)}12%{background-color:rgba(124,92,255,.24)}22%{background-color:rgba(124,92,255,.08)}}
 
 .result{max-width:620px;margin:1.6rem auto 0;border-radius:26px;background:var(--hero);color:var(--hero-ink);padding:24px 20px;text-align:center;position:relative;overflow:hidden}
 .result::before{content:"";position:absolute;left:50%;top:-30%;width:120%;height:80%;translate:-50% 0;background:radial-gradient(circle,rgba(255,106,0,.28),transparent 65%);pointer-events:none}
@@ -1140,7 +1142,7 @@ function renderStage4(){
   $("p4").textContent=s==="faceid"?`Dòng ${m.n} được tô sáng trong bảng.`:"Chọn loại, giá hiện ngay bên dưới.";
   if(s==="faceid"){
     $("stage4").innerHTML=`<div class="fid ani"><table><thead><tr><th>Dòng máy</th>${FID_COLS.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>`+
-      ["X","11","12","13t","13","14t","14","15t","15","16t","16","17","18"].filter(g=>FID[g]).map(g=>[g,FID[g]]).map(([g,[n,ps]])=>`<tr class="${g===m.fid?"me":""}"><td>${n}</td>${ps.map(p=>`<td class="p">${p==null?"Liên hệ":vnd(p)}</td>`).join("")}</tr>`).join("")+`</tbody></table></div>`;
+      ["X","11","12","13t","13","14t","14","15t","15","16t","16","17","18"].filter(g=>FID[g]).map(g=>[g,FID[g]]).map(([g,[n,ps]],ri)=>`<tr class="${g===m.fid?"me":""}" style="--r:${ri}"><td style="--c:0">${n}</td>${ps.map((p,ci)=>`<td class="p" style="--c:${ci+1}">${p==null?"Liên hệ":vnd(p)}</td>`).join("")}</tr>`).join("")+`</tbody></table></div>`;
     st.t=0;return;
   }
   const ts=types(st.b,m,s);if(st.t>=ts.length)st.t=0;
