@@ -372,6 +372,16 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 :is(.wv:not(.done),.need)>:is(.brand,.ser,.model:not(.other):not(.xb),.svc,button):not([aria-pressed="true"]),.wv:not(.done) .types>.type:not([aria-pressed="true"]){animation:needWave 2.4s ease-in-out infinite;animation-delay:calc(var(--k,0)*.11s)}
 :is(.wv:not(.done),.need)>.ani:not([aria-pressed="true"]){animation:aniIn 1s var(--ease) both,needWave 2.4s ease-in-out infinite;animation-delay:calc(var(--i,0)*90ms),calc(var(--k,0)*.11s)}
 .wv:not(.done) .types>.type.ani:not([aria-pressed="true"]){animation:flipIn 1.1s var(--ease) both,needWave 2.4s ease-in-out infinite;animation-delay:calc(var(--i,0)*160ms),calc(var(--k,0)*.11s)}
+body.scrl :is(.wv,.need) :is(.brand,.ser,.model,.svc,.type,button){animation:none!important;transition:translate .45s cubic-bezier(.3,1.4,.5,1),border-color .45s,box-shadow .45s}
+body.scrl .lit{translate:0 -6px;border-color:#16c8f0!important;box-shadow:0 6px 16px rgba(22,200,240,.38),0 0 0 3px rgba(22,200,240,.22)!important}
+@media (hover:hover){
+ :is(.wv,.need)>:hover,.wv .types>:hover{animation:none!important}
+ :is(.series,.models,.tm-cond,.grid-c)>:is(.ser,.model,.svc,.brand,button):hover{translate:0 -6px;border-color:#16c8f0;box-shadow:0 8px 18px rgba(22,200,240,.4),0 0 0 3px rgba(22,200,240,.25);transition:translate .35s cubic-bezier(.3,1.5,.5,1),box-shadow .35s,border-color .35s}
+ :is(.series,.models,.tm-cond)>:is(.ser,.model,button):is(:hover+*,:has(+ :hover)){translate:0 -3px;border-color:rgba(22,200,240,.6);transition:translate .4s cubic-bezier(.3,1.5,.5,1),border-color .4s}
+ :is(.series,.models,.tm-cond)>:is(.ser,.model,button):is(:hover+*+*,:has(+ * + :hover)){translate:0 -1px;border-color:rgba(22,200,240,.3);transition:translate .45s,border-color .45s}
+}
+.rip{position:absolute;border-radius:50%;background:rgba(22,200,240,.45);transform:scale(0);animation:rip .7s ease-out forwards;pointer-events:none;z-index:0}
+@keyframes rip{to{transform:scale(1);opacity:0}}
 @keyframes needWave{0%,46%,100%{translate:0 0;border-color:var(--line);box-shadow:none}14%{translate:0 -6px;border-color:#16c8f0;box-shadow:0 6px 16px rgba(22,200,240,.38),0 0 0 3px rgba(22,200,240,.22)}28%{translate:0 1px;border-color:rgba(22,200,240,.45);box-shadow:0 0 0 2px rgba(22,200,240,.1)}}
 .go-up{cursor:pointer}.go-up .go-hint{display:inline-block;margin-top:.7rem;padding:7px 16px;border-radius:999px;background:#16c8f0;color:#04202b;font-weight:800;font-size:.9rem;animation:goBob 1.6s ease-in-out infinite}
 @keyframes goBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
@@ -1058,6 +1068,18 @@ function renderBrands(){
 const WV=["brands","series","models","svcs","stage4","tmB","tmS","tmM","tmG","tmC"];
 function waveIdx(){WV.forEach(id=>{const e=$(id);if(e)e.classList.add("wv")});
   document.querySelectorAll(".wv,.need,.wv .types").forEach(c=>{let k=0;for(const x of c.children)x.style.setProperty("--k",k++)})}
+const WVSEL=':is(.wv:not(.done),.need)>:is(.brand,.ser,.model:not(.other):not(.xb),.svc,button):not([aria-pressed="true"]),.wv:not(.done) .types>.type:not([aria-pressed="true"])';
+let wvT=0,wvRaf=0;
+function wvScroll(){wvRaf=0;const c=innerHeight*.52,band=Math.max(70,innerHeight*.11);
+  document.querySelectorAll(".lit").forEach(x=>x.classList.remove("lit"));
+  document.querySelectorAll(WVSEL).forEach(x=>{const r=x.getBoundingClientRect();if(Math.abs(r.top+r.height/2-c)<band)x.classList.add("lit")});}
+if(motionOK)addEventListener("scroll",()=>{document.body.classList.add("scrl");if(!wvRaf)wvRaf=requestAnimationFrame(wvScroll);
+  clearTimeout(wvT);wvT=setTimeout(()=>{document.body.classList.remove("scrl");document.querySelectorAll(".lit").forEach(x=>x.classList.remove("lit"))},700);},{passive:true});
+if(motionOK)document.addEventListener("pointerdown",e=>{const b=e.target.closest(".ser,.model,.svc,.brand,.type,.tm-cond>button,.tm-tab");if(!b)return;
+  const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)*2.2,sp=document.createElement("span");sp.className="rip";
+  sp.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;
+  if(getComputedStyle(b).position==="static")b.style.position="relative";if(getComputedStyle(b).overflow!=="hidden")b.style.overflow="hidden";
+  b.appendChild(sp);setTimeout(()=>sp.remove(),750);},{passive:true});
 function wvReset(...ids){ids.forEach(id=>{const e=$(id);if(e)e.classList.remove("done")})}
 document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const c=b.closest(".wv");if(c)c.classList.add("done");},true);
 function renderSeries(){
