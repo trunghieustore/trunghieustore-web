@@ -352,11 +352,15 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 .tm-flags input{accent-color:var(--accent);width:16px;height:16px;margin:0}
 .tm-res .tm-img{display:block;width:120px;height:150px;object-fit:contain;margin:0 auto}
 .tm-res.xac .tm-img{filter:grayscale(.6) brightness(.85)}
-.tm-res .price{font:800 clamp(1.5rem,6.4vw,2.1rem)/1.25 var(--f-body);letter-spacing:0;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:2px 8px}
+.tm-res .price{font:800 clamp(1.25rem,5.6vw,1.8rem)/1.3 var(--f-body);letter-spacing:0;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:0 6px;margin-top:.5rem}
 .tm-res .price .pv{white-space:nowrap}
 .tm-res .price small{font-size:.7em;color:#fff;margin-left:1px}
-.tm-res .price .to{font-size:.55em;font-weight:600;color:#8fa3bd}
-.tm-res .r-cta{grid-template-columns:1fr 1fr}
+.tm-res .price .to{font-size:.8em;font-weight:500;color:#8fa3bd}
+.tm-res .r-cta{grid-template-columns:1fr 1fr;margin-top:1.1rem}
+.tm-res .r-cta .btn{min-height:48px;font-size:.95rem;padding:10px 8px;white-space:nowrap;animation:none!important}
+.tm-res .r-cta .btn .go{display:none}
+.tm-res .tap-hint{font-size:.76rem;font-weight:500;opacity:.6;margin-top:6px}
+.tm-res .rm{color:#9fb0c4;font-size:.9rem}
 .tm-how{list-style:none;padding:0;margin:1.4rem auto 0;max-width:760px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;counter-reset:h}
 .tm-how li{counter-increment:h;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;font-size:.85rem;color:var(--muted)}
 .tm-how li b{display:block;color:var(--ink);font-size:.92rem;margin-bottom:2px}
@@ -391,7 +395,7 @@ body.scrl .lit{translate:0 -6px;border-color:#16c8f0!important;box-shadow:0 6px 
 .go-up{cursor:pointer}.go-up .go-hint{display:inline-block;margin-top:.7rem;padding:7px 16px;border-radius:999px;background:#16c8f0;color:#04202b;font-weight:800;font-size:.9rem;animation:goBob 1.6s ease-in-out infinite}
 @keyframes goBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .crumb.go-up span:last-child{background:#16c8f0;color:#04202b}
-.tm-ref{color:#f1d27a;font-weight:600}
+.tm-ref{color:#8fa3bd;font-weight:400;font-size:.8rem;line-height:1.5;margin-top:.9rem}
 .sec-head .n,.tm-step .lbl i{animation:badgeGlow 2.4s ease-in-out infinite}
 @keyframes badgeGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,106,0,.5)}60%{box-shadow:0 0 0 9px rgba(255,106,0,0)}}
 .brand[aria-pressed="false"]::after,.svc[aria-pressed="false"]::after,.tm-tab[aria-selected="false"]::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-130%);animation:swShine 5s ease-in-out infinite;pointer-events:none}
@@ -1265,15 +1269,15 @@ function tmText(){const bu=BUY[tm.m],fl=tmFlags().map(x=>x.toLowerCase()),C=tmCo
   return `Chào tiệm, em muốn bán ${tm.mode==="xac"?"xác máy ":""}${tm.m||BR[tm.b].n}${bu&&tm.mode==="cu"?" "+gb(bu[1][tm.g]):""}, tình trạng: ${C[0].toLowerCase()}${fl.length?", "+fl.join(", "):""}. Tiệm định giá giúp em.`;}
 function tmResult(){const el=$("tmR");el.classList.toggle("xac",tm.mode==="xac");
   const lab=tm.mode==="xac"?"Giá thu xác tham khảo":"Giá thu tham khảo";
-  if(!tm.m){el.innerHTML=`<div class="rl">${lab}</div><h3>Chọn máy cần bán</h3><p class="rm">Chọn đời máy ở trên để xem giá thu.</p><p class="rdesc tm-ref">Giá thu mua là giá tham khảo, giống bảng giá sửa chữa. Muốn biết giá chính xác vui lòng liên hệ trực tiếp tiệm.</p>${tm.b==="khac"?tmCta():'<span class="go-hint">↑ Bấm vào đây để chọn máy</span>'}`;el.classList.toggle("go-up",tm.b!=="khac");return;}
+  if(!tm.m){el.innerHTML=`<div class="rl">${lab}</div><h3>Chọn máy cần bán</h3><p class="rm">Chọn đời máy ở trên để xem giá thu.</p><p class="rdesc tm-ref">Giá thu mua là giá tham khảo. Muốn biết giá chính xác vui lòng liên hệ trực tiếp tiệm.</p>${tm.b==="khac"?tmCta():'<span class="go-hint">↑ Bấm vào đây để chọn máy</span>'}`;el.classList.toggle("go-up",tm.b!=="khac");return;}
   el.classList.remove("go-up");
   const m=Object.values(BR[tm.b].series).flat().find(x=>x.n===tm.m);let img="";
   try{const g=BR[tm.b].kind==="ip"?grpOf(m.n):grpAnd(tm.b,m);if(g&&IMG[g])img=`<img class="tm-img" alt="${m.n}" src="${imgSrc(g,IMG[g][0][0])}">`;}catch(e){}
   const pr=tmPrice(),bu=BUY[tm.m],fl=tmFlags();
   el.innerHTML=`${img}<div class="rl">${lab}</div><h3>${tm.mode==="xac"?"Xác ":""}${tm.m}${bu&&tm.mode==="cu"?" "+gb(bu[1][tm.g]):""}</h3><p class="rm">${tmCond()[tm.c][0]}${fl.length?" · "+fl.join(" · "):""}</p>`+
-   (pr?`<div class="price">${tmRange(pr)}</div>${tm.mode==="xac"||tm.c===3?'<span class="tmp">Giá chốt sau khi tiệm kiểm tra máy</span>':""}`
+   (pr?`<div class="price">${tmRange(pr)}</div>`
       :`<div class="price na">Liên hệ định giá</div><p class="rdesc">Gửi vài ảnh máy qua Zalo, tiệm báo giá thu trong vài phút.</p>`)+tmCta();}
-function tmCta(){return `<p class="rdesc tm-ref">Giá thu mua là giá tham khảo, giống bảng giá sửa chữa, giá thực tế có thể cao hoặc thấp hơn. Muốn biết giá chính xác vui lòng mang máy đến tiệm hoặc nhắn Zalo, gọi trực tiếp.</p><div class="r-cta"><a class="btn btn-zalo" id="tmZalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Gửi Zalo định giá</a><a class="btn btn-call" href="tel:0372659937">Gọi tiệm</a><span class="tap-hint" id="tmHint" style="grid-column:1/-1;color:#b8c4d4">Bấm Zalo, thông tin máy được chép sẵn, chỉ cần dán và gửi kèm ảnh.</span></div>`;}
+function tmCta(){return `<p class="rdesc tm-ref">Giá tham khảo, có thể cao hoặc thấp hơn tùy máy. Giá chốt sau khi tiệm kiểm tra, mang máy đến tiệm hoặc nhắn Zalo để biết giá chính xác.</p><div class="r-cta"><a class="btn btn-zalo" id="tmZalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Zalo định giá</a><a class="btn btn-call" href="tel:0372659937">Gọi tiệm</a><span class="tap-hint" id="tmHint" style="grid-column:1/-1;color:#b8c4d4">Thông tin máy được chép sẵn, chỉ cần dán vào Zalo.</span></div>`;}
 $("thu-mua").addEventListener("click",e=>{const t=e.target.closest("button,a");if(!t)return;
   if(t.id==="tmZalo"){try{navigator.clipboard.writeText(tmText()).then(()=>{const h=$("tmHint");if(h)h.textContent="Đã chép thông tin máy, dán vào Zalo và gửi kèm ảnh.";});}catch(err){}return;}
   if(t.dataset.mode){tm.mode=t.dataset.mode;tm.c=0;tmRender();return;}
