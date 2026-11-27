@@ -1018,7 +1018,7 @@ function renderStage4(){
   $("p4").textContent=s==="faceid"?`Dòng ${m.n} được tô sáng trong bảng.`:"Chọn loại, giá hiện ngay bên dưới.";
   if(s==="faceid"){
     $("stage4").innerHTML=`<div class="fid ani"><table><thead><tr><th>Dòng máy</th>${FID_COLS.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>`+
-      Object.entries(FID).map(([g,[n,ps]])=>`<tr class="${g===m.fid?"me":""}"><td>${n}</td>${ps.map(p=>`<td class="p">${p==null?"Liên hệ":vnd(p)}</td>`).join("")}</tr>`).join("")+`</tbody></table></div>`;
+      ["X","11","12","13t","13","14t","14","15t","15","16t","16","17","18"].filter(g=>FID[g]).map(g=>[g,FID[g]]).map(([g,[n,ps]])=>`<tr class="${g===m.fid?"me":""}"><td>${n}</td>${ps.map(p=>`<td class="p">${p==null?"Liên hệ":vnd(p)}</td>`).join("")}</tr>`).join("")+`</tbody></table></div>`;
     st.t=0;return;
   }
   const ts=types(st.b,m,s);if(st.t>=ts.length)st.t=0;
