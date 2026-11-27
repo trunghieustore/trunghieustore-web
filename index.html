@@ -1104,12 +1104,12 @@ const tm={b:"iphone",s:null,m:null,g:0,c:0,f:new Set()};
 const fmtTr=v=>(v/1000).toLocaleString("vi-VN",{maximumFractionDigits:2});
 const gb=v=>v>=1024?(v/1024)+"TB":v+"GB";
 function tmModels(){const ser=BR[tm.b].series,t=qTerm($("tmQ").value);
-  const all=t?Object.values(ser).flat().filter(m=>qMatch(m.n,t)):(ser[tm.s]||[]);return all.filter(m=>!m.other);}
+  const all=(t||BR[tm.b].kind==="ip")?Object.values(ser).flat().filter(m=>qMatch(m.n,t)):(ser[tm.s]||[]);return all.filter(m=>!m.other);}
 function tmRender(){
   $("tmB").innerHTML=Object.entries(BR).map(([k,b])=>`<button class="ser" type="button" data-b="${k}" aria-pressed="${k===tm.b}">${b.n}</button>`).join("");
   const sers=Object.keys(BR[tm.b].series).filter(k=>BR[tm.b].series[k].length);
   if(!sers.includes(tm.s))tm.s=sers[0]||null;
-  $("tmS").innerHTML=sers.length>1?sers.map(k=>`<button class="ser" type="button" data-s="${k}" aria-pressed="${k===tm.s}">${k}</button>`).join(""):"";
+  $("tmS").innerHTML=sers.length>1&&BR[tm.b].kind!=="ip"?sers.map(k=>`<button class="ser" type="button" data-s="${k}" aria-pressed="${k===tm.s}">${k}</button>`).join(""):"";
   const ms=tmModels();
   $("tmM").innerHTML=ms.length?ms.map(m=>`<button class="model" type="button" data-m="${m.n}" aria-pressed="${tm.m===m.n}">${m.n}</button>`).join(""):`<p class="pv-hint">${tm.b==="khac"?"Ghi tên máy và tình trạng qua Zalo, tiệm báo giá thu cho bạn.":"Không thấy máy, thử gõ tên khác."}</p>`;
   const bu=BUY[tm.m];$("tmGW").hidden=!bu;$("tmCL").textContent=(bu?"4":"3")+". Tình trạng vỏ, màn";
