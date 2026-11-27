@@ -794,7 +794,7 @@ const ill=(s,b,m)=>(ILL[s]||ILL.main)(illKey(b,m));
 
 /* ===== Trạng thái ===== */
 const firstSeries=b=>Object.keys(BR[b].series)[0];
-let st={b:"iphone",ser:"14 – 15",mi:0,s:"man",t:0};
+let st={b:"iphone",ser:"14 – 15",mi:0,s:"man",t:0,pick:true};
 const model=()=>st.mi<0?BR[st.b].oth:BR[st.b].series[st.ser][st.mi];
 
 /* ===== Ảnh máy thật theo màu (ảnh gốc Apple) ===== */
@@ -925,6 +925,7 @@ function grpOf(n){
 const imgSrc=(g,c)=>g.startsWith("t|")?c:g.startsWith("c|")?svgURI(SVGK[g][0],"#"+c,SVGK[g][1]):`ph/${g}-${c}.webp`;
 const pv={m:null,g:null,i:0,timer:0,front:0};
 function pvRender(m,fast){
+  if(!st.pick){pv.m=null;clearInterval(pv.timer);$("preview").innerHTML=`<div class="pv-stage">${brandSvg(BR[st.b].svg)}</div><div class="pv-name">${BR[st.b].n}</div><div class="pv-hint">Chọn dòng máy bên dưới</div>`;return;}
   const g=BR[st.b].kind==="ip"?grpOf(m.n):grpAnd(st.b,m);pv.m=m;pv.g=g;pv.i=0;
   const el=$("preview");
   if(!g){el.innerHTML=`<div class="pv-stage">${brandSvg(m.other?"other":BR[st.b].svg)}</div><div class="pv-name">${m.n}</div><div class="pv-hint">${m.other?"Không thấy máy của bạn? Ghi dòng máy và lỗi ở mục bên dưới, tiệm báo giá ngay.":"Ảnh màu thật của dòng này đang cập nhật"}</div>`;clearInterval(pv.timer);return;}
@@ -965,7 +966,7 @@ function renderBrands(){
 function renderSeries(){
   const b=BR[st.b];$("t2").textContent=st.b==="khac"?"Máy hãng khác":b.kind==="ip"?"Chọn đời iPhone":`Chọn dòng và đời ${b.n}`;
   $("serBox").hidden=b.kind==="ip"||st.b==="khac";$("p2").textContent=st.b==="khac"?"Máy hãng khác hoặc không có trong danh sách: bấm ô bên dưới để ghi dòng máy và lỗi.":b.kind==="ip"?"Tất cả đời iPhone, mới nhất xếp trước. Rê chuột để xem màu máy.":"Chọn dòng máy trước, sau đó chọn đúng đời máy.";
-  $("series").innerHTML=Object.keys(b.series).map((s,i)=>`<button class="ser ani" style="--i:${i}" type="button" data-s="${s}" aria-pressed="${s===st.ser}">${b.kind==="ip"?"iPhone "+s:s}</button>`).join("");
+  $("series").innerHTML=Object.keys(b.series).map((s,i)=>`<button class="ser ani" style="--i:${i}" type="button" data-s="${s}" aria-pressed="${st.pick&&s===st.ser}">${b.kind==="ip"?"iPhone "+s:s}</button>`).join("");
 }
 /* Tìm máy: hiểu cách gõ tắt (ip 13 pm, s24u, rn13...) và tìm cả hãng khác */
 const ALIAS=[[/(\d)\s?(pm|prm)\b/g,"$1 pro max"],[/(\d)\s?p\b/g,"$1 pro"],[/\bip(hone)?\s?(?=\d|x|se)/g,"iphone "],[/\bip(hone)?\b/g,"iphone "],[/\bpm\b/g,"pro max"],[/\bprm\b/g,"pro max"],[/\bss\b/g,"galaxy "],[/\brn(?=\d)/g,"redmi note "],[/\bmi(?=\d)/g,"mi "],
@@ -975,7 +976,8 @@ function qMatch(n,t){if(!t)return true;const a=norm(n).replace(/\+/g," +"),c=a.r
   return t.split(" ").every(w=>a.split(" ").some(x=>x.startsWith(w)||(w.length>2&&x.includes(w))))||c.includes(t.replace(/ /g,""));}
 function renderModels(){
   const b=BR[st.b],term=qTerm($("q").value);let html="",i=0;
-  const sets=(term||b.kind==="ip")?Object.entries(b.series):[[st.ser,b.series[st.ser]]];
+  const sets=(term||b.kind==="ip")?Object.entries(b.series):st.pick?[[st.ser,b.series[st.ser]]]:[];
+  if(!st.pick&&!term)html=`<div class="empty">Chọn dòng máy ở trên để hiện danh sách máy.</div>`;
   for(const [ser,list] of sets)list.forEach((m,mi)=>{if(!qMatch(m.n,term))return;
     html+=`<button class="model ani" style="--i:${Math.min(i++,14)}" type="button" data-ser="${ser}" data-mi="${mi}" aria-pressed="${ser===st.ser&&mi===st.mi}">${m.n}</button>`;});
   if(term&&term.length>=2){let x="",k=0;
@@ -989,7 +991,7 @@ function renderModels(){
 }
 function renderSvcs(){
   const m=model(),list=services(st.b,m);if(!list.includes(st.s))st.s=list[0];
-  $("crumb3").innerHTML=`<span>${BR[st.b].n}</span><span>${m.n}</span>`;
+  $("crumb3").innerHTML=`<span>${BR[st.b].n}</span><span>${st.pick?m.n:"Chưa chọn máy"}</span>`;
   $("svcs").innerHTML=list.map((s,i)=>{let mp;
     if(s==="faceid"){mp=FID[m.fid][1][0];}else if(s==="khac"){mp=-1;}else mp=minPrice(types(st.b,m,s));
     return `<button class="svc ani" style="--i:${i}" type="button" data-s="${s}" aria-pressed="${s===st.s}">${i<2?'<span class="hot">Hay sửa</span>':""}<span class="tick">✓</span>${ill(s,st.b,m)}<span class="sn">${SVN[s]}</span><span class="sp">${mp===-1?"Tả lỗi, tiệm gọi lại":mp==null?"Liên hệ":mp===0?"Sấy miễn phí":"từ "+vnd(mp)+"đ"}</span></button>`}).join("");
@@ -1061,13 +1063,14 @@ function glide(el,off=-16){
 const later=(el)=>setTimeout(()=>glide(el),350);
 
 $("brands").addEventListener("click",e=>{const t=e.target.closest(".brand");if(!t)return;
-  st.b=t.dataset.k;st.ser=st.b==="iphone"?"14 – 15":firstSeries(st.b);st.mi=st.b==="khac"?-1:0;st.t=0;if(st.b==="khac")st.s="khac";$("q").value="";
+  st.b=t.dataset.k;st.ser=st.b==="iphone"?"14 – 15":firstSeries(st.b);st.pick=st.b==="iphone"||st.b==="khac"||BR[st.b].kind!=="and";st.mi=st.b==="khac"?-1:0;st.t=0;if(st.b==="khac")st.s="khac";$("q").value="";
   document.querySelectorAll(".brand").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===st.b));renderFrom(0);later($("s2"));});
 $("series").addEventListener("click",e=>{const t=e.target.closest(".ser");if(!t)return;
-  st.ser=t.dataset.s;st.mi=st.b==="khac"?-1:0;st.t=0;$("q").value="";
+  st.ser=t.dataset.s;st.pick=true;st.mi=st.b==="khac"?-1:0;st.t=0;$("q").value="";
   document.querySelectorAll(".ser").forEach(x=>x.setAttribute("aria-pressed",x===t));renderFrom(1);});
 $("models").addEventListener("click",e=>{const t=e.target.closest(".model");if(!t)return;
   if(t.dataset.other){st.mi=-1;st.s="khac";st.t=0;$("q").value="";renderModels();renderFrom(2);later($("s4"));return;}
+  st.pick=true;
   if(t.dataset.b){st.b=t.dataset.b;st.ser=t.dataset.ser;st.mi=+t.dataset.mi;st.t=0;if(!services(st.b,model()).includes(st.s))st.s="man";$("q").value="";
     document.querySelectorAll(".brand").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===st.b));renderFrom(0);later($("s3"));return;}
   st.ser=t.dataset.ser;st.mi=+t.dataset.mi;st.t=0;
@@ -1108,10 +1111,10 @@ function tmModels(){const ser=BR[tm.b].series,t=qTerm($("tmQ").value);
 function tmRender(){
   $("tmB").innerHTML=Object.entries(BR).map(([k,b])=>`<button class="ser" type="button" data-b="${k}" aria-pressed="${k===tm.b}">${b.n}</button>`).join("");
   const sers=Object.keys(BR[tm.b].series).filter(k=>BR[tm.b].series[k].length);
-  if(!sers.includes(tm.s))tm.s=sers[0]||null;
+  if(tm.s&&!sers.includes(tm.s))tm.s=null;if(!tm.s&&(BR[tm.b].kind!=="and"||tm.b==="khac"))tm.s=sers[0]||null;
   $("tmS").innerHTML=sers.length>1&&BR[tm.b].kind!=="ip"?sers.map(k=>`<button class="ser" type="button" data-s="${k}" aria-pressed="${k===tm.s}">${k}</button>`).join(""):"";
   const ms=tmModels();
-  $("tmM").innerHTML=ms.length?ms.map(m=>`<button class="model" type="button" data-m="${m.n}" aria-pressed="${tm.m===m.n}">${m.n}</button>`).join(""):`<p class="pv-hint">${tm.b==="khac"?"Ghi tên máy và tình trạng qua Zalo, tiệm báo giá thu cho bạn.":"Không thấy máy, thử gõ tên khác."}</p>`;
+  $("tmM").innerHTML=ms.length?ms.map(m=>`<button class="model" type="button" data-m="${m.n}" aria-pressed="${tm.m===m.n}">${m.n}</button>`).join(""):`<p class="pv-hint">${tm.b==="khac"?"Ghi tên máy và tình trạng qua Zalo, tiệm báo giá thu cho bạn.":!tm.s&&!$("tmQ").value?"Chọn dòng máy ở trên để hiện danh sách máy.":"Không thấy máy, thử gõ tên khác."}</p>`;
   const bu=BUY[tm.m];$("tmGW").hidden=!bu;$("tmCL").textContent=(bu?"4":"3")+". Tình trạng vỏ, màn";
   if(bu){if(tm.g>=bu[1].length)tm.g=0;$("tmG").innerHTML=bu[1].map((v,i)=>`<button class="model" type="button" data-g="${i}" aria-pressed="${i===tm.g}">${gb(v)}</button>`).join("");}
   $("tmC").innerHTML=TMC.map((c,i)=>`<button type="button" data-c="${i}" aria-pressed="${i===tm.c}">${c[0]}<small>${c[1]}</small></button>`).join("");
