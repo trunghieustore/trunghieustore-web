@@ -55,6 +55,7 @@
 </head>
 <body>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap">
 <style>
 /* Layout: mọi khối căn giữa. Hero: iPhone mặt trước (Dynamic Island) trôi lên, tên TrungHieuStore ở chân màn hình.
@@ -234,6 +235,8 @@ section{padding-block:4.2rem 0}
 .model{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px 15px;font:600 .88rem var(--f-body);cursor:pointer;position:relative;overflow:hidden}
 .model[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .model.other{border:1.5px dashed var(--accent);color:var(--accent);font-weight:700}
+.model.xb small{display:block;font:700 .62rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#888);margin-bottom:1px}.model.xb{border-radius:14px;padding:6px 14px;text-align:center}.model.xb:hover small{color:inherit}
+.xb-h{flex-basis:100%;width:100%;text-align:center;font:600 .8rem var(--f-body);color:var(--muted,#888);margin:10px 0 2px}
 .model.other[aria-pressed="true"]{background:var(--accent);color:#fff;border-style:solid}
 .empty{color:var(--muted);text-align:center;padding:10px}
 
@@ -322,8 +325,10 @@ footer{padding-block:2.4rem 1rem;color:var(--muted);font-size:.85rem;text-align:
 footer .seo-note{max-width:640px;margin:.5rem auto;line-height:1.5;font-size:.8rem}
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
   padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
-.bar .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.bar .btn{width:100%;overflow:visible;padding:11px 8px;font-size:.9rem}
+.bar .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.bar .btn{width:100%;overflow:visible;padding:11px 8px;font-size:.9rem;white-space:nowrap;gap:6px}
+@media (max-width:400px){.bar .btn{font-size:.84rem;padding:11px 6px}.bar .btn svg{width:18px;height:18px}}
+@media (max-width:370px){.bar .in{gap:6px}.bar .btn{font-size:.78rem;padding:11px 4px;gap:4px}.bar .btn svg{width:16px;height:16px}}
 .progress{position:fixed;top:env(safe-area-inset-top,0px);left:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(var(--p,0));background:var(--accent);z-index:30}
 
 /* ---------- EFFECTS (chậm, mượt) ---------- */
@@ -726,7 +731,9 @@ function types0(b,m,s){
       T("Dùng một lúc tắt nguồn, nóng máy",500,3,"3 tháng","1–2 ngày","Tự tắt, tự khởi động lại, nóng bất thường ở vùng main.",true),
       T("Lỗi ổ cứng, nâng cấp ổ cứng",500,3,"3 tháng","1 ngày","Lỗi ổ cứng, báo đầy bộ nhớ, hoặc nâng dung lượng ổ cứng.",true),
       T("Treo logo, treo táo không lên",500,3,"3 tháng","1–2 ngày","Máy kẹt ở logo, khởi động lại liên tục, không vào được màn hình chính.",true)];}
-  if(s==="epkinh")return [T("Ép kính màn hình",k==="ip"?(EK[m.n]??(Z&&Math.min(450,Math.max(350,r50(Z*.5))))):k==="pad"?Z&&Math.max(350,r50(Z*.25)):Z&&Math.max(300,r50(Z*.2)),3,"3 tháng","2–3 giờ","Màn vẫn lên hình và cảm ứng tốt, chỉ vỡ mặt kính. Giữ nguyên màn zin, chỉ thay lớp kính bên ngoài.")];
+  if(s==="epkinh"){let ek=k==="ip"?(EK[m.n]??(Z&&Math.min(450,Math.max(350,r50(Z*.5))))):k==="pad"?Z&&Math.max(350,r50(Z*.25)):Z&&Math.max(300,r50(Z*.2));
+    if(!(k==="ip"&&EK[m.n]!=null)&&ek){const cm=minPrice(types0(b,m,"man"));if(cm&&ek>=cm)ek=Math.max(150,r50(cm*.8));} /* ép kính không được đắt bằng thay màn */
+    return [T("Ép kính màn hình",ek,3,"3 tháng","2–3 giờ","Màn vẫn lên hình và cảm ứng tốt, chỉ vỡ mặt kính. Giữ nguyên màn zin, chỉ thay lớp kính bên ngoài.")];}
   if(s==="nuoc")return [T("Sấy khô, vệ sinh máy vào nước",0,3,"Không áp dụng","2–24 giờ","Máy rơi nước mang đến sớm nhất có thể, tắt nguồn, không sạc. Tiệm sấy và vệ sinh miễn phí."),
       T("Xử lý main sau vào nước",B&&Math.max(500,r50((Z||3000)*.15)),3,"1 tháng","1–3 ngày","Máy đã sấy vẫn lỗi, cần vệ sinh và thay linh kiện trên main.",true)];
   if(s==="loa")return [T("Loa, mic, rung",B&&r50(200+B*.25),3,"3 tháng","30–60 phút","Loa rè, nhỏ, mất tiếng, mic không nghe, không rung.")];
@@ -891,7 +898,7 @@ function pvShow(i){
 function pvTimer(fast){clearInterval(pv.timer);if(!motionOK)return;pv.timer=setInterval(()=>pvShow(pv.i+1),fast?1500:2600);}
 $("preview").addEventListener("click",e=>{const d=e.target.closest(".dot");if(!d)return;pvShow(+d.dataset.i);pvTimer(false);});
 let hoverT=0;
-$("models").addEventListener("pointerover",e=>{const t=e.target.closest(".model");if(!t||t.dataset.other||e.pointerType!=="mouse")return;clearTimeout(hoverT);
+$("models").addEventListener("pointerover",e=>{const t=e.target.closest(".model");if(!t||t.dataset.other||t.dataset.b||e.pointerType!=="mouse")return;clearTimeout(hoverT);
   const m=BR[st.b].series[t.dataset.ser][+t.dataset.mi];if(pv.m!==m)pvRender(m,true);else pvTimer(true);});
 $("models").addEventListener("pointerleave",()=>{hoverT=setTimeout(()=>{if(pv.m!==model())pvRender(model(),false);else pvTimer(false);},500);});
 function brandCardCycle(btn){
@@ -911,11 +918,22 @@ function renderSeries(){
   $("serBox").hidden=b.kind==="ip"||st.b==="khac";$("p2").textContent=st.b==="khac"?"Máy hãng khác hoặc không có trong danh sách: bấm ô bên dưới để ghi dòng máy và lỗi.":b.kind==="ip"?"Tất cả đời iPhone, mới nhất xếp trước. Rê chuột để xem màu máy.":"Chọn dòng máy trước, sau đó chọn đúng đời máy.";
   $("series").innerHTML=Object.keys(b.series).map((s,i)=>`<button class="ser ani" style="--i:${i}" type="button" data-s="${s}" aria-pressed="${s===st.ser}">${b.kind==="ip"?"iPhone "+s:s}</button>`).join("");
 }
+/* Tìm máy: hiểu cách gõ tắt (ip 13 pm, s24u, rn13...) và tìm cả hãng khác */
+const ALIAS=[[/(\d)\s?(pm|prm)\b/g,"$1 pro max"],[/(\d)\s?p\b/g,"$1 pro"],[/\bip(hone)?\s?(?=\d|x|se)/g,"iphone "],[/\bip(hone)?\b/g,"iphone "],[/\bpm\b/g,"pro max"],[/\bprm\b/g,"pro max"],[/\bss\b/g,"galaxy "],[/\brn(?=\d)/g,"redmi note "],[/\bmi(?=\d)/g,"mi "],
+ [/\b([sa]\d{2})u\b/g,"$1 ultra"],[/\bzfold/g,"z fold"],[/\bzflip/g,"z flip"],[/\bfold(?=\d)/g,"fold"],[/(\d)(pro|plus|max|mini|ultra|lite|fe)\b/g,"$1 $2"],[/\+/g," +"]];
+function qTerm(raw){let t=norm(raw);for(const [r,v] of ALIAS)t=t.replace(r,v);return t.replace(/\s+/g," ").trim()}
+function qMatch(n,t){if(!t)return true;const a=norm(n).replace(/\+/g," +"),c=a.replace(/ /g,"");
+  return t.split(" ").every(w=>a.split(" ").some(x=>x.startsWith(w)||(w.length>2&&x.includes(w))))||c.includes(t.replace(/ /g,""));}
 function renderModels(){
-  const b=BR[st.b],term=norm($("q").value);let html="",i=0;
+  const b=BR[st.b],term=qTerm($("q").value);let html="",i=0;
   const sets=(term||b.kind==="ip")?Object.entries(b.series):[[st.ser,b.series[st.ser]]];
-  for(const [ser,list] of sets)list.forEach((m,mi)=>{if(term&&!norm(m.n).includes(term)&&!norm(m.n).replace(/ /g,"").includes(term.replace(/ /g,"")))return;
+  for(const [ser,list] of sets)list.forEach((m,mi)=>{if(!qMatch(m.n,term))return;
     html+=`<button class="model ani" style="--i:${Math.min(i++,14)}" type="button" data-ser="${ser}" data-mi="${mi}" aria-pressed="${ser===st.ser&&mi===st.mi}">${m.n}</button>`;});
+  if(term&&term.length>=2){let x="",k=0;
+    for(const [bk,B] of Object.entries(BR)){if(bk===st.b)continue;
+      for(const [ser,list] of Object.entries(B.series))list.forEach((m,mi)=>{if(k>=12||!qMatch(m.n,term))return;k++;
+        x+=`<button class="model xb ani" style="--i:${Math.min(i++,14)}" type="button" data-b="${bk}" data-ser="${ser}" data-mi="${mi}"><small>${B.n}</small>${m.n}</button>`;});}
+    if(x)html+=`<div class="xb-h">${html?"Máy hãng khác trùng tên":"Không có trong "+b.n+", có ở hãng khác:"}</div>`+x;}
   if(!html&&term)html=`<div class="empty">Chưa có máy này trong danh sách. Bấm ô bên dưới để ghi máy và lỗi, hoặc gọi 0372 659 937.</div>`;
   html+=`<button class="model other ani" style="--i:${Math.min(i,14)}" type="button" data-other="1" aria-pressed="${st.mi<0}">＋ ${st.b==="khac"?"Ghi dòng máy và lỗi của bạn":"Máy khác, không có trong danh sách"}</button>`;
   $("models").innerHTML=html;
@@ -1000,6 +1018,8 @@ $("series").addEventListener("click",e=>{const t=e.target.closest(".ser");if(!t)
   document.querySelectorAll(".ser").forEach(x=>x.setAttribute("aria-pressed",x===t));renderFrom(1);});
 $("models").addEventListener("click",e=>{const t=e.target.closest(".model");if(!t)return;
   if(t.dataset.other){st.mi=-1;st.s="khac";st.t=0;$("q").value="";renderModels();renderFrom(2);later($("s4"));return;}
+  if(t.dataset.b){st.b=t.dataset.b;st.ser=t.dataset.ser;st.mi=+t.dataset.mi;st.t=0;if(!services(st.b,model()).includes(st.s))st.s="man";$("q").value="";
+    document.querySelectorAll(".brand").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===st.b));renderFrom(0);later($("s3"));return;}
   st.ser=t.dataset.ser;st.mi=+t.dataset.mi;st.t=0;
   if($("q").value){$("q").value="";renderSeries();renderModels();}else document.querySelectorAll(".model").forEach(x=>x.setAttribute("aria-pressed",x===t));
   renderFrom(2);later($("s3"));});
