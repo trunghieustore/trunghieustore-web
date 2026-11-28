@@ -365,6 +365,7 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 .tm-flags:empty{display:none}
 .tm-flags label{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:8px 14px;font:600 .86rem var(--f-body);cursor:pointer}
 .tm-flags input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.tm-pv{margin:1.2rem 0 .4rem;animation:aniIn .8s var(--ease) both}
 .tm-res .tm-img{display:block;width:120px;height:150px;object-fit:contain;margin:0 auto}
 .tm-res.xac .tm-img{filter:grayscale(.6) brightness(.85)}
 .tm-res .price{font:800 clamp(1.25rem,5.6vw,1.8rem)/1.3 var(--f-body);letter-spacing:0;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:0 6px;margin-top:.5rem}
@@ -602,7 +603,8 @@ footer .seo-note{max-width:640px;margin:.5rem auto;line-height:1.5;font-size:.8r
       <div class="tm-step"><div class="lbl"><i>1</i>Hãng máy</div><div class="series" id="tmB"></div></div>
       <div class="tm-step"><div class="lbl"><i>2</i>Đời máy</div><div class="series" id="tmS"></div>
         <input class="search" id="tmQ" type="search" placeholder="Hoặc gõ tên máy, ví dụ: 13 Pro Max" aria-label="Tìm máy cần bán" autocomplete="off">
-        <div class="models" id="tmM"></div></div>
+        <div class="models" id="tmM"></div>
+        <div class="preview tm-pv" id="tmPv" hidden></div></div>
       <div class="tm-step" id="tmGW" hidden><div class="lbl"><i>3</i>Dung lượng</div><div class="models" id="tmG"></div></div>
       <div class="tm-step"><div class="lbl" id="tmCL"></div><div class="tm-cond" id="tmC"></div>
         <div class="tm-flags" id="tmF"></div></div>
@@ -1287,8 +1289,29 @@ function tmRender(){
   $("tmC").innerHTML=C.map((c,i)=>`<button type="button" data-c="${i}" aria-pressed="${i===tm.c}">${c[0]}<small>${c[1]}</small></button>`).join("");
   $("tmF").innerHTML=tm.mode==="xac"?"":TMF.filter(f=>!(f[0]==="fid"&&tm.b!=="iphone"&&tm.b!=="ipad")).map(f=>`<label><input type="checkbox" data-f="${f[0]}"${tm.f.has(f[0])?" checked":""}>${f[1]}</label>`).join("");
   $("tmM").classList.toggle("need",!tm.m);$("tmS").classList.toggle("need",!tm.s&&BR[tm.b].kind==="and");
-  tmResult();waveIdx();
+  tmResult();waveIdx();tmPvSync();
 }
+/* Ảnh máy thật + chấm màu cho phần thu mua (dùng chung kho ảnh bên sửa chữa) */
+const tpv={m:null,g:null,i:0,timer:0,front:0,b:null};
+const tmFind=n=>n?Object.values(BR[tm.b].series).flat().find(m=>m.n===n):null;
+function tmPvSync(){const m=tmFind(tm.m);if(m!==tpv.m||tm.b!==tpv.b)tmPvRender(m);}
+function tmPvRender(m,fast){const el=$("tmPv"),b=BR[tm.b];clearInterval(tpv.timer);tpv.m=m;tpv.b=tm.b;el.hidden=!m||!!m.other;if(el.hidden){el.innerHTML="";return;}
+  let g=null;if(m&&!m.other)try{g=b.kind==="ip"?grpOf(m.n):grpAnd(tm.b,m)}catch(e){}
+  tpv.g=g;tpv.i=0;
+  if(!g||!IMG[g]){el.innerHTML=`<div class="pv-stage">${brandSvg(b.svg)}</div><div class="pv-name">${m?m.n:b.n}</div><div class="pv-hint">${m?"Ảnh màu thật của dòng này đang cập nhật":"Chọn đời máy bên dưới để xem ảnh máy"}</div>`;return;}
+  const cols=IMG[g];
+  el.innerHTML=`<div class="pv-stage"><img alt="" class="off"><img alt="" class="off"></div><div class="pv-name">${m.n}</div>
+    <div class="pv-color"${cols.length>1?"":" hidden"}><i></i><span></span></div>
+    <div class="dots"${cols.length>1?"":" hidden"}>${cols.map((c,i)=>`<button class="dot" type="button" data-i="${i}" title="${c[1]}" aria-label="Màu ${c[1]}" style="background:${c[2]}"></button>`).join("")}</div>
+    <div class="pv-hint">${g.startsWith("c|")?"Hình minh họa theo màu thật của máy, bấm chấm màu để đổi màu":cols.length>1?"Ảnh máy thật, bấm chấm màu để chọn":"Ảnh máy thật"}</div>`;
+  tpv.front=0;tmPvShow(0);if(motionOK)tpv.timer=setInterval(()=>tmPvShow(tpv.i+1),fast?1500:2600);
+}
+function tmPvShow(i){const cols=IMG[tpv.g];if(!cols)return;tpv.i=(i+cols.length)%cols.length;const c=cols[tpv.i],el=$("tmPv");
+  const imgs=el.querySelectorAll(".pv-stage img");if(imgs.length<2)return;const next=imgs[1-tpv.front],cur=imgs[tpv.front];
+  next.alt=`${tpv.m.n} màu ${c[1]}`;next.onload=()=>{next.classList.remove("off");cur.classList.add("off");};next.src=imgSrc(tpv.g,c[0]);tpv.front=1-tpv.front;
+  const lab=el.querySelector(".pv-color");lab.querySelector("i").style.background=c[2];lab.querySelector("span").textContent=c[1];
+  el.querySelectorAll(".dot").forEach((d,k)=>d.setAttribute("aria-pressed",k===tpv.i));}
+$("tmPv").addEventListener("click",e=>{const d=e.target.closest(".dot");if(!d)return;tmPvShow(+d.dataset.i);clearInterval(tpv.timer);});
 function tmPrice(){const bu=BUY[tm.m];if(!bu)return null;
   if(tm.mode==="xac"){const p=bu[0]*TMX[tm.c][2];return [Math.max(50,r50(p*.85)),Math.max(100,r50(p))];}
   let p=bu[0]*(1+tm.g*.1)*TMC[tm.c][2];for(const f of TMF)if(tm.f.has(f[0]))p-=Math.max(f[3],bu[0]*f[2]);
