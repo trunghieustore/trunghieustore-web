@@ -369,6 +369,10 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 .tm-flags .tf-z{display:flex;gap:6px;max-width:460px;margin:0 auto 12px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:4px}
 .tm-flags .tf-z button{flex:1 1 0;min-width:0;border:0;background:transparent;border-radius:10px;padding:9px 4px;font:700 .84rem/1.2 var(--f-body);color:var(--muted);cursor:pointer}
 .tm-flags .tf-z button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.tm-flags .tf-zh{text-align:center;font:700 .86rem var(--f-body);margin-bottom:6px}.tm-flags .tf-zh b{color:var(--muted);font-weight:700}.tm-flags .tf-zh.req b{color:#e5484d}
+.tm-flags .tf-z.need-z{border-color:#e5484d;animation:zNeed 1.8s ease-in-out infinite}
+@keyframes zNeed{0%,100%{box-shadow:0 0 0 0 rgba(229,72,77,.45)}50%{box-shadow:0 0 0 7px rgba(229,72,77,0)}}
+.tm-res .tm-goz{border:0;background:#16c8f0;color:#04202b;font:800 .9rem var(--f-body);border-radius:999px;padding:9px 16px;cursor:pointer}
 .tm-flags .tf-h{font:700 .86rem var(--f-body);text-align:center;margin-bottom:8px}.tm-flags .tf-h small{font-weight:500;color:var(--muted)}
 .tm-flags .tf-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}
 .tm-flags .tf-g button{border:1px dashed var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:9px 4px;font:600 .82rem/1.2 var(--f-body);cursor:pointer}
@@ -377,6 +381,20 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 .tm-flags:empty{display:none}
 .tm-flags label{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:8px 14px;font:600 .86rem var(--f-body);cursor:pointer}
 .tm-flags input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.tm-pv{position:relative;isolation:isolate}
+.tm-pv .tm-glow{position:absolute;left:50%;top:0;width:min(100%,520px);height:clamp(220px,38vw,300px);translate:-50% 0;border-radius:28px;overflow:hidden;z-index:-1;background:#f7f6f3;box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)}
+.tm-pv .tm-glow i{position:absolute;width:75%;aspect-ratio:1;border-radius:46% 54% 60% 40%/50% 42% 58% 50%;filter:blur(30px);opacity:.55;transition:background 1.2s}
+.tm-pv .tm-glow i:nth-child(1){left:-18%;top:-30%;background:var(--w1);animation:wpA 14s ease-in-out infinite}
+.tm-pv .tm-glow i:nth-child(2){right:-20%;top:-10%;background:var(--w2);animation:wpB 17s ease-in-out infinite}
+.tm-pv .tm-glow i:nth-child(3){left:20%;bottom:-45%;background:var(--w3);animation:wpC 12s ease-in-out infinite}
+.tm-pv .tm-glow::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.25),transparent 50%)}
+.tm-pv .pv-stage img{mix-blend-mode:multiply}
+@keyframes wpA{0%,100%{transform:translate(0,0) rotate(0) scale(1)}50%{transform:translate(18%,14%) rotate(120deg) scale(1.15)}}
+@keyframes wpB{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-22%,18%) rotate(-140deg) scale(.9)}}
+@keyframes wpC{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-12%,-22%) rotate(90deg) scale(1.2)}}
+.tm-pv .pv-stage{margin-top:10px}
+.tm-pv .pv-color.picked{border-color:var(--accent);color:var(--accent)}
+.tm-pv .dot[aria-pressed="true"]{outline:3px solid var(--accent);outline-offset:2px}
 .tm-pv{margin:1.2rem 0 .4rem;animation:aniIn .8s var(--ease) both}
 .tm-res .tm-img{display:block;width:120px;height:150px;object-fit:contain;margin:0 auto}
 .tm-res.xac .tm-img{filter:grayscale(.6) brightness(.85)}
@@ -1282,7 +1300,7 @@ const TMX=[["Vỡ màn, còn lên nguồn","Màn nứt, sọc, liệt cảm ứn
 const TMS={"Đẹp như mới":"Như mới","Trầy xước nhẹ":"Trầy nhẹ","Trầy nhiều, cấn móp":"Trầy nhiều","Có lỗi nhẹ":"Lỗi nhẹ","Lỗi Face ID / vân tay":"Lỗi Face ID","Lỗi chức năng (loa, mic, camera, sóng...)":"Lỗi chức năng","Vỡ màn, còn lên nguồn":"Vỡ màn","Không lên nguồn":"Mất nguồn","Vào nước nặng":"Vào nước","Thiếu linh kiện":"Thiếu đồ"};
 const tmShort=n=>TMS[n]||n;
 const TMF=[["sua","Đã qua sửa chữa",.1,200],["pin","Pin dưới 85%",.05,150],["man","Đã thay màn",.12,0],["lung","Bể lưng",.08,300],["fid","Lỗi Face ID / vân tay",.2,0],["cn","Lỗi chức năng (loa, mic, camera, sóng...)",.25,300]];
-const tm={mode:"cu",b:"iphone",s:null,m:null,g:0,c:0,f:new Set()};
+const tm={mode:"cu",b:"iphone",s:null,m:null,g:0,c:0,f:new Set(),z:null};
 const fmtTr=v=>v>=1000?(v/1000).toLocaleString("vi-VN",{maximumFractionDigits:2})+" <small>triệu</small>":v+" <small>nghìn</small>";
 const tmRange=([a,b])=>{const f=v=>`<span class="pv">${(v*1000).toLocaleString("vi-VN")}<small>đ</small></span>`;return a<b?`${f(a)}<span class="to">đến</span>${f(b)}`:f(b);};
 const gb=v=>v>=1024?(v/1024)+"TB":v+"GB";
@@ -1302,7 +1320,7 @@ function tmRender(){
   if(sg){if(tm.g>=bu[1].length)tm.g=0;$("tmG").innerHTML=bu[1].map((v,i)=>`<button class="model" type="button" data-g="${i}" aria-pressed="${i===tm.g}">${gb(v)}</button>`).join("");}
   const C=tmCond();if(tm.c>=C.length)tm.c=0;
   $("tmC").innerHTML=C.map((c,i)=>`<button type="button" data-c="${i}" aria-pressed="${i===tm.c}"><span class="lg">${c[0]}</span><span class="sh">${tmShort(c[0])}</span><small>${c[1]}</small></button>`).join("");
-  $("tmF").innerHTML=tm.mode==="xac"?"":`<div class="tf-z"><button type="button" data-z="0" aria-pressed="${!tm.f.has("sua")}">Máy zin, chưa sửa</button><button type="button" data-z="1" aria-pressed="${tm.f.has("sua")}">Đã qua sửa chữa</button></div><div class="tf-h">Máy có lỗi gì không? <small>(chọn nếu có)</small></div><div class="tf-g">`+TMF.filter(f=>f[0]!=="sua"&&!(f[0]==="fid"&&tm.b!=="iphone"&&tm.b!=="ipad")).map(f=>`<button type="button" data-f="${f[0]}" aria-pressed="${tm.f.has(f[0])}" title="${f[1]}">${tmShort(f[1])}</button>`).join("")+"</div>";
+  $("tmF").innerHTML=tm.mode==="xac"?"":`<div class="tf-zh${tm.z==null?" req":""}">Máy zin hay đã sửa? <b>${tm.z==null?"Bắt buộc chọn":"✓"}</b></div><div class="tf-z${tm.z==null?" need-z":""}" id="tmZ"><button type="button" data-z="0" aria-pressed="${tm.z===0}">Máy zin, chưa sửa</button><button type="button" data-z="1" aria-pressed="${tm.z===1}">Đã qua sửa chữa</button></div><div class="tf-h">Máy có lỗi gì không? <small>(chọn nếu có)</small></div><div class="tf-g">`+TMF.filter(f=>f[0]!=="sua"&&!(f[0]==="fid"&&tm.b!=="iphone"&&tm.b!=="ipad")).map(f=>`<button type="button" data-f="${f[0]}" aria-pressed="${tm.f.has(f[0])}" title="${f[1]}">${tmShort(f[1])}</button>`).join("")+"</div>";
   $("tmM").classList.toggle("need",!tm.m);$("tmS").classList.toggle("need",!tm.s&&BR[tm.b].kind==="and");
   tmResult();waveIdx();tmPvSync();
 }
@@ -1310,28 +1328,36 @@ function tmRender(){
 const tpv={m:null,g:null,i:0,timer:0,front:0,b:null};
 const tmFind=n=>n?Object.values(BR[tm.b].series).flat().find(m=>m.n===n):null;
 function tmPvSync(){const m=tmFind(tm.m);if(m!==tpv.m||tm.b!==tpv.b)tmPvRender(m);}
-function tmPvRender(m,fast){const el=$("tmPv"),b=BR[tm.b];clearInterval(tpv.timer);tpv.m=m;tpv.b=tm.b;el.hidden=!m||!!m.other;if(el.hidden){el.innerHTML="";return;}
-  let g=null;if(m&&!m.other)try{g=b.kind==="ip"?grpOf(m.n):grpAnd(tm.b,m)}catch(e){}
-  tpv.g=g;tpv.i=0;
-  if(!g||!IMG[g]){el.innerHTML=`<div class="pv-stage">${brandSvg(b.svg)}</div><div class="pv-name">${m?m.n:b.n}</div><div class="pv-hint">${m?"Ảnh màu thật của dòng này đang cập nhật":"Chọn đời máy bên dưới để xem ảnh máy"}</div>`;return;}
-  const cols=IMG[g];
-  el.innerHTML=`<div class="pv-stage"><img alt="" class="off"><img alt="" class="off"></div><div class="pv-name">${m.n}</div>
-    <div class="pv-color"${cols.length>1?"":" hidden"}><i></i><span></span></div>
-    <div class="dots"${cols.length>1?"":" hidden"}>${cols.map((c,i)=>`<button class="dot" type="button" data-i="${i}" title="${c[1]}" aria-label="Màu ${c[1]}" style="background:${c[2]}"></button>`).join("")}</div>
-    <div class="pv-hint">${g.startsWith("c|")?"Hình minh họa theo màu thật của máy, bấm chấm màu để đổi màu":cols.length>1?"Ảnh máy thật, bấm chấm màu để chọn":"Ảnh máy thật"}</div>`;
-  tpv.front=0;tmPvShow(0);if(motionOK)tpv.timer=setInterval(()=>tmPvShow(tpv.i+1),fast?1500:2600);
+const GENC=[["Đen","#1d1d1f"],["Trắng","#f1f1f1"],["Bạc, xám","#b9bec6"],["Xanh dương","#3b6fd8"],["Xanh lá","#3f9a6b"],["Tím","#8e6bd8"],["Hồng","#f0a8c0"],["Vàng, gold","#e2c06a"],["Màu khác","conic-gradient(#f55,#fc5,#5c8,#58f,#c5f,#f55)"]];
+function tmPvRender(m,fast){const el=$("tmPv"),b=BR[tm.b];clearInterval(tpv.timer);tpv.m=m;tpv.b=tm.b;tm.col=null;el.hidden=!m||!!m.other;if(el.hidden){el.innerHTML="";return;}
+  let g=null;try{g=b.kind==="ip"?grpOf(m.n):grpAnd(tm.b,m)}catch(e){}
+  if(g&&!IMG[g])g=null;tpv.g=g;tpv.i=0;tpv.front=0;
+  const cols=g&&IMG[g].length>1?IMG[g]:null;tpv.cols=cols||GENC.map(c=>[null,c[0],c[1]]);
+  const stage=g?`<div class="pv-stage"><img alt="" class="off"><img alt="" class="off"></div>`:`<div class="pv-stage">${brandSvg(b.svg)}</div>`;
+  el.innerHTML=`<div class="tm-glow"><i></i><i></i><i></i></div>${stage}<div class="pv-name">${m.n}</div>
+    <div class="pv-color"><i></i><span>Chọn màu máy của bạn</span></div>
+    <div class="dots">${tpv.cols.map((c,i)=>`<button class="dot" type="button" data-i="${i}" title="${c[1]}" aria-label="Màu ${c[1]}" aria-pressed="false" style="background:${c[2]}"></button>`).join("")}</div>
+    <div class="pv-hint">${cols?"Ảnh máy thật, bấm chấm màu đúng màu máy của bạn":g?"Ảnh máy thật. Bấm chấm màu đúng màu máy của bạn":"Ảnh máy đang cập nhật. Bấm chấm màu đúng màu máy của bạn"}</div>`;
+  if(g)tmPvImg(0);tmGlow(cols?cols[0][2]:"#16c8f0");
+  if(cols&&motionOK)tpv.timer=setInterval(()=>{tpv.i=(tpv.i+1)%cols.length;tmPvImg(tpv.i);tmGlow(cols[tpv.i][2]);tmLabel(cols[tpv.i],false)},fast?1500:2600);
+  if(cols)tmLabel(cols[0],false);
 }
-function tmPvShow(i){const cols=IMG[tpv.g];if(!cols)return;tpv.i=(i+cols.length)%cols.length;const c=cols[tpv.i],el=$("tmPv");
+function tmGlow(c){const gl=$("tmPv").querySelector(".tm-glow");if(!gl)return;c=c.startsWith("conic")?"#16c8f0":c;
+  const pal=(tpv.g?IMG[tpv.g].map(x=>x[2]):[]).filter(x=>x&&x!==c);const p2=pal[0]||mixC(c,"#7a5cff"),p3=pal[1]||mixC(c,"#ff7a3d");
+  gl.style.setProperty("--w1",c);gl.style.setProperty("--w2",p2);gl.style.setProperty("--w3",p3);}
+function mixC(a,b){const h=x=>[1,3,5].map(i=>parseInt(x.slice(i,i+2),16));try{const A=h(a),B=h(b);return "#"+A.map((v,i)=>Math.round(v*.55+B[i]*.45).toString(16).padStart(2,"0")).join("")}catch(e){return b}}
+function tmLabel(c,picked){const lab=$("tmPv").querySelector(".pv-color");if(!lab)return;lab.querySelector("i").style.background=c[2];lab.querySelector("span").textContent=picked?"Màu máy: "+c[1]:c[1];lab.classList.toggle("picked",picked);}
+function tmPvImg(i){if(!tpv.g)return;const all=IMG[tpv.g],c=all[Math.min(i,all.length-1)],el=$("tmPv");
   const imgs=el.querySelectorAll(".pv-stage img");if(imgs.length<2)return;const next=imgs[1-tpv.front],cur=imgs[tpv.front];
-  next.alt=`${tpv.m.n} màu ${c[1]}`;next.onload=()=>{next.classList.remove("off");cur.classList.add("off");};next.src=imgSrc(tpv.g,c[0]);tpv.front=1-tpv.front;
-  const lab=el.querySelector(".pv-color");lab.querySelector("i").style.background=c[2];lab.querySelector("span").textContent=c[1];
-  el.querySelectorAll(".dot").forEach((d,k)=>d.setAttribute("aria-pressed",k===tpv.i));}
-$("tmPv").addEventListener("click",e=>{const d=e.target.closest(".dot");if(!d)return;tmPvShow(+d.dataset.i);clearInterval(tpv.timer);});
+  next.alt=`${tpv.m.n} màu ${c[1]}`;next.onload=()=>{next.classList.remove("off");cur.classList.add("off");};next.src=imgSrc(tpv.g,c[0]);tpv.front=1-tpv.front;}
+$("tmPv").addEventListener("click",e=>{const d=e.target.closest(".dot");if(!d)return;clearInterval(tpv.timer);const i=+d.dataset.i,c=tpv.cols[i];
+  tm.col=c[1];if(tpv.g&&IMG[tpv.g].length>1)tmPvImg(i);tmGlow(c[2]);tmLabel(c,true);
+  $("tmPv").querySelectorAll(".dot").forEach((x,k)=>x.setAttribute("aria-pressed",k===i));tmResult();});
 function tmPrice(){const bu=BUY[tm.m];if(!bu)return null;
   if(tm.mode==="xac"){const p=bu[0]*TMX[tm.c][2];return [Math.max(50,r50(p*.85)),Math.max(100,r50(p))];}
   let p=bu[0]*(1+tm.g*.1)*TMC[tm.c][2];for(const f of TMF)if(tm.f.has(f[0]))p-=Math.max(f[3],bu[0]*f[2]);
   p=Math.max(200,p);return [Math.max(100,r50(p*.94)),r50(p)];}
-function tmFlags(){return tm.mode==="xac"?[]:(tm.f.has("sua")?[]:["Máy zin"]).concat(TMF.filter(f=>tm.f.has(f[0])).map(f=>tmShort(f[1])));}
+function tmFlags(){return (tm.col?["Màu "+tm.col.toLowerCase()]:[]).concat(tm.mode==="xac"?[]:(tm.z===0?["Máy zin"]:[])).concat(TMF.filter(f=>tm.f.has(f[0])).map(f=>tmShort(f[1])));}
 function tmText(){const bu=BUY[tm.m],fl=tmFlags().map(x=>x.toLowerCase()),C=tmCond()[tm.c];
   return `Chào tiệm, em muốn bán ${tm.mode==="xac"?"xác máy ":""}${tm.m||BR[tm.b].n}${bu&&tm.mode==="cu"?" "+gb(bu[1][tm.g]):""}, tình trạng: ${C[0].toLowerCase()}${fl.length?", "+fl.join(", "):""}. Tiệm định giá giúp em.`;}
 function tmResult(){const el=$("tmR");el.classList.toggle("xac",tm.mode==="xac");
@@ -1339,10 +1365,10 @@ function tmResult(){const el=$("tmR");el.classList.toggle("xac",tm.mode==="xac")
   if(!tm.m){el.innerHTML=`<div class="rl">${lab}</div><h3>Chọn máy cần bán</h3><p class="rm">Chọn đời máy ở trên để xem giá thu.</p><p class="rdesc tm-ref">Giá thu mua là giá tham khảo. Muốn biết giá chính xác vui lòng liên hệ trực tiếp tiệm.</p>${tm.b==="khac"?tmCta():'<span class="go-hint">↑ Bấm vào đây để chọn máy</span>'}`;el.classList.toggle("go-up",tm.b!=="khac");return;}
   el.classList.remove("go-up");
   const m=Object.values(BR[tm.b].series).flat().find(x=>x.n===tm.m);let img="";
-  try{const g=BR[tm.b].kind==="ip"?grpOf(m.n):grpAnd(tm.b,m);if(g&&IMG[g])img=`<img class="tm-img" alt="${m.n}" src="${imgSrc(g,IMG[g][0][0])}">`;}catch(e){}
+  try{const g=BR[tm.b].kind==="ip"?grpOf(m.n):grpAnd(tm.b,m);if(g&&IMG[g]){const ci=Math.max(0,IMG[g].findIndex(c=>c[1]===tm.col));img=`<img class="tm-img" alt="${m.n}" src="${imgSrc(g,IMG[g][ci][0])}">`;}}catch(e){}
   const pr=tmPrice(),bu=BUY[tm.m],fl=tmFlags();
   el.innerHTML=`${img}<div class="rl">${lab}</div><h3>${tm.mode==="xac"?"Xác ":""}${tm.m}${bu&&tm.mode==="cu"?" "+gb(bu[1][tm.g]):""}</h3><div class="tm-sw" role="group" aria-label="Đổi tình trạng máy">${tmCond().map((c,i)=>`<button type="button" data-c="${i}" aria-pressed="${i===tm.c}">${tmShort(c[0])}</button>`).join("")}</div>${fl.length?`<p class="rm">${fl.join(" · ")}</p>`:""}`+
-   (pr?`<div class="price">${tmRange(pr)}</div>`
+   (pr&&tm.mode==="cu"&&tm.z==null?`<div class="price na">Chọn máy zin hay đã sửa</div><p class="rdesc"><button type="button" class="tm-goz">↑ Chọn "Máy zin" hoặc "Đã qua sửa chữa" để xem giá</button></p>`:pr?`<div class="price">${tmRange(pr)}</div>`
       :`<div class="price na">Liên hệ định giá</div><p class="rdesc">Gửi vài ảnh máy qua Zalo, tiệm báo giá thu trong vài phút.</p>`)+tmCta();}
 function tmCta(){return `<p class="rdesc tm-ref">Giá tham khảo, có thể cao hoặc thấp hơn tùy máy. Giá chốt sau khi tiệm kiểm tra, mang máy đến tiệm hoặc nhắn Zalo để biết giá chính xác.</p><div class="r-cta"><a class="btn btn-zalo" id="tmZalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Zalo định giá</a><a class="btn btn-call" href="tel:0372659937">Gọi tiệm</a><span class="tap-hint" id="tmHint" style="grid-column:1/-1;color:#b8c4d4">Thông tin máy được chép sẵn, chỉ cần dán vào Zalo.</span></div>`;}
 $("thu-mua").addEventListener("click",e=>{const t=e.target.closest("button,a");if(!t)return;
@@ -1350,14 +1376,14 @@ $("thu-mua").addEventListener("click",e=>{const t=e.target.closest("button,a");i
   if(t.dataset.mode){tm.mode=t.dataset.mode;tm.c=0;tmRender();return;}
   if(t.dataset.b){wvReset("tmS","tmM","tmG","tmC");tm.b=t.dataset.b;tm.s=null;tm.m=null;tm.g=0;$("tmQ").value="";tmRender();return;}
   if(t.dataset.s){wvReset("tmM");tm.s=t.dataset.s;$("tmQ").value="";tmRender();return;}
-  if(t.dataset.m){tm.m=t.dataset.m;tm.g=0;tmRender();setTimeout(()=>{try{glide($("tmR"),-80)}catch(e){}},250);return;}
+  if(t.dataset.m){tm.m=t.dataset.m;tm.g=0;tm.z=null;tm.f.delete("sua");tmRender();setTimeout(()=>{try{glide($("tmR"),-80)}catch(e){}},250);return;}
   if(t.dataset.g){tm.g=+t.dataset.g;tmRender();return;}
   if(t.dataset.c){tm.c=+t.dataset.c;tmRender();return;}
 });
-$("tmR").addEventListener("click",e=>{if(e.target.closest("a,button")||!$("tmR").classList.contains("go-up"))return;
+$("tmR").addEventListener("click",e=>{if(e.target.closest(".tm-goz")){glide($("tmZ")||$("tmF"),-160);return;}if(e.target.closest("a,button")||!$("tmR").classList.contains("go-up"))return;
   const to=BR[tm.b].kind==="and"&&!tm.s?$("tmS"):$("tmM");glide(to,-110);});
 $("crumb3").addEventListener("click",()=>{if(!st.pick)glide($("s2"));});
-$("tmF").addEventListener("click",e=>{const z=e.target.closest("button[data-z]");if(z){e.stopPropagation();z.dataset.z==="1"?tm.f.add("sua"):tm.f.delete("sua");$("tmF").querySelectorAll("[data-z]").forEach(x=>x.setAttribute("aria-pressed",x===z));tmResult();return;}const b=e.target.closest("button[data-f]");if(!b)return;e.stopPropagation();const f=b.dataset.f;tm.f.has(f)?tm.f.delete(f):tm.f.add(f);b.setAttribute("aria-pressed",tm.f.has(f));tmResult();});
+$("tmF").addEventListener("click",e=>{const z=e.target.closest("button[data-z]");if(z){e.stopPropagation();tm.z=+z.dataset.z;tm.z?tm.f.add("sua"):tm.f.delete("sua");tmRender();return;}const b=e.target.closest("button[data-f]");if(!b)return;e.stopPropagation();const f=b.dataset.f;tm.f.has(f)?tm.f.delete(f):tm.f.add(f);b.setAttribute("aria-pressed",tm.f.has(f));tmResult();});
 $("tmQ").addEventListener("input",()=>tmRender());
 tmRender();
 
