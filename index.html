@@ -1086,7 +1086,7 @@ let wvT=0,wvRaf=0;
 function wvScroll(){wvRaf=0;const c=innerHeight*.52,band=Math.max(70,innerHeight*.11);
   document.querySelectorAll(".lit").forEach(x=>x.classList.remove("lit"));
   document.querySelectorAll(WVSEL).forEach(x=>{const r=x.getBoundingClientRect();if(Math.abs(r.top+r.height/2-c)<band)x.classList.add("lit")});}
-if(motionOK&&!matchMedia("(hover:hover) and (pointer:fine)").matches)addEventListener("scroll",()=>{document.body.classList.add("scrl");if(!wvRaf)wvRaf=requestAnimationFrame(wvScroll);
+if(motionOK&&!matchMedia("(hover:hover) and (pointer:fine)").matches)addEventListener("scroll",()=>{if(!document.body.classList.contains("scrl"))document.querySelectorAll(".wv .ani,.need .ani").forEach(aniDone);document.body.classList.add("scrl");if(!wvRaf)wvRaf=requestAnimationFrame(wvScroll);
   clearTimeout(wvT);wvT=setTimeout(()=>{document.body.classList.remove("scrl");document.querySelectorAll(".lit").forEach(x=>x.classList.remove("lit"))},700);},{passive:true});
 if(motionOK)document.addEventListener("pointerdown",e=>{const b=e.target.closest(".ser,.model,.brand,.tm-cond>button");if(!b)return;
   const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)*2.2,sp=document.createElement("span");sp.className="rip";
@@ -1095,6 +1095,10 @@ if(motionOK)document.addEventListener("pointerdown",e=>{const b=e.target.closest
   b.appendChild(sp);setTimeout(()=>sp.remove(),750);},{passive:true});
 function wvReset(...ids){ids.forEach(id=>{const e=$(id);if(e)e.classList.remove("done")})}
 document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const c=b.closest(".wv");if(c)c.classList.add("done");},true);
+/* Hiện xong thì bỏ class ani: rê chuột/chọn máy không làm ô chạy lại hiệu ứng hiện (mờ mất) */
+function aniDone(t){t.classList.remove("ani")}
+document.addEventListener("mouseover",e=>{const t=e.target.closest&&e.target.closest(".ani");if(t)aniDone(t)});
+["animationstart","animationend","animationcancel"].forEach(ev=>document.addEventListener(ev,e=>{const t=e.target;if(!t.classList||!t.classList.contains("ani")||!/^(aniIn|flipIn)$/.test(e.animationName))return;if(ev==="animationend")return aniDone(t);if(!t._aniT){const i=+getComputedStyle(t).getPropertyValue("--i")||0;t._aniT=setTimeout(()=>aniDone(t),1300+i*160)}}));
 function renderSeries(){
   const b=BR[st.b];$("t2").textContent=st.b==="khac"?"Máy hãng khác":b.kind==="ip"?"Chọn đời iPhone":`Chọn dòng và đời ${b.n}`;
   $("serBox").hidden=b.kind==="ip"||st.b==="khac";$("p2").textContent=st.b==="khac"?"Máy hãng khác hoặc không có trong danh sách: bấm ô bên dưới để ghi dòng máy và lỗi.":b.kind==="ip"?"Tất cả đời iPhone, mới nhất xếp trước. Rê chuột để xem màu máy.":"Chọn dòng máy trước, sau đó chọn đúng đời máy.";
