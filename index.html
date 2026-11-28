@@ -358,6 +358,10 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 .tm-step .lbl i{font-style:normal;display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--accent);color:var(--accent-ink);font:800 .8rem var(--f-num);letter-spacing:0}
 .tm-cond{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:12px}
 .tm-cond button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:11px 12px;text-align:center;cursor:pointer;font:700 .9rem var(--f-body)}
+.tm-cond button .sh{display:none}
+.tm-res .tm-sw{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin:.8rem auto 0;max-width:420px;background:rgba(255,255,255,.07);border-radius:14px;padding:4px}
+.tm-res .tm-sw button{border:0;background:transparent;color:#c9d4e2;border-radius:10px;padding:8px 2px;font:700 .78rem/1.2 var(--f-body);cursor:pointer}
+.tm-res .tm-sw button[aria-pressed="true"]{background:#fff;color:#111}
 .tm-cond button small{display:block;font-weight:500;font-size:.76rem;color:var(--muted);margin-top:2px}
 .tm-cond button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .tm-cond button[aria-pressed="true"] small{color:inherit;opacity:.75}
@@ -383,7 +387,8 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 .tm-how li::before{content:counter(h);display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--soft);color:var(--accent);font:800 .9rem var(--f-num);margin-bottom:6px}
 .tm-note{max-width:620px;margin:1rem auto 0;color:var(--muted);font-size:.84rem;text-align:center}
 @media (max-width:640px){.tm-perks{grid-template-columns:1fr 1fr}.tm-tab{flex-direction:column;text-align:center;padding:12px 8px;gap:8px}}
-@media (max-width:420px){.tm-cond{grid-template-columns:1fr 1fr}.tm-cond button{padding:9px 8px;font-size:.84rem}.tm-how li{padding:10px 6px;font-size:.76rem}.tm-how li b{font-size:.82rem}}
+@media (max-width:560px){.tm-cond{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.tm-cond button{padding:9px 3px;font-size:.78rem;border-radius:12px;line-height:1.2}.tm-cond button small{display:none}.tm-cond button .sh{display:inline}.tm-cond button .lg{display:none}.tm-flags{gap:6px}.tm-flags label{padding:7px 11px;font-size:.8rem}}
+@media (max-width:420px){.tm-how li{padding:10px 6px;font-size:.76rem}.tm-how li b{font-size:.82rem}}
 
 /* ===== Gợi ý chỗ cần bấm: nhấp nháy nhẹ, vệt sáng lướt ===== */
 .tm-tab{position:relative;overflow:hidden}
@@ -1266,6 +1271,8 @@ const BUY={
 "iPhone SE 2022":[2200,[64,128,256]],"iPhone SE 2020":[1100,[64,128,256]],"iPhone 8 Plus":[1100,[64,256]],"iPhone 8":[700,[64,256]],"iPhone 7 Plus":[800,[32,128,256]],"iPhone 7":[500,[32,128,256]]};
 const TMC=[["Đẹp như mới","Không trầy, như máy mới",1],["Trầy xước nhẹ","Vài vết nhỏ, nhìn kỹ mới thấy",.93],["Trầy nhiều, cấn móp","Vỏ cấn, trầy rõ",.83],["Có lỗi nhẹ","Lỗi loa, camera, rung...",.7]];
 const TMX=[["Vỡ màn, còn lên nguồn","Màn nứt, sọc, liệt cảm ứng",.4],["Không lên nguồn","Chết nguồn, treo táo, lỗi main",.22],["Vào nước nặng","Ngâm nước, chập, rỉ sét",.15],["Thiếu linh kiện","Chỉ còn vỏ, màn hoặc main",.08]];
+const TMS={"Đẹp như mới":"Như mới","Trầy xước nhẹ":"Trầy nhẹ","Trầy nhiều, cấn móp":"Trầy nhiều","Có lỗi nhẹ":"Lỗi nhẹ","Vỡ màn, còn lên nguồn":"Vỡ màn","Không lên nguồn":"Mất nguồn","Vào nước nặng":"Vào nước","Thiếu linh kiện":"Thiếu đồ"};
+const tmShort=n=>TMS[n]||n;
 const TMF=[["pin","Pin dưới 85%",.05,150],["man","Đã thay màn",.12,0],["fid","Lỗi Face ID / vân tay",.2,0]];
 const tm={mode:"cu",b:"iphone",s:null,m:null,g:0,c:0,f:new Set()};
 const fmtTr=v=>v>=1000?(v/1000).toLocaleString("vi-VN",{maximumFractionDigits:2})+" <small>triệu</small>":v+" <small>nghìn</small>";
@@ -1286,7 +1293,7 @@ function tmRender(){
   $("tmCL").innerHTML=`<i>${sg?4:3}</i>${tm.mode==="xac"?"Tình trạng xác máy":"Tình trạng máy"}`;
   if(sg){if(tm.g>=bu[1].length)tm.g=0;$("tmG").innerHTML=bu[1].map((v,i)=>`<button class="model" type="button" data-g="${i}" aria-pressed="${i===tm.g}">${gb(v)}</button>`).join("");}
   const C=tmCond();if(tm.c>=C.length)tm.c=0;
-  $("tmC").innerHTML=C.map((c,i)=>`<button type="button" data-c="${i}" aria-pressed="${i===tm.c}">${c[0]}<small>${c[1]}</small></button>`).join("");
+  $("tmC").innerHTML=C.map((c,i)=>`<button type="button" data-c="${i}" aria-pressed="${i===tm.c}"><span class="lg">${c[0]}</span><span class="sh">${tmShort(c[0])}</span><small>${c[1]}</small></button>`).join("");
   $("tmF").innerHTML=tm.mode==="xac"?"":TMF.filter(f=>!(f[0]==="fid"&&tm.b!=="iphone"&&tm.b!=="ipad")).map(f=>`<label><input type="checkbox" data-f="${f[0]}"${tm.f.has(f[0])?" checked":""}>${f[1]}</label>`).join("");
   $("tmM").classList.toggle("need",!tm.m);$("tmS").classList.toggle("need",!tm.s&&BR[tm.b].kind==="and");
   tmResult();waveIdx();tmPvSync();
@@ -1326,7 +1333,7 @@ function tmResult(){const el=$("tmR");el.classList.toggle("xac",tm.mode==="xac")
   const m=Object.values(BR[tm.b].series).flat().find(x=>x.n===tm.m);let img="";
   try{const g=BR[tm.b].kind==="ip"?grpOf(m.n):grpAnd(tm.b,m);if(g&&IMG[g])img=`<img class="tm-img" alt="${m.n}" src="${imgSrc(g,IMG[g][0][0])}">`;}catch(e){}
   const pr=tmPrice(),bu=BUY[tm.m],fl=tmFlags();
-  el.innerHTML=`${img}<div class="rl">${lab}</div><h3>${tm.mode==="xac"?"Xác ":""}${tm.m}${bu&&tm.mode==="cu"?" "+gb(bu[1][tm.g]):""}</h3><p class="rm">${tmCond()[tm.c][0]}${fl.length?" · "+fl.join(" · "):""}</p>`+
+  el.innerHTML=`${img}<div class="rl">${lab}</div><h3>${tm.mode==="xac"?"Xác ":""}${tm.m}${bu&&tm.mode==="cu"?" "+gb(bu[1][tm.g]):""}</h3><div class="tm-sw" role="group" aria-label="Đổi tình trạng máy">${tmCond().map((c,i)=>`<button type="button" data-c="${i}" aria-pressed="${i===tm.c}">${tmShort(c[0])}</button>`).join("")}</div>${fl.length?`<p class="rm">${fl.join(" · ")}</p>`:""}`+
    (pr?`<div class="price">${tmRange(pr)}</div>`
       :`<div class="price na">Liên hệ định giá</div><p class="rdesc">Gửi vài ảnh máy qua Zalo, tiệm báo giá thu trong vài phút.</p>`)+tmCta();}
 function tmCta(){return `<p class="rdesc tm-ref">Giá tham khảo, có thể cao hoặc thấp hơn tùy máy. Giá chốt sau khi tiệm kiểm tra, mang máy đến tiệm hoặc nhắn Zalo để biết giá chính xác.</p><div class="r-cta"><a class="btn btn-zalo" id="tmZalo" href="https://zalo.me/0372659937" target="_blank" rel="noopener">Zalo định giá</a><a class="btn btn-call" href="tel:0372659937">Gọi tiệm</a><span class="tap-hint" id="tmHint" style="grid-column:1/-1;color:#b8c4d4">Thông tin máy được chép sẵn, chỉ cần dán vào Zalo.</span></div>`;}
