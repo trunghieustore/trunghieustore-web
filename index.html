@@ -232,6 +232,13 @@ section{padding-block:4.2rem 0}
 .divider{height:1px;background:var(--line);margin:16px 0}
 .search{display:block;width:100%;max-width:420px;margin:.6rem auto 0;font:500 1rem var(--f-body);padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);text-align:center}
 .models{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
+@media (max-width:560px){
+ .models{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .models>.model{border-radius:12px;padding:10px 4px;font-size:.84rem;line-height:1.2;text-align:center;min-height:44px;display:flex;align-items:center;justify-content:center}
+ .models>.model .pre{display:none}
+ .models>.model.other,.models>.xb-h,.models>.empty,.models>.pv-hint{grid-column:1/-1}
+ .models>.model.xb{flex-direction:column}
+}
 .model{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px 15px;font:600 .88rem var(--f-body);cursor:pointer;position:relative;overflow:hidden}
 .model[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .giftline{margin:12px auto 0;width:fit-content;max-width:100%;padding:7px 14px;border-radius:999px;background:linear-gradient(90deg,#ff7a18,#ffb347);color:#1a0d00;font:700 .86rem var(--f-body);text-align:center;box-shadow:0 0 0 0 rgba(255,122,24,.5);animation:giftPulse 2.8s ease-in-out infinite}
@@ -1111,12 +1118,14 @@ const ALIAS=[[/(\d)\s?(pm|prm)\b/g,"$1 pro max"],[/(\d)\s?p\b/g,"$1 pro"],[/\bip
 function qTerm(raw){let t=norm(raw);for(const [r,v] of ALIAS)t=t.replace(r,v);return t.replace(/\s+/g," ").trim()}
 function qMatch(n,t){if(!t)return true;const a=norm(n).replace(/\+/g," +"),c=a.replace(/ /g,"");
   return t.split(" ").every(w=>a.split(" ").some(x=>x.startsWith(w)||(w.length>2&&x.includes(w))))||c.includes(t.replace(/ /g,""));}
+const PRE=/^(iPhone|iPad|Galaxy|vivo|OPPO|Xiaomi|Realme|Redmi Note|Redmi) /;
+const mName=n=>{const m=n.match(PRE);return m&&!/^Redmi/.test(m[1])?`<span class="pre">${m[1]} </span>${n.slice(m[0].length)}`:n};
 function renderModels(){
   const b=BR[st.b],term=qTerm($("q").value);let html="",i=0;
   const sets=(term||b.kind==="ip")?Object.entries(b.series):st.pick?[[st.ser,b.series[st.ser]]]:[];
   if(!st.pick&&!term)html=`<div class="empty">Chọn dòng máy ở trên để hiện danh sách máy.</div>`;
   for(const [ser,list] of sets)list.forEach((m,mi)=>{if(!qMatch(m.n,term))return;
-    html+=`<button class="model ani" style="--i:${Math.min(i++,14)}" type="button" data-ser="${ser}" data-mi="${mi}" aria-pressed="${ser===st.ser&&mi===st.mi}">${m.n}</button>`;});
+    html+=`<button class="model ani" style="--i:${Math.min(i++,14)}" type="button" data-ser="${ser}" data-mi="${mi}" aria-pressed="${ser===st.ser&&mi===st.mi}">${mName(m.n)}</button>`;});
   if(term&&term.length>=2){let x="",k=0;
     for(const [bk,B] of Object.entries(BR)){if(bk===st.b)continue;
       for(const [ser,list] of Object.entries(B.series))list.forEach((m,mi)=>{if(k>=12||!qMatch(m.n,term))return;k++;
@@ -1258,7 +1267,7 @@ function tmRender(){
   if(tm.s&&!sers.includes(tm.s))tm.s=null;if(!tm.s&&(BR[tm.b].kind!=="and"||tm.b==="khac"))tm.s=sers[0]||null;
   $("tmS").innerHTML=sers.length>1&&BR[tm.b].kind!=="ip"?sers.map(k=>`<button class="ser" type="button" data-s="${k}" aria-pressed="${k===tm.s}">${k}</button>`).join(""):"";
   const ms=tmModels();
-  $("tmM").innerHTML=ms.length?ms.map(m=>`<button class="model" type="button" data-m="${m.n}" aria-pressed="${tm.m===m.n}">${m.n}</button>`).join(""):`<p class="pv-hint">${tm.b==="khac"?"Ghi tên máy và tình trạng qua Zalo, tiệm báo giá thu cho bạn.":!tm.s&&!$("tmQ").value?"Chọn dòng máy ở trên để hiện danh sách máy.":"Không thấy máy, thử gõ tên khác."}</p>`;
+  $("tmM").innerHTML=ms.length?ms.map(m=>`<button class="model" type="button" data-m="${m.n}" aria-pressed="${tm.m===m.n}">${mName(m.n)}</button>`).join(""):`<p class="pv-hint">${tm.b==="khac"?"Ghi tên máy và tình trạng qua Zalo, tiệm báo giá thu cho bạn.":!tm.s&&!$("tmQ").value?"Chọn dòng máy ở trên để hiện danh sách máy.":"Không thấy máy, thử gõ tên khác."}</p>`;
   const bu=BUY[tm.m],sg=bu&&tm.mode==="cu";$("tmGW").hidden=!sg;
   $("tmCL").innerHTML=`<i>${sg?4:3}</i>${tm.mode==="xac"?"Tình trạng xác máy":"Tình trạng máy"}`;
   if(sg){if(tm.g>=bu[1].length)tm.g=0;$("tmG").innerHTML=bu[1].map((v,i)=>`<button class="model" type="button" data-g="${i}" aria-pressed="${i===tm.g}">${gb(v)}</button>`).join("");}
