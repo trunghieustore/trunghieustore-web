@@ -366,6 +366,9 @@ body.mua .free,body.mua #s1,body.mua #s2,body.mua #s3,body.mua #s4,body.mua #quy
 .tm-cond button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .tm-cond button[aria-pressed="true"] small{color:inherit;opacity:.75}
 .tm-flags{margin-top:14px}
+.tm-flags .tf-z{display:flex;gap:6px;max-width:460px;margin:0 auto 12px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:4px}
+.tm-flags .tf-z button{flex:1 1 0;min-width:0;border:0;background:transparent;border-radius:10px;padding:9px 4px;font:700 .84rem/1.2 var(--f-body);color:var(--muted);cursor:pointer}
+.tm-flags .tf-z button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 .tm-flags .tf-h{font:700 .86rem var(--f-body);text-align:center;margin-bottom:8px}.tm-flags .tf-h small{font-weight:500;color:var(--muted)}
 .tm-flags .tf-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}
 .tm-flags .tf-g button{border:1px dashed var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:9px 4px;font:600 .82rem/1.2 var(--f-body);cursor:pointer}
@@ -1278,7 +1281,7 @@ const TMC=[["Đẹp như mới","Không trầy, như máy mới",1],["Trầy xư
 const TMX=[["Vỡ màn, còn lên nguồn","Màn nứt, sọc, liệt cảm ứng",.4],["Không lên nguồn","Chết nguồn, treo táo, lỗi main",.22],["Vào nước nặng","Ngâm nước, chập, rỉ sét",.15],["Thiếu linh kiện","Chỉ còn vỏ, màn hoặc main",.08]];
 const TMS={"Đẹp như mới":"Như mới","Trầy xước nhẹ":"Trầy nhẹ","Trầy nhiều, cấn móp":"Trầy nhiều","Có lỗi nhẹ":"Lỗi nhẹ","Lỗi Face ID / vân tay":"Lỗi Face ID","Lỗi chức năng (loa, mic, camera, sóng...)":"Lỗi chức năng","Vỡ màn, còn lên nguồn":"Vỡ màn","Không lên nguồn":"Mất nguồn","Vào nước nặng":"Vào nước","Thiếu linh kiện":"Thiếu đồ"};
 const tmShort=n=>TMS[n]||n;
-const TMF=[["pin","Pin dưới 85%",.05,150],["man","Đã thay màn",.12,0],["lung","Bể lưng",.08,300],["fid","Lỗi Face ID / vân tay",.2,0],["cn","Lỗi chức năng (loa, mic, camera, sóng...)",.25,300]];
+const TMF=[["sua","Đã qua sửa chữa",.1,200],["pin","Pin dưới 85%",.05,150],["man","Đã thay màn",.12,0],["lung","Bể lưng",.08,300],["fid","Lỗi Face ID / vân tay",.2,0],["cn","Lỗi chức năng (loa, mic, camera, sóng...)",.25,300]];
 const tm={mode:"cu",b:"iphone",s:null,m:null,g:0,c:0,f:new Set()};
 const fmtTr=v=>v>=1000?(v/1000).toLocaleString("vi-VN",{maximumFractionDigits:2})+" <small>triệu</small>":v+" <small>nghìn</small>";
 const tmRange=([a,b])=>{const f=v=>`<span class="pv">${(v*1000).toLocaleString("vi-VN")}<small>đ</small></span>`;return a<b?`${f(a)}<span class="to">đến</span>${f(b)}`:f(b);};
@@ -1299,7 +1302,7 @@ function tmRender(){
   if(sg){if(tm.g>=bu[1].length)tm.g=0;$("tmG").innerHTML=bu[1].map((v,i)=>`<button class="model" type="button" data-g="${i}" aria-pressed="${i===tm.g}">${gb(v)}</button>`).join("");}
   const C=tmCond();if(tm.c>=C.length)tm.c=0;
   $("tmC").innerHTML=C.map((c,i)=>`<button type="button" data-c="${i}" aria-pressed="${i===tm.c}"><span class="lg">${c[0]}</span><span class="sh">${tmShort(c[0])}</span><small>${c[1]}</small></button>`).join("");
-  $("tmF").innerHTML=tm.mode==="xac"?"":`<div class="tf-h">Máy có lỗi gì không? <small>(chọn nếu có)</small></div><div class="tf-g">`+TMF.filter(f=>!(f[0]==="fid"&&tm.b!=="iphone"&&tm.b!=="ipad")).map(f=>`<button type="button" data-f="${f[0]}" aria-pressed="${tm.f.has(f[0])}" title="${f[1]}">${tmShort(f[1])}</button>`).join("")+"</div>";
+  $("tmF").innerHTML=tm.mode==="xac"?"":`<div class="tf-z"><button type="button" data-z="0" aria-pressed="${!tm.f.has("sua")}">Máy zin, chưa sửa</button><button type="button" data-z="1" aria-pressed="${tm.f.has("sua")}">Đã qua sửa chữa</button></div><div class="tf-h">Máy có lỗi gì không? <small>(chọn nếu có)</small></div><div class="tf-g">`+TMF.filter(f=>f[0]!=="sua"&&!(f[0]==="fid"&&tm.b!=="iphone"&&tm.b!=="ipad")).map(f=>`<button type="button" data-f="${f[0]}" aria-pressed="${tm.f.has(f[0])}" title="${f[1]}">${tmShort(f[1])}</button>`).join("")+"</div>";
   $("tmM").classList.toggle("need",!tm.m);$("tmS").classList.toggle("need",!tm.s&&BR[tm.b].kind==="and");
   tmResult();waveIdx();tmPvSync();
 }
@@ -1328,7 +1331,7 @@ function tmPrice(){const bu=BUY[tm.m];if(!bu)return null;
   if(tm.mode==="xac"){const p=bu[0]*TMX[tm.c][2];return [Math.max(50,r50(p*.85)),Math.max(100,r50(p))];}
   let p=bu[0]*(1+tm.g*.1)*TMC[tm.c][2];for(const f of TMF)if(tm.f.has(f[0]))p-=Math.max(f[3],bu[0]*f[2]);
   p=Math.max(200,p);return [Math.max(100,r50(p*.94)),r50(p)];}
-function tmFlags(){return tm.mode==="xac"?[]:TMF.filter(f=>tm.f.has(f[0])).map(f=>tmShort(f[1]));}
+function tmFlags(){return tm.mode==="xac"?[]:(tm.f.has("sua")?[]:["Máy zin"]).concat(TMF.filter(f=>tm.f.has(f[0])).map(f=>tmShort(f[1])));}
 function tmText(){const bu=BUY[tm.m],fl=tmFlags().map(x=>x.toLowerCase()),C=tmCond()[tm.c];
   return `Chào tiệm, em muốn bán ${tm.mode==="xac"?"xác máy ":""}${tm.m||BR[tm.b].n}${bu&&tm.mode==="cu"?" "+gb(bu[1][tm.g]):""}, tình trạng: ${C[0].toLowerCase()}${fl.length?", "+fl.join(", "):""}. Tiệm định giá giúp em.`;}
 function tmResult(){const el=$("tmR");el.classList.toggle("xac",tm.mode==="xac");
@@ -1354,7 +1357,7 @@ $("thu-mua").addEventListener("click",e=>{const t=e.target.closest("button,a");i
 $("tmR").addEventListener("click",e=>{if(e.target.closest("a,button")||!$("tmR").classList.contains("go-up"))return;
   const to=BR[tm.b].kind==="and"&&!tm.s?$("tmS"):$("tmM");glide(to,-110);});
 $("crumb3").addEventListener("click",()=>{if(!st.pick)glide($("s2"));});
-$("tmF").addEventListener("click",e=>{const b=e.target.closest("button[data-f]");if(!b)return;e.stopPropagation();const f=b.dataset.f;tm.f.has(f)?tm.f.delete(f):tm.f.add(f);b.setAttribute("aria-pressed",tm.f.has(f));tmResult();});
+$("tmF").addEventListener("click",e=>{const z=e.target.closest("button[data-z]");if(z){e.stopPropagation();z.dataset.z==="1"?tm.f.add("sua"):tm.f.delete("sua");$("tmF").querySelectorAll("[data-z]").forEach(x=>x.setAttribute("aria-pressed",x===z));tmResult();return;}const b=e.target.closest("button[data-f]");if(!b)return;e.stopPropagation();const f=b.dataset.f;tm.f.has(f)?tm.f.delete(f):tm.f.add(f);b.setAttribute("aria-pressed",tm.f.has(f));tmResult();});
 $("tmQ").addEventListener("input",()=>tmRender());
 tmRender();
 
